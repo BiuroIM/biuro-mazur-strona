@@ -1,0 +1,336 @@
+---
+import ArrowButton from './ArrowButton.astro';
+import CustomSelect from './CustomSelect.astro';
+import { callback, phone } from '../data/contact.js';
+
+interface Props {
+  idPrefix?: string;
+  surface?: 'dark' | 'light';
+  steps?: boolean;
+}
+
+const { idPrefix = 'formularz', surface = 'dark', steps = true } = Astro.props;
+
+const onLight = surface === 'light';
+const stepped = steps;
+
+const fields = [
+  {
+    name: 'name',
+    label: 'Imię i nazwisko',
+    type: 'text',
+    autocomplete: 'name',
+    placeholder: 'Jan Kowalski',
+    maxlength: 120,
+  },
+  {
+    name: 'phone',
+    label: 'Numer telefonu',
+    type: 'tel',
+    autocomplete: 'tel',
+    placeholder: '600 100 200',
+    maxlength: 40,
+  },
+  {
+    name: 'email',
+    label: 'Adres e-mail',
+    type: 'email',
+    autocomplete: 'email',
+    placeholder: 'jan.kowalski@firma.pl',
+    maxlength: 160,
+  },
+];
+
+const messageHint = 'Kilka zdań o tym, co jest teraz najbardziej pilne';
+
+const businessForms = [
+  'Jednoosobowa działalność',
+  'Spółka z o.o.',
+  'Spółka jawna / komandytowa',
+  'Dopiero zakładam firmę',
+  'Inne',
+];
+
+const ranges = ['księgowość', 'kadry i płace', 'doradztwo podatkowe', 'rozliczenia ZUS i US'];
+const scopeHint = `Np. ${ranges.slice(0, 2).join(', ')}...`;
+
+const fieldSize = stepped
+  ? 'pb-[8px] text-[17px]'
+  : 'pb-[clamp(0.5rem,0.6vw,0.8rem)] text-[clamp(0.95rem,1.2vw,1.4rem)]';
+const labelSize = stepped
+  ? 'mb-[10px] text-[13px]'
+  : 'mb-[clamp(0.55rem,0.65vw,0.8rem)] text-[clamp(0.8rem,0.95vw,1.1rem)]';
+const noteSize = stepped ? 'text-[13px]' : 'text-[clamp(0.8rem,0.9vw,1.05rem)]';
+
+const fieldBase = onLight
+  ? `w-full border-b border-ink/70 font-sans font-normal text-ink outline-none transition-colors duration-300 placeholder:text-ink/55 focus:border-ink aria-invalid:border-alert aria-invalid:focus:border-alert ${fieldSize}`
+  : `w-full border-b border-canvas/35 font-sans font-normal text-canvas outline-none transition-colors duration-300 placeholder:text-canvas/40 focus:border-canvas aria-invalid:border-alert aria-invalid:focus:border-alert ${fieldSize}`;
+const fieldClasses = `${fieldBase} bg-transparent`;
+const selectClasses = `${fieldBase} pt-0`;
+const labelClasses = onLight
+  ? `block font-sans font-normal text-ink/85 ${labelSize}`
+  : `block font-sans font-normal text-canvas/45 ${labelSize}`;
+const mutedClasses = onLight ? 'text-ink/85' : 'text-canvas/45';
+const policyLinkClasses = onLight
+  ? 'underline decoration-ink/40 underline-offset-[0.2em] transition-colors duration-300 hover:decoration-ink'
+  : 'underline decoration-canvas/35 underline-offset-[0.2em] transition-colors duration-300 hover:text-canvas hover:decoration-canvas';
+const errorClasses = `block font-sans font-normal leading-[1.4] text-alert ${noteSize}`;
+const stepErrorClasses = `${errorClasses} mt-[8px]`;
+const rowErrorClasses = `${errorClasses} col-start-2 max-lg:col-start-1`;
+const barClasses = onLight ? 'bg-ink' : 'bg-canvas';
+
+const underlineBase = `relative after:absolute after:bottom-0 after:left-0 after:right-[clamp(1rem,2vw,3rem)] after:h-px after:content-[''] after:transition-colors after:duration-300`;
+const underlineTone = onLight
+  ? 'after:bg-ink/55 focus-within:after:bg-ink has-aria-invalid:after:bg-alert has-aria-invalid:focus-within:after:bg-alert'
+  : 'after:bg-canvas/55 focus-within:after:bg-canvas has-aria-invalid:after:bg-alert has-aria-invalid:focus-within:after:bg-alert';
+const rowClasses = `${underlineBase} ${underlineTone} grid grid-cols-[minmax(9rem,14vw)_1fr] gap-x-[clamp(1rem,2vw,3rem)] py-[clamp(1rem,1.5vw,2.1rem)] pl-[clamp(1rem,2vw,3rem)] pr-[clamp(0.5rem,1vw,1.5rem)] max-lg:grid-cols-1 max-lg:gap-y-[clamp(0.5rem,2.4vw,1rem)] max-lg:py-[clamp(1.1rem,5vw,1.9rem)] max-lg:pl-0 max-lg:pr-0`;
+const rowLabelClasses = `flex items-baseline gap-[clamp(0.5rem,0.8vw,1rem)] font-sans font-medium max-lg:text-[clamp(0.85rem,3.6vw,1.05rem)] ${
+  onLight ? 'text-ink' : 'text-canvas'
+} ${labelSize.replace(/mb-\[[^\]]+\]\s?/, '')}`;
+const rowFieldClasses = `w-full bg-transparent font-sans font-normal outline-none max-lg:min-h-[clamp(1.6rem,7vw,2.4rem)] max-lg:text-[clamp(1rem,4.2vw,1.25rem)] ${
+  onLight ? 'text-ink placeholder:text-ink/50' : 'text-canvas placeholder:text-canvas/40'
+} ${fieldSize.replace(/pb-\[[^\]]+\]\s?/, '')}`;
+
+---
+{
+  stepped && (
+    <>
+      <span
+        class={`absolute inset-x-0 top-0 h-[2px] origin-left ${barClasses}`}
+        data-form-progress
+        aria-hidden="true"
+      />
+
+      <p class={`mb-[28px] font-counter text-[14px] font-medium tabular-nums ${mutedClasses}`} aria-hidden="true">
+        <span data-form-number>01</span> / 03
+      </p>
+    </>
+  )
+}
+
+<form class="flex flex-col" data-form-node data-form-source={idPrefix} novalidate>
+  <input
+    type="text"
+    name="website"
+    tabindex="-1"
+    autocomplete="off"
+    aria-hidden="true"
+    class="absolute -left-[9999px] h-px w-px opacity-0"
+    data-form-trap
+  />
+
+  {stepped ? (
+  <>
+  <div class="flex flex-col gap-[28px]" data-step>
+    {
+      fields.map(({ name, label, type, autocomplete, placeholder, maxlength }) => (
+        <div data-form-field>
+          <label class={labelClasses} for={`${idPrefix}-${name}`}>
+            {label}
+          </label>
+          <input
+            id={`${idPrefix}-${name}`}
+            name={name}
+            type={type}
+            autocomplete={autocomplete}
+            placeholder={placeholder}
+            maxlength={maxlength}
+            required
+            class={fieldClasses}
+          />
+          <span class={stepErrorClasses} data-field-error={name} hidden />
+        </div>
+      ))
+    }
+
+    <div class="mt-[12px] flex justify-end" data-form-field>
+      <ArrowButton text="Dalej" surface={surface} data-next />
+    </div>
+  </div>
+
+  <div class="hidden flex-col gap-[28px]" data-step>
+    <div data-form-field>
+      <label class={labelClasses} for={`${idPrefix}-businessForm`}>Forma działalności</label>
+      <CustomSelect
+        id={`${idPrefix}-businessForm`}
+        name="businessForm"
+        options={businessForms}
+        placeholder="Wybierz z listy"
+        surface={surface}
+        triggerClasses={selectClasses}
+        required
+      />
+      <span class={stepErrorClasses} data-field-error="businessForm" hidden />
+    </div>
+
+    <div data-form-field>
+      <label class={labelClasses} for={`${idPrefix}-scope`}>Czego potrzebujesz</label>
+      <input
+        id={`${idPrefix}-scope`}
+        name="scope"
+        type="text"
+        placeholder={scopeHint}
+        maxlength="300"
+        class={fieldClasses}
+      />
+      <span class={stepErrorClasses} data-field-error="scope" hidden />
+    </div>
+
+    <div class="mt-[12px] flex items-center justify-between" data-form-field>
+      <ArrowButton text="Wstecz" direction="left" surface={surface} data-reverse />
+      <ArrowButton text="Dalej" surface={surface} data-next />
+    </div>
+  </div>
+
+  <div class="hidden flex-col gap-[28px]" data-step>
+    <div data-form-field>
+      <label class={labelClasses} for={`${idPrefix}-message`}>
+        Wiadomość (opcjonalnie)
+      </label>
+      <textarea
+        id={`${idPrefix}-message`}
+        name="message"
+        rows="4"
+        placeholder={messageHint}
+        maxlength="2000"
+        class={`${fieldClasses} resize-none`}></textarea>
+      <span class={stepErrorClasses} data-field-error="message" hidden />
+    </div>
+
+    <p
+      class={`font-sans text-[13px] font-normal leading-[1.4] ${mutedClasses}`}
+      data-form-field
+    >
+      Klikając „wyślij”, wyrażasz zgodę na kontakt w sprawie swojego
+      zapytania i przetwarzanie podanych danych zgodnie z <a href="/polityka-prywatnosci" class={policyLinkClasses}>polityką prywatności</a>.
+    </p>
+
+    <div class="mt-[12px] flex items-center justify-between gap-[32px]" data-form-field>
+      <ArrowButton text="Wstecz" direction="left" surface={surface} data-reverse />
+
+      <ArrowButton text="Wyślij" variant="full" type="submit" surface={surface} />
+    </div>
+  </div>
+  </>
+  ) : (
+  <div class="flex flex-col" data-step>
+    <div class="grid grid-cols-2 max-lg:grid-cols-1">
+      {
+        fields.map(({ name, label, type, autocomplete, placeholder, maxlength }) => (
+          <label
+            class={`${rowClasses} items-baseline cursor-text`}
+            for={`${idPrefix}-${name}`}
+            data-form-field
+          >
+            <span class={rowLabelClasses}>
+              {label}
+            </span>
+            <input
+              id={`${idPrefix}-${name}`}
+              name={name}
+              type={type}
+              autocomplete={autocomplete}
+              placeholder={placeholder}
+              maxlength={maxlength}
+              required
+              class={rowFieldClasses}
+            />
+            <span class={rowErrorClasses} data-field-error={name} hidden />
+          </label>
+        ))
+      }
+
+      <div
+        class={`${rowClasses} items-baseline cursor-pointer`}
+        data-form-field
+      >
+        <span class={rowLabelClasses}>
+          Forma działalności
+        </span>
+        <CustomSelect
+          id={`${idPrefix}-businessForm`}
+          name="businessForm"
+          options={businessForms}
+          placeholder="Wybierz z listy"
+          surface={surface}
+          triggerClasses={rowFieldClasses}
+          required
+        />
+        <span class={rowErrorClasses} data-field-error="businessForm" hidden />
+      </div>
+
+      <label
+        class={`${rowClasses} col-span-2 items-baseline cursor-text max-lg:col-span-1`}
+        for={`${idPrefix}-scope`}
+        data-form-field
+      >
+        <span class={rowLabelClasses}>
+          Czego potrzebujesz
+        </span>
+        <input
+          id={`${idPrefix}-scope`}
+          name="scope"
+          type="text"
+          placeholder={scopeHint}
+          maxlength="300"
+          class={rowFieldClasses}
+        />
+        <span class={rowErrorClasses} data-field-error="scope" hidden />
+      </label>
+
+      <label
+        class={`${rowClasses} col-span-2 items-stretch cursor-text max-lg:col-span-1`}
+        for={`${idPrefix}-message`}
+        data-form-field
+      >
+        <span class={`${rowLabelClasses} self-baseline`}>
+          Wiadomość (opcjonalnie)
+        </span>
+        <textarea
+          id={`${idPrefix}-message`}
+          name="message"
+          rows="4"
+          placeholder={messageHint}
+          maxlength="2000"
+          class={`${rowFieldClasses} resize-none`}></textarea>
+        <span class={rowErrorClasses} data-field-error="message" hidden />
+      </label>
+    </div>
+
+    <div
+      class="mt-[clamp(1.5rem,2.2vw,3rem)] flex items-end justify-between gap-[clamp(2rem,4vw,6rem)] max-lg:mt-[8vw] max-lg:flex-col max-lg:items-stretch max-lg:gap-[6vw]"
+      data-form-field
+    >
+      <p class={`max-w-[52ch] font-sans font-normal leading-[1.45] max-lg:text-[clamp(0.85rem,3.4vw,1rem)] ${noteSize} ${mutedClasses}`}>
+        Klikając „wyślij”, wyrażasz zgodę na kontakt w sprawie swojego
+        zapytania i przetwarzanie podanych danych zgodnie z <a href="/polityka-prywatnosci" class={policyLinkClasses}>polityką prywatności</a>.
+      </p>
+
+      <span class="shrink-0 max-lg:flex max-lg:justify-end">
+        <ArrowButton text="Wyślij" variant="full" type="submit" surface={surface} size="roomy" />
+      </span>
+    </div>
+  </div>
+  )}
+</form>
+
+<p
+  class={`hidden mt-[24px] font-sans font-normal leading-[1.4] text-alert ${noteSize}`}
+  role="alert"
+  data-form-error
+>
+  Nie udało się wysłać zgłoszenia. Spróbuj ponownie za chwilę albo zadzwoń: {phone.label}.
+</p>
+
+<div class="hidden" data-form-thanks>
+  <p class={`font-sans text-[28px] font-medium uppercase leading-[1.1] ${onLight ? 'text-ink' : ''}`}>
+    Dziękujemy!
+  </p>
+  <p class={`mt-[16px] font-sans text-[16px] font-normal leading-[1.4] ${onLight ? 'text-ink/70' : 'text-canvas/60'}`}>
+    Zgłoszenie do nas dotarło. {callback.sentence}
+  </p>
+
+  <div class="mt-[28px]">
+    <slot name="after-submit" />
+  </div>
+</div>

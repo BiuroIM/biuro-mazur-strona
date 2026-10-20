@@ -1,0 +1,158 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import { Font } from 'astro:assets';
+import Header from '../components/Header.astro';
+import Menu from '../components/Menu.astro';
+import ScrollBar from '../components/ScrollBar.astro';
+import Footer from '../components/Footer.astro';
+import ContactForm from '../components/ContactForm.astro';
+import ContactPill from '../components/ContactPill.astro';
+import PageTransition from '../components/PageTransition.astro';
+import LoadingScreen from '../components/LoadingScreen.astro';
+import '../styles/global.css';
+import {
+  brandName,
+  businessHours,
+  email,
+  facebook,
+  geo,
+  legalName,
+  phone,
+  postalAddress,
+  registry,
+} from '../data/contact.js';
+
+interface Props {
+  title?: string;
+  documentTitle?: string;
+  description?: string;
+  image?: string;
+  loadingScreen?: boolean;
+  noindex?: boolean;
+}
+
+const {
+  title = 'Biuro Rachunkowe Iwona Mazur',
+  documentTitle,
+  description = 'Biuro rachunkowe w Dębicy: księgowość, kadry i płace oraz doradztwo podatkowe dla firm. Biuro Rachunkowe Iwona Mazur.',
+  image = '/og-default.jpg',
+  loadingScreen = false,
+  noindex = false,
+} = Astro.props;
+
+const fullTitle = documentTitle
+  ?? (title === 'Biuro Rachunkowe Iwona Mazur' ? title : `${title} | Biuro Rachunkowe Iwona Mazur`);
+
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL(image, Astro.site);
+
+const businessSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'AccountingService',
+  '@id': new URL('/#biuro', Astro.site).href,
+  name: brandName,
+  legalName,
+  description,
+  url: new URL('/', Astro.site).href,
+  logo: new URL('/logo.png', Astro.site).href,
+  image: new URL('/og-default.jpg', Astro.site).href,
+  telephone: phone.href.replace('tel:', ''),
+  email: email.label,
+  sameAs: [facebook.href],
+  vatID: `PL${registry.taxId}`,
+  taxID: registry.taxId,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: postalAddress.street,
+    postalCode: postalAddress.postalCode,
+    addressLocality: postalAddress.city,
+    addressCountry: postalAddress.country,
+  },
+  geo: {
+    '@type': 'GeoCoordinates',
+    latitude: geo.latitude,
+    longitude: geo.longitude,
+  },
+  areaServed: {
+    '@type': 'AdministrativeArea',
+    name: 'Dębica i powiat dębicki',
+  },
+  openingHoursSpecification: [
+    {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: businessHours.days,
+      opens: businessHours.opens,
+      closes: businessHours.closes,
+    },
+  ],
+};
+---
+<!doctype html>
+<html lang="pl" transition:animate="none">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" type="image/png" href="/favicon-96.png" sizes="96x96" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="generator" content={Astro.generator} />
+
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    {noindex ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonical} />}
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="pl_PL" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    {!noindex && <meta property="og:url" content={canonical} />}
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <script type="application/ld+json" set:html={JSON.stringify(businessSchema)} is:inline />
+
+    <Font cssVariable="--font-satoshi" preload />
+    <Font cssVariable="--font-clash" preload />
+    <Font cssVariable="--font-poppins" />
+
+    <ClientRouter />
+  </head>
+
+  <body class="min-h-screen font-sans text-graphite antialiased">
+    <div class="page-canvas" aria-hidden="true"></div>
+
+    <ScrollBar />
+
+    <Header />
+
+    <main>
+      <slot />
+    </main>
+
+    <Footer />
+
+    <Menu />
+
+    <ContactForm />
+
+    <ContactPill />
+
+    <div
+      class="invisible pointer-events-none fixed left-0 top-0 z-[65] flex h-[clamp(5rem,7vw,8.5rem)] w-[clamp(5rem,7vw,8.5rem)] items-center justify-center rounded-full bg-forest opacity-0"
+      data-cursor
+      aria-hidden="true"
+    >
+      <span
+        class="font-display text-[clamp(0.7rem,0.85vw,1rem)] font-medium uppercase tracking-[0.03em] text-canvas"
+        data-cursor-text></span>
+    </div>
+
+    <PageTransition />
+
+    {loadingScreen && <LoadingScreen />}
+
+    <script>
+      import '../scripts/animations.js';
+    </script>
+  </body>
+</html>

@@ -1,0 +1,128 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+import { formatDateMonthFirst, isoDate, sortPosts } from '../data/blog.js';
+
+const MARQUEE_REPEATS = 3;
+const DASH_LENGTH = 'clamp(3.5rem,9vw,11rem)';
+const DASH_THICKNESS = 'clamp(0.3rem,0.8vw,1rem)';
+
+const posts = sortPosts(await getCollection('blog'));
+---
+<BaseLayout
+  title="Blog o księgowości i podatkach"
+  description="Poradniki księgowe dla przedsiębiorców: KSeF, forma opodatkowania, zatrudnienie pracownika i zamknięcie roku. Piszemy o tym, co zmienia rozliczenia małych firm."
+>
+  <section class="px-[2vw] pt-40 max-lg:px-[4vw] max-lg:pt-28">
+    <div class="-mx-[2vw] overflow-hidden pt-[0.5vw] pb-[3.6vw] -mt-[0.5vw] -mb-[1.6vw] max-lg:-mx-[4vw] max-lg:pt-[0.6vw] max-lg:pb-[4.2vw] max-lg:-mt-[0.6vw] max-lg:mb-[4.8vw]" aria-hidden="true">
+      <div
+        class="marquee-track marquee-track--hero flex w-max items-center gap-[clamp(1rem,3vw,4rem)]"
+      >
+        {
+          Array.from({ length: MARQUEE_REPEATS * 2 }).map(() => (
+            <>
+              <span class="text-trim shrink-0 font-display text-[18vw] font-medium uppercase leading-[0.85] text-ink max-lg:text-[21vw]">
+                Blog
+              </span>
+              <span
+                class="shrink-0 rounded-full bg-ink"
+                style={`width:${DASH_LENGTH};height:${DASH_THICKNESS}`}
+              ></span>
+            </>
+          ))
+        }
+      </div>
+    </div>
+
+    <h1 class="sr-only">Blog</h1>
+
+    <div class="mt-[3vw] grid grid-cols-2 gap-x-[2vw] gap-y-[5vw] max-lg:mt-[8vw] max-lg:gap-y-[10vw] max-sm:grid-cols-1">
+      {
+        posts.map((post, i) => (
+          <a href={`/blog/${post.id}`} class="group block" data-cursor-label="Zobacz">
+            <div
+              class="relative aspect-[3/2] w-full overflow-hidden rounded-[clamp(1rem,1.5vw,2rem)]"
+              data-image-reveal
+              data-trigger="section"
+              data-delay-desktop={i < 2 ? '0.25' : '0.15'}
+            >
+              <div class="absolute inset-0" data-photo-zoom>
+                <Image
+                  src={post.data.cover}
+                  alt={post.data.coverAlt}
+                  class={`parallax-img ${post.data.softParallax ? 'parallax-img--soft' : ''}`}
+                  data-parallax
+                  widths={[640, 1024, 1600]}
+                  sizes="(width < 40rem) 114vw, 58vw"
+                  loading={i < 2 ? 'eager' : 'lazy'}
+                />
+              </div>
+              <div class="reveal-panel absolute inset-0 z-10"></div>
+            </div>
+
+            <div
+              class="mt-[clamp(1rem,1.4vw,2rem)] flex items-center gap-[clamp(0.5rem,0.7vw,0.9rem)] font-sans text-[clamp(0.8rem,0.9vw,1.05rem)] font-normal text-graphite/90 max-lg:mt-[4vw] max-lg:text-[clamp(0.78rem,3.1vw,0.95rem)]"
+            >
+              <span class="h-[0.5em] w-[0.5em] shrink-0 rounded-full bg-graphite/90" aria-hidden="true"></span>
+              <time datetime={isoDate(post.data.date)}>{formatDateMonthFirst(post.data.date)}</time>
+            </div>
+
+            <h2
+              class="mt-[clamp(0.5rem,0.8vw,1.1rem)] font-display text-[clamp(1.15rem,1.9vw,2.5rem)] font-medium uppercase leading-[1.15] text-graphite transition-colors duration-500 [@media(hover:hover)]:group-hover:text-ink max-lg:mt-[2.5vw] max-lg:text-[clamp(1.15rem,5.2vw,2rem)]"
+            >
+              {post.data.title}
+            </h2>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="relative mt-[10vw] h-[240vh] max-lg:mt-[20vw] max-lg:h-[200vh]" data-headline-pin data-stagger="0.15" data-hold="1">
+    <div class="sticky top-0 h-screen overflow-hidden">
+      <div
+        class="pointer-events-none absolute inset-0 flex items-center justify-center px-[2vw] max-lg:px-[4vw]"
+        data-headline-group
+      >
+        <h2 class="text-center font-display text-[clamp(3rem,8vw,10rem)] font-medium uppercase leading-[1] text-graphite">
+          <span class="block overflow-hidden -mb-[0.15em]"><span class="headline-line block pb-[0.15em]">Masz pytanie?</span></span>
+        </h2>
+      </div>
+
+      <div
+        class="pointer-events-none absolute inset-0 flex flex-col items-center justify-center px-[2vw] max-lg:px-[4vw]"
+        data-headline-group
+        data-stays
+      >
+        <h2 class="text-center font-display text-[clamp(2rem,4.5vw,5.5rem)] font-medium uppercase leading-[1.05] text-graphite max-lg:text-[clamp(1.4rem,7vw,2.75rem)]">
+          <span class="block overflow-hidden -mb-[0.15em]"><span class="headline-line block pb-[0.15em]">Sprawdzimy to</span></span>
+          <span class="block overflow-hidden -mb-[0.15em]"><span class="headline-line block pb-[0.15em]">na Twoich liczbach</span></span>
+        </h2>
+
+        <div class="pointer-events-auto flex flex-col items-center" data-headline-extra>
+          <p
+            class="mt-[2vw] max-w-[42vw] text-center font-sans text-[clamp(0.95rem,1.1vw,1.25rem)] font-medium leading-[1.35] text-graphite max-lg:mt-[3vh] max-lg:max-w-none"
+            data-extra-words
+          >
+            Wpisy opisują typowe sytuacje, a Twoja firma może mieć inne. Napisz
+            do nas, a policzymy to na Twoich dokumentach.
+          </p>
+
+          <span class="mt-[clamp(1rem,1.4vw,2rem)] flex overflow-hidden max-lg:mt-[3vh]">
+            <a
+              href="#"
+              class="extra-line group relative z-10 inline-flex w-fit cursor-pointer items-center gap-[clamp(1rem,1.4vw,2rem)] overflow-hidden whitespace-nowrap rounded-full border-2 border-transparent bg-ink py-[clamp(0.75rem,0.9vw,1.15rem)] pl-[clamp(1.5rem,2.2vw,3rem)] pr-[clamp(0.75rem,1.1vw,1.5rem)] text-canvas transition-colors duration-700 hover:border-ink max-lg:gap-[4vw] max-lg:whitespace-normal max-lg:py-[3vw] max-lg:pl-[5vw] max-lg:pr-[3vw]"
+              aria-haspopup="dialog"
+              data-open-form
+            >
+              <span class="relative z-10 font-display text-[clamp(1rem,1.15vw,1.375rem)] font-normal uppercase transition-all duration-[400ms] group-hover:translate-x-[1.2vw] group-hover:text-ink max-lg:text-[0.85rem]">Napisz do nas</span>
+              <span class="relative z-0 flex h-[clamp(1.75rem,2vw,2.75rem)] w-[clamp(1.75rem,2vw,2.75rem)] shrink-0 rounded-full bg-canvas transition-transform duration-700 ease-out group-hover:duration-[1600ms] group-hover:scale-[55]"></span>
+            </a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</BaseLayout>

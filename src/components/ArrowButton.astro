@@ -1,0 +1,99 @@
+---
+import HoverLetters from './HoverLetters.astro';
+
+interface Props {
+  text: string;
+  direction?: 'right' | 'left';
+  arrow?: boolean;
+  variant?: 'full' | 'text';
+  type?: 'button' | 'submit';
+  surface?: 'dark' | 'light';
+  size?: 'default' | 'roomy';
+  [key: string]: unknown;
+}
+
+const {
+  text,
+  direction = 'right',
+  arrow: withArrow = true,
+  variant = 'text',
+  type = 'button',
+  surface = 'dark',
+  size = 'default',
+  ...rest
+} = Astro.props;
+
+const onLight = surface === 'light';
+const full = variant === 'full';
+const fullPadding =
+  size === 'roomy'
+    ? 'px-[clamp(1.75rem,2.6vw,3.5rem)] py-[clamp(0.85rem,1.15vw,1.5rem)]'
+    : 'px-[26px] py-[10px] max-sm:px-[20px] max-sm:py-[9px]';
+const variantClasses = full
+  ? onLight
+    ? `rounded-full bg-ink text-canvas ${fullPadding}`
+    : `rounded-full bg-canvas text-ink ${fullPadding}`
+  : onLight
+    ? 'pb-[0.15em] text-ink'
+    : 'pb-[0.15em] text-canvas';
+const underlineColor = onLight ? 'bg-ink' : 'bg-canvas';
+
+const paths =
+  direction === 'right'
+    ? '<path d="M5 12h14"/><path d="m13 6 6 6-6 6"/>'
+    : '<path d="M19 12H5"/><path d="m11 6-6 6 6 6"/>';
+const arrow = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="h-[1em] w-[1em]" aria-hidden="true">${paths}</svg>`;
+
+const leaving = direction === 'right' ? 'group-hover:translate-x-[150%]' : 'group-hover:-translate-x-[150%]';
+const incoming = direction === 'right' ? '-translate-x-[150%]' : 'translate-x-[150%]';
+---
+<button
+  type={type}
+  class={`group relative inline-flex cursor-pointer items-center gap-[12px] font-display uppercase text-[22px] font-medium leading-none max-sm:gap-[8px] max-sm:text-[17px] ${variantClasses}`}
+  {...rest}
+>
+  {
+    withArrow && direction === 'left' && (
+      <span class="relative block h-[1.15em] w-[1em] overflow-hidden">
+        <span class={`absolute inset-0 flex items-center justify-center transition-transform duration-500 ease-out ${leaving}`}>
+          <Fragment set:html={arrow} />
+        </span>
+        <span class={`absolute inset-0 flex ${incoming} items-center justify-center transition-transform duration-500 ease-out group-hover:translate-x-0`}>
+          <Fragment set:html={arrow} />
+        </span>
+      </span>
+    )
+  }
+
+  <span class="block">
+    <HoverLetters text={text} />
+  </span>
+
+  {
+    withArrow && direction === 'right' && (
+      <span class="relative block h-[1.15em] w-[1em] overflow-hidden">
+        <span class={`absolute inset-0 flex items-center justify-center transition-transform duration-500 ease-out ${leaving}`}>
+          <Fragment set:html={arrow} />
+        </span>
+        <span class={`absolute inset-0 flex ${incoming} items-center justify-center transition-transform duration-500 ease-out group-hover:translate-x-0`}>
+          <Fragment set:html={arrow} />
+        </span>
+      </span>
+    )
+  }
+
+  {
+    !full && (
+      <>
+        <span
+          class={`absolute bottom-0 left-0 h-[2px] w-full origin-right ${underlineColor} transition-transform duration-300 ease-in group-hover:scale-x-0`}
+          aria-hidden="true"
+        />
+        <span
+          class={`absolute bottom-0 left-0 h-[2px] w-full origin-left scale-x-0 ${underlineColor} transition-transform delay-300 duration-300 ease-out group-hover:scale-x-100`}
+          aria-hidden="true"
+        />
+      </>
+    )
+  }
+</button>

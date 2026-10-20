@@ -1,0 +1,37 @@
+---
+interface Props {
+  text: string;
+  step?: number;
+}
+
+const { text, step = 30 } = Astro.props;
+
+let letterIndex = 0;
+const words = text
+  .split(' ')
+  .filter(Boolean)
+  .map((word) => [...word].map((char) => ({ char, delay: letterIndex++ * step })));
+---
+<span class="inline-block align-bottom">
+  {
+    words.map((letters, wordIndex) => (
+      <>
+        {wordIndex > 0 && <span class="inline-block w-[0.3em]" />}
+
+        <span class="inline-block whitespace-nowrap align-bottom">
+          {letters.map(({ char, delay }) => (
+            <span class="inline-block h-[1.15em] overflow-hidden align-bottom leading-[1.15]">
+              <span
+                class="block -translate-y-1/2 transition-transform duration-500 ease-out group-hover:translate-y-0"
+                style={`transition-delay:${delay}ms`}
+              >
+                <span class="block">{char}</span>
+                <span class="block">{char}</span>
+              </span>
+            </span>
+          ))}
+        </span>
+      </>
+    ))
+  }
+</span>

@@ -1,0 +1,37 @@
+---
+import HoverLetters from './HoverLetters.astro';
+---
+<header class="fixed inset-x-0 top-0 z-50" data-navbar>
+  <nav class="flex items-center justify-between px-[2vw] py-8 max-lg:px-[4vw] max-lg:py-5">
+    <a
+      href="/"
+      class="shrink-0 text-center font-sans text-2xl font-medium leading-[0.95] text-graphite transition-colors duration-500 hover:text-ink max-lg:text-xl"
+      aria-label="Strona główna"
+    >
+      Iwona<br />Mazur
+    </a>
+
+    <button
+      type="button"
+      class="group flex h-[3.25rem] shrink-0 cursor-pointer items-center gap-[clamp(0.9rem,1.1vw,1.5rem)] rounded-full bg-ink pl-[clamp(1.15rem,1.4vw,1.9rem)] pr-[clamp(1rem,1.2vw,1.6rem)] text-canvas max-lg:h-[2.875rem] max-lg:gap-[3.5vw] max-lg:pl-[4.5vw] max-lg:pr-[4vw]"
+      aria-label="Menu"
+      aria-expanded="false"
+      aria-controls="menu"
+      data-menu-open
+    >
+      <span
+        class="block font-display text-[clamp(0.95rem,1.05vw,1.15rem)] font-medium uppercase leading-none max-lg:text-[clamp(0.8rem,3.4vw,1rem)]"
+      >
+        <HoverLetters text="Menu" />
+      </span>
+
+      <span
+        class="flex h-[1.4rem] w-[1.4rem] shrink-0 flex-col justify-center gap-[0.35rem]"
+        aria-hidden="true"
+      >
+        <span class="block h-[2px] w-full rounded-full bg-canvas transition-transform duration-500 ease-out group-hover:-translate-y-[0.15rem]"></span>
+        <span class="block h-[2px] w-full rounded-full bg-canvas transition-transform duration-500 ease-out group-hover:translate-y-[0.15rem]"></span>
+      </span>
+    </button>
+  </nav>
+</header>

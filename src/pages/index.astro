@@ -1,0 +1,880 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import LogoSlider from '../components/LogoSlider.astro';
+import { questions } from '../data/questions.js';
+import { address, callback } from '../data/contact.js';
+import { Image } from 'astro:assets';
+import teamGroup from '../assets/photos/team-group.jpg';
+import reviewingDocuments from '../assets/photos/two-accountants-documents.jpg';
+import colleaguesReviewingDocuments from '../assets/photos/three-accountants-discussing-documents.jpg';
+import loungeConversation from '../assets/photos/lounge-conversation-two-women.jpg';
+import clientConversation from '../assets/photos/client-conversation.jpg';
+import accountantAtWorkstation from '../assets/photos/accountant-at-workstation.jpg';
+import officeBuilding from '../assets/photos/office-building-exterior.jpg';
+import crDieselLogo from '../assets/client-logos/cr-diesel.png';
+import deGazLogo from '../assets/client-logos/de-gaz.png';
+import dlRegmetLogo from '../assets/client-logos/dl-regmet.png';
+import aestheticRevolutionsLogo from '../assets/client-logos/estetyczne-rewolucje.png';
+import fsDrewnoLogo from '../assets/client-logos/fs-drewno.png';
+import hotelGoldLogo from '../assets/client-logos/hotel-gold.png';
+import ralGlassLogo from '../assets/client-logos/r-al-glass.png';
+import simpleLightsLogo from '../assets/client-logos/simple-lights.png';
+import HoverLetters from '../components/HoverLetters.astro';
+import { getCollection } from 'astro:content';
+import { formatDateMonthFirst, isoDate, sortPosts } from '../data/blog.js';
+
+const ralGlass = { name: 'R-AL Glass', image: ralGlassLogo };
+const aestheticRevolutions = { name: 'Estetyczne Rewolucje', image: aestheticRevolutionsLogo, scale: 1.25, mobileScale: 1.5 };
+const deGaz = { name: 'DE-GAZ', image: deGazLogo };
+const crDiesel = { name: 'CR Diesel', image: crDieselLogo, scale: 1.08 };
+const dlRegmet = { name: 'DL Regmet', image: dlRegmetLogo, scale: 1.03 };
+const fsDrewno = { name: 'FS Drewno', image: fsDrewnoLogo, scale: 1.1 };
+const simpleLights = { name: 'Simple Lights', image: simpleLightsLogo, scale: 0.8 };
+const hotelGold = { name: 'Hotel Gold', image: hotelGoldLogo, scale: 1.2 };
+
+const sliderLogos = [ralGlass, dlRegmet, aestheticRevolutions, crDiesel, deGaz, fsDrewno, simpleLights, hotelGold];
+const sliderMobileRows = [
+  [ralGlass, fsDrewno, deGaz, dlRegmet],
+  [simpleLights, hotelGold, aestheticRevolutions, crDiesel],
+];
+
+const clientLogos = [
+  { name: 'Apis' },
+  { name: 'Hotel Gold' },
+  { name: 'Newman Polska' },
+  { name: 'R-AL Glass' },
+  { name: 'BR-GAZ' },
+  { name: 'DE-GAZ' },
+  { name: 'Estetyczne Rewolucje' },
+  { name: 'FS Drewno' },
+  { name: 'Kinesis' },
+  { name: 'KRP Motors' },
+  { name: 'Lodowiec' },
+  { name: 'Omega System' },
+  { name: 'Simple Lights' },
+  { name: 'Sław-Mar' },
+  { name: 'DL Regmet' },
+  { name: 'PAT-Instal' },
+  { name: 'CR Diesel' },
+  { name: 'Fox-Instal' },
+  { name: 'DWOperations' },
+  { name: 'Joker' },
+  { name: 'MSK Investment' },
+  { name: 'Gąsiorek' },
+];
+
+const logoWall = [
+  [
+    { name: 'Sław-Mar', height: 26 },
+    { name: 'Kinesis', height: 18 },
+    { name: 'CR Diesel', height: 30 },
+    { name: 'DE-GAZ', height: 22 },
+    { name: 'KRP Motors', height: 28 },
+  ],
+  [
+    { name: 'Joker', height: 20 },
+    { name: 'Gąsiorek', height: 32 },
+    { name: 'PAT-Instal', height: 18 },
+    { name: 'MSK Investment', height: 26 },
+    { name: 'BR-GAZ', height: 22 },
+  ],
+  [
+    { name: 'Simple Lights', height: 30 },
+    { name: 'Newman Polska', height: 20 },
+    { name: 'Lodowiec', height: 26 },
+    { name: 'Apis', height: 28 },
+    { name: 'Fox-Instal', height: 18 },
+  ],
+  [
+    { name: 'DL Regmet', height: 22 },
+    { name: 'Hotel Gold', height: 28 },
+    { name: 'DWOperations', height: 20 },
+    { name: 'Omega System', height: 30 },
+    { name: 'R-AL Glass', height: 24 },
+  ],
+  [
+    { name: 'Estetyczne Rewolucje', height: 26 },
+    { name: 'FS Drewno', height: 22 },
+    { name: 'Newman Polska', height: 30 },
+    { name: 'Joker', height: 18 },
+    { name: 'Gąsiorek', height: 28 },
+  ],
+];
+
+const marqueeRows = [0, 1, 2, 3].map((band) => ({
+  logo: clientLogos.map((_, i) => clientLogos[(i + band * 2) % clientLogos.length]),
+  reverse: band % 2 === 1,
+  time: [3.6, 4.4, 3.2, 4][band] * clientLogos.length,
+}));
+
+const services = [
+  {
+    name: 'Księgowość',
+    description: 'Prowadzimy KPiR i księgi handlowe, wystawiamy i księgujemy faktury, a o terminach deklaracji pamiętamy za Ciebie, co miesiąc.',
+  },
+  {
+    name: 'Kadry i płace',
+    description: 'Przygotowujemy umowy i listy płac, rozliczamy składki ZUS i na bieżąco prowadzimy akta pracowników, także gdy zatrudniasz kolejne osoby.',
+  },
+  {
+    name: 'Rozliczenia z ZUS i US',
+    description: 'Składamy deklaracje w terminie i odpowiadamy na pisma z urzędów. Sprawy, które da się załatwić bez Twojego udziału, bierzemy na siebie.',
+  },
+  {
+    name: 'Doradztwo podatkowe',
+    description: 'Pomagamy wybrać formę opodatkowania i doradzamy przy bieżących decyzjach, żeby zmiana przepisów w trakcie roku nie była dla Ciebie zaskoczeniem.',
+  },
+  {
+    name: 'Zakładanie i przekształcenia firm',
+    description: 'Rejestrujemy działalność i przeprowadzamy zmianę formy prawnej. Wypełniamy wnioski i zgłaszamy firmę do ZUS oraz urzędu skarbowego.',
+  },
+];
+
+const FIRST_ROTATION = -5;
+const LAST_ROTATION = 6;
+const cardRotation = (i) =>
+  services.length > 1
+    ? FIRST_ROTATION + ((LAST_ROTATION - FIRST_ROTATION) * i) / (services.length - 1)
+    : FIRST_ROTATION;
+
+const articles = sortPosts(await getCollection('blog')).slice(0, 3);
+
+const numbers = [
+  { label: 'Specjalistów w zespole', value: '10' },
+  { label: 'Lat doświadczenia', value: '20+' },
+  { label: 'Dokumentów miesięcznie', value: '12 000' },
+  { label: 'Obsługiwanych firm', value: '90+' },
+  { label: 'Obsługiwanych branż', value: '15+' },
+];
+---
+<BaseLayout
+  loadingScreen
+  title="Biuro rachunkowe w Dębicy"
+  documentTitle="Biuro rachunkowe Dębica | Doradca podatkowy Iwona Mazur"
+  description="Biuro rachunkowe w Dębicy: księgowość, kadry i płace, rozliczenia z ZUS i US oraz doradztwo podatkowe. Umów bezpłatną 30-minutową konsultację."
+>
+  <section class="px-[2vw] pt-40 max-lg:px-[4vw] max-lg:pt-28" data-hero>
+    <div class="font-display font-medium uppercase leading-[0.85] text-ink max-lg:flex max-lg:flex-col max-lg:gap-0">
+      <div class="flex items-end justify-start gap-10 max-lg:contents">
+        <div
+          class="overflow-hidden pt-[0.6vw] -mt-[0.6vw] pb-[0.6vw] -mb-[0.6vw] max-lg:order-1 max-lg:pt-[0.9vw] max-lg:-mt-[0.9vw] max-lg:pb-[0.9vw] max-lg:-mb-[0.9vw]"
+          data-reveal-lines
+          data-duration="1.6"
+        >
+          <div class="reveal-line"><div class="giant-type text-trim text-[18vw] max-lg:text-[21vw]">Biuro</div></div>
+        </div>
+
+        <div
+          class="max-w-md font-sans font-normal normal-case tracking-normal max-lg:order-3 max-lg:mt-[2.5vh] max-lg:max-w-none"
+          data-reveal-lines
+          data-stagger="0.1"
+          data-delay="0.28"
+        >
+          <h1 class="text-[clamp(1.25rem,1.6vw,1.75rem)] leading-[1.05] text-graphite">
+            <span class="block overflow-hidden -mb-[0.15em]"><span class="reveal-line block pb-[0.15em]">Biuro rachunkowe w</span></span>
+            <span class="block overflow-hidden -mb-[0.15em]"><span class="reveal-line block pb-[0.15em]">Dębicy dla Twojej firmy.</span></span>
+          </h1>
+
+          <span class="mt-[clamp(1rem,1.4vw,2rem)] flex w-fit overflow-hidden max-lg:mt-[2vh]">
+            <a
+              href="#"
+              class="reveal-line group relative z-10 inline-flex w-fit cursor-pointer items-center gap-[clamp(1rem,1.4vw,2rem)] overflow-hidden whitespace-nowrap rounded-full border-2 border-transparent bg-ink py-[clamp(0.75rem,0.9vw,1.15rem)] pl-[clamp(1.5rem,2.2vw,3rem)] pr-[clamp(0.75rem,1.1vw,1.5rem)] text-canvas transition-colors duration-700 hover:border-ink max-lg:gap-[4vw] max-lg:whitespace-normal max-lg:py-[3vw] max-lg:pl-[5vw] max-lg:pr-[3vw]"
+              aria-haspopup="dialog"
+              data-open-form
+            >
+              <span class="relative z-10 font-display text-[clamp(1rem,1.15vw,1.375rem)] font-normal uppercase transition-all duration-[400ms] group-hover:translate-x-[1.2vw] group-hover:text-ink max-lg:text-[clamp(0.65rem,3.4vw,1.05rem)]">Umów bezpłatną konsultację</span>
+              <span class="relative z-0 flex h-[clamp(1.75rem,2vw,2.75rem)] w-[clamp(1.75rem,2vw,2.75rem)] shrink-0 rounded-full bg-canvas transition-transform duration-700 ease-out group-hover:duration-[1600ms] group-hover:scale-[55]"></span>
+            </a>
+          </span>
+        </div>
+      </div>
+
+      <div class="mt-[5vw] flex items-stretch gap-[2vw] max-lg:contents">
+        <div
+          class="relative -my-[1vw] min-w-0 flex-1 overflow-hidden rounded-[clamp(1rem,1.5vw,2rem)] max-lg:order-4 max-lg:mb-0 max-lg:mt-[2.5vh] max-lg:aspect-[1600/1143] max-lg:w-full max-lg:flex-none"
+          data-image-reveal
+          data-delay="0.35"
+          data-trigger="[data-hero]"
+          data-start="top bottom"
+        >
+          <Image
+            src={teamGroup}
+            alt="Zespół biura rachunkowego Iwony Mazur w komplecie, w biurze"
+            class="parallax-img parallax-img--whole"
+            data-parallax
+            widths={[640, 1024, 1600]}
+            sizes="(width < 64rem) 92vw, 32vw"
+            loading="eager"
+          />
+          <div class="reveal-panel absolute inset-0 z-10"></div>
+        </div>
+
+        <div
+          class="shrink-0 overflow-hidden pt-[0.6vw] -mt-[0.6vw] pb-[0.6vw] -mb-[0.6vw] max-lg:order-2 max-lg:mt-[calc(1.6vh-0.9vw)] max-lg:pt-[0.9vw] max-lg:pb-[0.9vw] max-lg:-mb-[0.9vw]"
+          data-reveal-lines
+          data-direction="down"
+          data-duration="1.6"
+          data-delay="0.12"
+          data-trigger="[data-hero]"
+          data-start="top bottom"
+        >
+          <div class="reveal-line"><div class="giant-type text-trim text-[18vw] max-lg:text-[21vw]">Mazur</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <LogoSlider logos={sliderLogos} mobileRows={sliderMobileRows} repeat={2} />
+
+  <section
+    id="o-nas"
+    class="mt-[9.4vw] px-[2vw] max-lg:mt-[20.5vw] max-lg:flex max-lg:flex-col max-lg:gap-[5vw] max-lg:px-[4vw]"
+  >
+    <h2
+      class="font-display text-[clamp(2rem,3.8vw,4.5rem)] font-medium uppercase leading-[1.05] text-graphite max-lg:order-1 max-lg:text-[clamp(1.35rem,6vw,2.25rem)]"
+      data-reveal-lines
+    >
+      <span class="block overflow-hidden -mb-[0.15em]"><span class="reveal-line block pb-[0.15em]">Prowadzimy księgowość</span></span>
+      <span class="block overflow-hidden -mb-[0.15em]"><span class="reveal-line block pb-[0.15em]">od Dębicy aż po</span></span>
+      <span class="block overflow-hidden -mb-[0.15em]"><span class="reveal-line block pb-[0.15em]">całą Polskę.</span></span>
+    </h2>
+
+    <div class="mt-[2vw] max-lg:order-3 max-lg:mt-0">
+      <a
+        href="/o-nas"
+        class="group inline-flex border-b-2 border-graphite pb-[1px] font-display uppercase text-[clamp(1.1rem,1.6vw,1.75rem)] font-medium text-graphite transition-colors duration-500 hover:border-ink hover:text-ink"
+      >
+        <HoverLetters text="O nas" />
+      </a>
+    </div>
+
+    <div class="mt-[3vw] grid grid-cols-3 items-end gap-[2vw] max-lg:contents">
+      <div class="relative w-full overflow-hidden rounded-[clamp(1rem,1.5vw,2rem)] h-[clamp(18rem,30vw,38rem)] max-lg:order-5 max-lg:h-[62vw]" data-image-reveal>
+        <Image
+          src={reviewingDocuments}
+          alt="Dwie księgowe omawiające dokumenty przy stanowisku pracy"
+          class="parallax-img"
+          data-parallax
+          widths={[640, 1024, 1600]}
+          sizes="(width < 64rem) 116vw, 56vw"
+        />
+        <div class="reveal-panel absolute inset-0 z-10"></div>
+      </div>
+
+      <div class="relative w-full overflow-hidden rounded-[clamp(1rem,1.5vw,2rem)] h-[clamp(15rem,25vw,32rem)] max-lg:order-6 max-lg:h-[52vw]" data-image-reveal>
+        <Image
+          src={loungeConversation}
+          alt="Dwie osoby rozmawiają w fotelach w strefie spotkań biura"
+          class="parallax-img parallax-img--soft"
+          data-parallax
+          widths={[640, 1024, 1400]}
+          sizes="(width < 64rem) 92vw, 44vw"
+        />
+        <div class="reveal-panel absolute inset-0 z-10"></div>
+      </div>
+
+      <div class="flex flex-col justify-end max-lg:contents">
+        <p
+          class="mb-[1.5vw] font-sans text-[clamp(0.95rem,1.1vw,1.25rem)] font-medium leading-[1.25] text-graphite max-lg:order-2 max-lg:mb-0"
+          data-words-scrub
+          data-from="0.3"
+          data-to="1"
+        >
+          Prowadzimy pełną księgowość i księgi przychodów i rozchodów, rozliczamy
+          firmy z urzędem skarbowym i ZUS, zajmujemy się też kadrami i płacami.
+          Pomagamy też przy bieżących decyzjach finansowych, więc na
+          prowadzenie firmy zostaje Ci więcej czasu.
+        </p>
+        <div class="relative w-full overflow-hidden rounded-[clamp(1rem,1.5vw,2rem)] h-[clamp(15rem,25vw,32rem)] max-lg:order-4 max-lg:h-[52vw]" data-image-reveal>
+          <Image
+            src={clientConversation}
+            alt="Rozmowa dwóch osób przy biurku, z dokumentami w dłoniach"
+            class="parallax-img"
+            data-parallax
+            widths={[640, 1024, 1400]}
+            sizes="(width < 64rem) 97vw, 47vw"
+          />
+          <div class="reveal-panel absolute inset-0 z-10"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="relative mt-[12vw] h-[300vh] max-lg:hidden" data-logo-wall>
+    <div class="sticky top-0 h-screen">
+      <h2
+        class="absolute inset-x-0 top-0 z-0 px-[2vw] pt-[8vh] font-display text-[clamp(2rem,4.5vw,5.5rem)] font-medium uppercase leading-[1.05] text-graphite"
+        data-reveal-lines
+        data-trigger="[data-logo-wall]"
+        data-start="top 85%"
+        data-end="top top-=30%"
+        data-stagger="0"
+      >
+        <span class="block overflow-hidden -mb-[0.15em]"><span class="reveal-line block pb-[0.15em]">Firmy, które</span></span>
+        <span class="block overflow-hidden -mb-[0.15em]"><span class="reveal-line block pb-[0.15em]">nam zaufały</span></span>
+      </h2>
+
+      <div class="absolute inset-x-0 top-0 z-10 flex items-start gap-[1.2vw] px-[2vw]">
+        {
+          logoWall.map((tiles) => (
+            <div class="min-w-0 flex-1" data-logo-col>
+              <div class="flex flex-col gap-[1.2vw]">
+                {tiles.map(({ name, height }) => (
+                  <div
+                    class="flex w-full items-center justify-center rounded-[clamp(1rem,1.5vw,2rem)] bg-graphite p-[clamp(1rem,2.2vw,3rem)]"
+                    style={`height:${height}vw`}
+                  >
+                    <span class="text-balance text-center font-display text-[clamp(1rem,1.9vw,2.2rem)] font-medium uppercase leading-[1.1] tracking-[0.02em] text-canvas">
+                      {name}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="mt-[34vw] hidden max-lg:block">
+    <h2
+      class="px-[4vw] text-right font-display text-[clamp(1.35rem,6vw,2.25rem)] font-medium uppercase leading-[1.05] text-graphite"
+      data-reveal-lines
+      data-stagger="0"
+    >
+      <span class="block overflow-hidden -mb-[0.15em]"><span class="reveal-line block pb-[0.15em]">Firmy, które</span></span>
+      <span class="block overflow-hidden -mb-[0.15em]"><span class="reveal-line block pb-[0.15em]">nam zaufały</span></span>
+    </h2>
+
+    <div
+      class="mt-[8vw] flex flex-col gap-[2.5vw]"
+      data-client-marquee
+    >
+      {
+        marqueeRows.map(({ logo, reverse, time }, band) => (
+          <div
+            class="overflow-hidden"
+            data-reveal-lines="once"
+            data-stagger="0"
+            data-duration="0.6"
+            data-delay={(band * 0.06).toString()}
+            data-trigger="[data-client-marquee]"
+            data-start="top 95%"
+          >
+            <div
+              class:list={['marquee-track flex w-max items-center', reverse && 'marquee-track--reverse']}
+              style={`animation-duration:${time}s`}
+            >
+              {[...logo, ...logo].map((l) => (
+                <div class="reveal-line mr-[2.5vw] shrink-0">
+                  <div class="flex h-[25vw] w-[44vw] items-center justify-center rounded-[2vw] bg-graphite p-[3.5vw]">
+                    <span class="text-balance text-center font-display text-[clamp(1rem,4.6vw,1.75rem)] font-medium uppercase leading-[1.1] tracking-[0.02em] text-canvas">
+                      {l.name}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="relative h-[420vh] max-lg:hidden" data-headline-pin data-stagger="0.5" data-photo-in="2.6" data-out="1.6" data-photo-out="2.6" data-scrub="1.2">
+    <div class="sticky top-0 flex h-screen items-center justify-center overflow-hidden px-[2vw] max-lg:px-[4vw]">
+      <div class="flex items-center">
+        <h2 class="shrink-0 text-center font-display text-[clamp(2rem,4.5vw,5.5rem)] font-medium uppercase leading-[1.05] text-graphite">
+          <span class="block overflow-hidden -mb-[0.15em]"><span class="headline-line block pb-[0.15em]">Nasze biuro</span></span>
+          <span class="block overflow-hidden -mb-[0.15em]"><span class="headline-line block pb-[0.15em]">w liczbach</span></span>
+        </h2>
+        <div class="w-0 shrink-0 overflow-hidden" data-headline-photo="width" data-photo-exit>
+          <div class="w-max pl-[4vw]">
+            <div class="relative aspect-[1600/1143] w-[min(46vw,78vh)] overflow-hidden rounded-[clamp(1rem,1.5vw,2rem)]">
+              <Image
+                src={officeBuilding}
+                alt="Budynek biura od strony ulicy"
+                class="h-full w-full object-cover"
+                widths={[640, 1024, 1600]}
+                sizes="46vw"
+              />
+              <address class="absolute bottom-[clamp(0.75rem,1.2vw,1.5rem)] left-[clamp(0.75rem,1.2vw,1.5rem)] rounded-full bg-canvas px-[clamp(0.9rem,1.2vw,1.5rem)] py-[clamp(0.5rem,0.7vw,0.9rem)] font-sans text-[clamp(0.7rem,0.85vw,1.05rem)] font-medium not-italic uppercase leading-[1.1] tracking-[0.08em] text-graphite">
+                {address.label}
+              </address>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section
+    class="mt-[8vw] py-[10vh] max-lg:mt-section-mobile max-lg:pb-[6vh] max-lg:pt-0"
+    data-numbers
+  >
+    <h2
+      class="hidden font-display text-[clamp(1.5rem,7vw,2.75rem)] font-medium uppercase leading-[1.05] text-graphite max-lg:mb-[5vw] max-lg:block max-lg:px-[4vw]"
+      data-reveal-lines
+    >
+      <span class="block overflow-hidden -mb-[0.15em]"><span class="reveal-line block pb-[0.15em]">Nasze biuro</span></span>
+      <span class="block overflow-hidden -mb-[0.15em]"><span class="reveal-line block pb-[0.15em]">w liczbach</span></span>
+    </h2>
+
+    <div class="border-b border-graphite/30">
+      {
+        numbers.map(({ label, value }) => (
+          <div class="flex min-h-[16vh] items-center justify-between gap-[2vw] border-t border-graphite/30 px-[2vw] py-[clamp(1rem,1.6vw,2.5rem)] max-lg:px-[4vw] max-sm:min-h-0 max-sm:gap-[4vw]">
+            <span class="text-trim self-start pt-[0.3em] font-sans text-[clamp(0.7rem,0.85vw,1.05rem)] font-medium uppercase leading-[1.1] tracking-[0.08em] text-graphite">
+              {label}
+            </span>
+            <span
+              class="text-trim shrink-0 font-display text-[clamp(3.75rem,11vw,14rem)] font-medium uppercase leading-[0.85] tabular-nums text-ink"
+              data-counter
+              data-trigger="[data-numbers]"
+              data-start="top bottom"
+            >
+              {value}
+            </span>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="relative mt-[12vw] h-[350vh] max-lg:mt-[8vw] max-lg:h-[260vh]" data-cards-section>
+    <div class="sticky top-0 grid h-screen grid-cols-2 items-center gap-[2vw] overflow-hidden px-[2vw] max-lg:grid-cols-1 max-lg:grid-rows-[auto_minmax(0,1fr)] max-lg:items-start max-lg:gap-[3vh] max-lg:px-[4vw] max-lg:pt-[clamp(4.5rem,9vh,7rem)]">
+      <div>
+        <h2
+          class="font-display text-[clamp(2rem,4.5vw,5.5rem)] font-medium uppercase leading-[1.05] text-graphite"
+          data-reveal-lines
+          data-end-trigger="[data-cards-section]"
+          data-end="bottom top+=45%"
+        >
+          <span class="block overflow-hidden -mb-[0.15em]"><span class="reveal-line block pb-[0.15em]">Szukasz biura</span></span>
+          <span class="block overflow-hidden -mb-[0.15em]"><span class="reveal-line block pb-[0.15em]">rachunkowego</span></span>
+          <span class="block overflow-hidden -mb-[0.15em]"><span class="reveal-line block pb-[0.15em]">w Dębicy?</span></span>
+        </h2>
+
+        <p
+          class="mt-[2vw] max-w-[32vw] font-sans text-[clamp(0.95rem,1.1vw,1.25rem)] font-medium leading-[1.25] text-graphite max-lg:mt-[2vh] max-lg:max-w-none"
+          data-words-scrub
+          data-from="0.3"
+          data-to="1"
+        >
+          Obsługujemy jednoosobowe działalności, spółki handlowe i zakłady
+          produkcyjne. Pilnujemy terminów rozliczeń i odpowiadamy na pytania,
+          zanim zamienią się w problem.
+        </p>
+
+        <div class="mt-[2vw] max-lg:mt-[2vh]">
+          <a
+            href="/uslugi"
+            class="group inline-flex border-b-2 border-graphite pb-[1px] font-display uppercase text-[clamp(0.95rem,1.25vw,1.4rem)] font-medium text-graphite transition-colors duration-500 hover:border-ink hover:text-ink"
+          >
+            <HoverLetters text="Poznaj nasze usługi" />
+          </a>
+        </div>
+      </div>
+
+      <div
+        class="relative h-full"
+        data-cards
+        data-base-x="-10"
+        data-base-x-max-lg="-6"
+        data-shift-x="3"
+        data-shift-y="1.6"
+        data-shift-y-max-lg="1.1"
+      >
+        {
+          services.map(({ name, description }, i) => (
+            <article
+              class="absolute left-0 right-0 top-1/2 mx-auto mt-[calc(var(--bok)*-0.5)] flex h-[var(--bok)] w-[var(--bok)] flex-col justify-between rounded-[clamp(1rem,1.5vw,2rem)] border border-canvas/15 bg-graphite p-[clamp(1.5rem,2.2vw,3rem)] [--bok:clamp(18rem,30vw,40rem)] max-lg:top-[6vh] max-lg:mt-0 max-lg:[--bok:68vw]"
+              style={`z-index:${i + 1}`}
+              data-card
+              data-rotate={cardRotation(i).toFixed(2)}
+            >
+              <div>
+                <h3 class="max-w-[85%] font-display text-[clamp(1.25rem,2vw,2.5rem)] font-medium uppercase leading-[1.1] text-canvas">
+                  {name}
+                </h3>
+                <p class="mt-[clamp(0.5rem,0.8vw,1rem)] max-w-[80%] font-sans text-[clamp(0.85rem,1.05vw,1.2rem)] font-normal leading-[1.25] text-canvas/70">
+                  {description}
+                </p>
+              </div>
+              <span class="self-end font-counter text-[clamp(1.75rem,3vw,4rem)] font-medium tabular-nums leading-none text-canvas/45">
+                {String(i + 1).padStart(2, '0')}
+              </span>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <div
+    class="pointer-events-none fixed inset-0 -z-10 bg-ink opacity-0"
+    data-dark-bg-layer
+    aria-hidden="true"
+  >
+  </div>
+
+  <section
+    class="relative mt-[12vw] h-[1040vh] max-lg:mt-[20vw] max-lg:h-[820vh]"
+    data-dark-bg
+    data-end="bottom bottom"
+    data-headline-pin
+    data-stagger="0.12"
+    data-hold="2.2"
+  >
+    <div class="sticky top-0 h-screen overflow-hidden">
+      <div
+        class="pointer-events-none absolute inset-0 flex items-center justify-center px-[2vw] pb-[clamp(4rem,10vh,9rem)] max-lg:px-[4vw]"
+        data-headline-group
+      >
+        <h2 class="text-center font-display text-[clamp(2.5rem,7vw,9rem)] font-medium uppercase leading-[1] text-canvas max-lg:text-[clamp(2rem,10vw,4rem)]">
+          <span class="block overflow-hidden -mb-[0.15em]"><span class="headline-line block pb-[0.15em]">Jak działamy</span></span>
+        </h2>
+      </div>
+
+      <div
+        class="pointer-events-none absolute inset-0 flex flex-col items-center justify-center px-[2vw] pb-[clamp(4rem,10vh,9rem)] max-lg:px-[4vw]"
+        data-headline-group
+      >
+        <div class="mb-[clamp(0.75rem,1.4vw,1.75rem)] overflow-hidden">
+          <span class="headline-line block pb-[0.15em] font-display text-[clamp(0.8rem,1vw,1.15rem)] font-medium uppercase tracking-[0.03em] text-canvas/50">Krok 01 / 04</span>
+        </div>
+
+        <h3 class="text-center font-display text-[clamp(1.75rem,4vw,5rem)] font-medium uppercase leading-[1.05] text-canvas max-lg:text-[clamp(1.4rem,7vw,2.75rem)]">
+          <span class="block overflow-hidden -mb-[0.15em]"><span class="headline-line block pb-[0.15em]">Odzywasz się</span></span>
+          <span class="block overflow-hidden -mb-[0.15em]"><span class="headline-line block pb-[0.15em]">do nas</span></span>
+        </h3>
+
+        <div class="flex flex-col items-center" data-headline-extra>
+          <p
+            class="mt-[2vw] max-w-[42vw] text-center font-sans text-[clamp(0.95rem,1.1vw,1.25rem)] font-normal leading-[1.4] text-canvas/70 max-lg:mt-[5vw] max-lg:max-w-none"
+            data-extra-words
+          >
+            Piszesz albo dzwonisz. Zadajemy kilka podstawowych pytań
+            o Twoją firmę i umawiamy termin spotkania online.
+          </p>
+        </div>
+      </div>
+
+      <div
+        class="pointer-events-none absolute inset-0 flex flex-col items-center justify-center px-[2vw] pb-[clamp(4rem,10vh,9rem)] max-lg:px-[4vw]"
+        data-headline-group
+      >
+        <div class="mb-[clamp(0.75rem,1.4vw,1.75rem)] overflow-hidden">
+          <span class="headline-line block pb-[0.15em] font-display text-[clamp(0.8rem,1vw,1.15rem)] font-medium uppercase tracking-[0.03em] text-canvas/50">Krok 02 / 04</span>
+        </div>
+
+        <h3 class="text-center font-display text-[clamp(1.75rem,4vw,5rem)] font-medium uppercase leading-[1.05] text-canvas max-lg:text-[clamp(1.4rem,7vw,2.75rem)]">
+          <span class="block overflow-hidden -mb-[0.15em]"><span class="headline-line block pb-[0.15em]">Trzydzieści minut</span></span>
+          <span class="block overflow-hidden -mb-[0.15em]"><span class="headline-line block pb-[0.15em]">o Twojej firmie</span></span>
+        </h3>
+
+        <div class="flex flex-col items-center" data-headline-extra>
+          <p
+            class="mt-[2vw] max-w-[42vw] text-center font-sans text-[clamp(0.95rem,1.1vw,1.25rem)] font-normal leading-[1.4] text-canvas/70 max-lg:mt-[5vw] max-lg:max-w-none"
+            data-extra-words
+          >
+            Rozmawiamy o formie działalności, obrotach, zatrudnieniu i o tym,
+            co dziś sprawia najwięcej kłopotu. Rozmowa do niczego nie zobowiązuje.
+          </p>
+        </div>
+      </div>
+
+      <div
+        class="pointer-events-none absolute inset-0 flex flex-col items-center justify-center px-[2vw] pb-[clamp(4rem,10vh,9rem)] max-lg:px-[4vw]"
+        data-headline-group
+      >
+        <div class="mb-[clamp(0.75rem,1.4vw,1.75rem)] overflow-hidden">
+          <span class="headline-line block pb-[0.15em] font-display text-[clamp(0.8rem,1vw,1.15rem)] font-medium uppercase tracking-[0.03em] text-canvas/50">Krok 03 / 04</span>
+        </div>
+
+        <h3 class="text-center font-display text-[clamp(1.75rem,4vw,5rem)] font-medium uppercase leading-[1.05] text-canvas max-lg:text-[clamp(1.4rem,7vw,2.75rem)]">
+          <span class="block overflow-hidden -mb-[0.15em]"><span class="headline-line block pb-[0.15em]">Dobieramy zakres</span></span>
+          <span class="block overflow-hidden -mb-[0.15em]"><span class="headline-line block pb-[0.15em]">i wariant dla Ciebie</span></span>
+        </h3>
+
+        <div class="flex flex-col items-center" data-headline-extra>
+          <p
+            class="mt-[2vw] max-w-[42vw] text-center font-sans text-[clamp(0.95rem,1.1vw,1.25rem)] font-normal leading-[1.4] text-canvas/70 max-lg:mt-[5vw] max-lg:max-w-none"
+            data-extra-words
+          >
+            Przedstawiamy warianty współpracy z ceną i zakresem każdego z nich.
+            Wybierasz ten, który przy Twojej skali wychodzi najkorzystniej.
+          </p>
+        </div>
+      </div>
+
+      <div
+        class="pointer-events-none absolute inset-0 flex flex-col items-center justify-center px-[2vw] pb-[clamp(4rem,10vh,9rem)] max-lg:px-[4vw]"
+        data-headline-group
+      >
+        <div class="mb-[clamp(0.75rem,1.4vw,1.75rem)] overflow-hidden">
+          <span class="headline-line block pb-[0.15em] font-display text-[clamp(0.8rem,1vw,1.15rem)] font-medium uppercase tracking-[0.03em] text-canvas/50">Krok 04 / 04</span>
+        </div>
+
+        <h3 class="text-center font-display text-[clamp(1.75rem,4vw,5rem)] font-medium uppercase leading-[1.05] text-canvas max-lg:text-[clamp(1.4rem,7vw,2.75rem)]">
+          <span class="block overflow-hidden -mb-[0.15em]"><span class="headline-line block pb-[0.15em]">Prowadzimy księgi</span></span>
+          <span class="block overflow-hidden -mb-[0.15em]"><span class="headline-line block pb-[0.15em]">miesiąc po miesiącu</span></span>
+        </h3>
+
+        <div class="flex flex-col items-center" data-headline-extra>
+          <p
+            class="mt-[2vw] max-w-[42vw] text-center font-sans text-[clamp(0.95rem,1.1vw,1.25rem)] font-normal leading-[1.4] text-canvas/70 max-lg:mt-[5vw] max-lg:max-w-none"
+            data-extra-words
+          >
+            Terminy, deklaracje i kontakt z urzędami bierzemy na siebie.
+            O sprawach, które wymagają Twojej decyzji, mówimy z wyprzedzeniem.
+          </p>
+        </div>
+      </div>
+
+      <div
+        class="pointer-events-none absolute inset-0 flex flex-col items-center justify-center px-[2vw] pb-[clamp(4rem,10vh,9rem)] max-lg:px-[4vw]"
+        data-headline-group
+      >
+        <h3 class="text-center font-display text-[clamp(2rem,4.5vw,5.5rem)] font-medium uppercase leading-[1.05] text-canvas max-lg:text-[clamp(1.4rem,6.4vw,3.25rem)]">
+          <span class="block overflow-hidden -mb-[0.15em]"><span class="headline-line block pb-[0.15em]">Porozmawiajmy o Twojej firmie</span></span>
+        </h3>
+
+        <div class="pointer-events-auto flex flex-col items-center" data-headline-extra>
+          <p
+            class="mt-[2vw] max-w-[42vw] text-center font-sans text-[clamp(0.95rem,1.1vw,1.25rem)] font-normal leading-[1.4] text-canvas/70 max-lg:mt-[5vw] max-lg:max-w-none"
+            data-extra-words
+          >
+            Wypełnij krótki formularz, a {callback.clause}.
+            Pierwsza rozmowa jest bezpłatna i do niczego nie zobowiązuje.
+          </p>
+
+          <span class="mt-[clamp(1rem,1.4vw,2rem)] flex overflow-hidden">
+            <a
+              href="/kontakt"
+              class="extra-line group relative z-10 inline-flex w-fit cursor-pointer items-center gap-[clamp(1rem,1.4vw,2rem)] overflow-hidden whitespace-nowrap rounded-full border-2 border-transparent bg-canvas py-[clamp(0.75rem,0.9vw,1.15rem)] pl-[clamp(1.5rem,2.2vw,3rem)] pr-[clamp(0.75rem,1.1vw,1.5rem)] max-lg:gap-[4vw] max-lg:whitespace-normal max-lg:py-[3vw] max-lg:pl-[5vw] max-lg:pr-[3vw] text-ink transition-colors duration-700 hover:border-canvas"
+            >
+              <span class="relative z-10 font-display text-[clamp(1rem,1.15vw,1.375rem)] font-normal uppercase transition-all duration-[400ms] group-hover:translate-x-[1.2vw] max-lg:text-[clamp(0.65rem,3.4vw,1.05rem)] group-hover:text-canvas">Wypełnij formularz</span>
+              <span class="relative z-0 flex h-[clamp(1.75rem,2vw,2.75rem)] w-[clamp(1.75rem,2vw,2.75rem)] shrink-0 rounded-full bg-ink transition-transform duration-700 ease-out group-hover:duration-[1600ms] group-hover:scale-[55]"></span>
+            </a>
+          </span>
+        </div>
+      </div>
+
+      <div
+        class="pointer-events-none absolute right-[clamp(1.5rem,2vw,3rem)] top-1/2 -translate-y-1/2 max-lg:hidden"
+        aria-hidden="true"
+      >
+        <div class="relative h-[60vh] w-[clamp(2.5rem,3.6vw,3.75rem)] overflow-hidden rounded-full border-2 border-canvas/40">
+          <div
+            class="absolute inset-0 origin-top bg-canvas [transform:scaleY(0)]"
+            data-progress-bar
+            data-progress-axis="y"
+            data-trigger="[data-dark-bg]"
+          >
+          </div>
+
+          <span
+            class="absolute bottom-[clamp(0.85rem,1.3vw,1.4rem)] left-1/2 flex -translate-x-1/2 text-canvas"
+            data-progress-icon
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              class="h-[clamp(1rem,1.35vw,1.5rem)] w-[clamp(1rem,1.35vw,1.5rem)]"
+            >
+              <rect x="7" y="2.75" width="10" height="18.5" rx="5" />
+              <path d="M12 6.5v3.5" />
+            </svg>
+          </span>
+        </div>
+      </div>
+
+      <div
+        class="pointer-events-none absolute left-1/2 top-[clamp(1.5rem,4vh,3.5rem)] hidden -translate-x-1/2 max-lg:block"
+        aria-hidden="true"
+      >
+        <div class="relative h-[clamp(2.6rem,12vw,3.5rem)] w-[clamp(14rem,68vw,22rem)] overflow-hidden rounded-full border-2 border-canvas/40">
+          <div
+            class="absolute inset-0 origin-left bg-canvas [transform:scaleX(0)]"
+            data-progress-bar
+            data-trigger="[data-dark-bg]"
+          >
+          </div>
+
+          <span
+            class="absolute right-[clamp(1rem,4vw,1.6rem)] top-1/2 flex -translate-y-1/2 text-canvas"
+            data-progress-icon
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              class="h-[clamp(1.2rem,5vw,1.75rem)] w-[clamp(1.2rem,5vw,1.75rem)]"
+            >
+              <rect x="7" y="2.75" width="10" height="18.5" rx="5" />
+              <path d="M12 6.5v3.5" />
+            </svg>
+          </span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="mt-[12vw] grid grid-cols-[35fr_65fr] items-start gap-[2vw] px-[2vw] max-lg:mt-section-mobile max-lg:grid-cols-1 max-lg:px-[4vw]">
+    <div
+      class="relative aspect-[3/4] w-[65%] overflow-hidden rounded-[clamp(1rem,1.5vw,2rem)] max-lg:hidden"
+      data-image-reveal
+    >
+      <Image
+        src={accountantAtWorkstation}
+        alt="Księgowa przy stanowisku pracy, w tle ścianka z logo biura"
+        class="parallax-img parallax-img--soft"
+        data-parallax
+        widths={[640, 1024, 1440]}
+        sizes="49vw"
+      />
+      <div class="reveal-panel absolute inset-0 z-10"></div>
+    </div>
+
+    <div>
+      <h2
+        class="font-display text-[clamp(1.5rem,2.8vw,3.5rem)] font-medium uppercase leading-[1.05] text-graphite"
+        data-reveal-lines
+      >
+        <span class="block overflow-hidden -mb-[0.15em]"><span class="reveal-line block pb-[0.15em]">Pytania o obsługę</span></span>
+        <span class="block overflow-hidden -mb-[0.15em]"><span class="reveal-line block pb-[0.15em]">księgową firmy</span></span>
+      </h2>
+
+      <div
+        class="relative mt-[5vw] hidden aspect-[16/9] w-full overflow-hidden rounded-[clamp(1rem,1.5vw,2rem)] max-lg:block"
+        data-image-reveal
+      >
+        <Image
+          src={colleaguesReviewingDocuments}
+          alt="Trzy księgowe omawiają dokumenty przy biurku"
+          class="parallax-img parallax-img--soft"
+          data-parallax
+          widths={[640, 1024, 1440]}
+          sizes="92vw"
+        />
+        <div class="reveal-panel absolute inset-0 z-10"></div>
+      </div>
+
+      <div class="mt-[1.5vw] border-b border-graphite/25 max-lg:mt-[4vw]">
+        {
+          questions.map(({ question, answer }, i) => (
+            <div
+              class="group/faq relative overflow-hidden border-t border-graphite/25"
+              data-faq
+              data-animate="fade-up"
+              data-delay={(i * 0.08).toString()}
+            >
+
+              <button
+                type="button"
+                class="group relative z-10 flex w-full cursor-pointer items-center justify-between gap-[2vw] overflow-hidden px-[clamp(0.5rem,1vw,1.5rem)] py-[clamp(1rem,1.35vw,1.85rem)] text-left"
+                aria-expanded="false"
+                aria-controls={`faq-odpowiedz-${i}`}
+                data-faq-button
+              >
+                <span
+                  class="pointer-events-none absolute inset-0 origin-bottom scale-y-0 bg-ink transition-transform duration-300 ease-out group-hover:scale-y-100"
+                  aria-hidden="true"
+                ></span>
+
+                <span
+                  class="pointer-events-none absolute inset-0 origin-top bg-ink"
+                  aria-hidden="true"
+                  data-faq-bg
+                ></span>
+
+                <span class="relative z-10 font-sans text-[clamp(1rem,1.4vw,1.6rem)] font-medium leading-[1.25] text-graphite transition-[transform,translate,color] duration-300 ease-out group-hover:translate-x-[1vw] group-hover:text-canvas group-data-[open=true]/faq:translate-x-[1vw] group-data-[open=true]/faq:text-canvas">
+                  {question}
+                </span>
+
+                <span
+                  class="relative z-10 shrink-0 transition-[translate,rotate] duration-300 ease-out group-hover:-translate-x-[1vw] group-data-[open=true]/faq:-translate-x-[1vw] group-data-[open=true]/faq:rotate-45"
+                  aria-hidden="true"
+                >
+                  <span class="block font-display text-[clamp(1.5rem,2.2vw,2.75rem)] font-normal leading-none text-graphite transition-[rotate,color] duration-300 ease-out group-hover:-rotate-180 group-hover:text-canvas group-data-[open=true]/faq:text-canvas">
+                    +
+                  </span>
+                </span>
+              </button>
+
+              <div
+                id={`faq-odpowiedz-${i}`}
+                class="relative z-10 overflow-hidden bg-ink"
+                data-faq-answer
+              >
+                <p class="max-w-[80%] px-[clamp(1rem,1.9vw,2.7rem)] pb-[clamp(1rem,1.35vw,1.85rem)] font-sans text-[clamp(0.9rem,1.1vw,1.25rem)] font-normal leading-[1.25] text-canvas max-lg:max-w-none">
+                  {answer}
+                </p>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="mt-[12vw] px-[2vw] max-lg:mt-section-mobile max-lg:px-[4vw]">
+    <div class="flex items-end justify-between gap-[2vw] max-sm:flex-col max-sm:items-start max-sm:gap-[2vh]">
+      <h2
+        class="font-display text-[clamp(1.5rem,2.8vw,3.5rem)] font-medium uppercase leading-[1.05] text-graphite"
+        data-reveal-lines
+      >
+        <span class="block overflow-hidden -mb-[0.15em]"><span class="reveal-line block pb-[0.15em]">Najnowsze wpisy</span></span>
+      </h2>
+
+      <a
+        href="/blog"
+        class="group inline-flex shrink-0 border-b-2 border-graphite pb-[1px] font-display uppercase text-[clamp(0.95rem,1.25vw,1.4rem)] font-medium text-graphite transition-colors duration-500 hover:border-ink hover:text-ink"
+      >
+        <HoverLetters text="Zobacz wszystkie" />
+      </a>
+    </div>
+
+    <div class="mt-[3vw] grid grid-cols-3 gap-[2vw] max-lg:mt-[6vw] max-lg:grid-cols-2 max-lg:gap-[4vw] max-sm:grid-cols-1">
+      {
+        articles.map((post) => (
+          <a href={`/blog/${post.id}`} class="group block" data-cursor-label="Zobacz">
+            <div
+              class="relative aspect-[3/2] w-full overflow-hidden rounded-[clamp(1rem,1.5vw,2rem)]"
+              data-image-reveal
+            >
+              <div class="absolute inset-0" data-photo-zoom>
+                <Image
+                  src={post.data.cover}
+                  alt={post.data.coverAlt}
+                  class={`parallax-img ${post.data.softParallax ? 'parallax-img--soft' : ''}`}
+                  data-parallax
+                  widths={[480, 800, 1200]}
+                  sizes="(width < 40rem) 114vw, (width < 64rem) 60vw, 38vw"
+                />
+              </div>
+              <div class="reveal-panel absolute inset-0 z-10" />
+            </div>
+
+            <div class="mt-[clamp(1rem,1.4vw,2rem)] flex items-center gap-[clamp(0.5rem,0.7vw,0.9rem)] font-sans text-[clamp(0.8rem,0.9vw,1.05rem)] font-normal text-graphite/90 max-lg:mt-[4vw] max-lg:text-[clamp(0.78rem,3.1vw,0.95rem)]">
+              <span class="h-[0.5em] w-[0.5em] shrink-0 rounded-full bg-graphite/90" aria-hidden="true"></span>
+              <time datetime={isoDate(post.data.date)}>{formatDateMonthFirst(post.data.date)}</time>
+            </div>
+
+            <h3 class="mt-[clamp(0.5rem,0.8vw,1.1rem)] font-display text-[clamp(1rem,1.5vw,1.9rem)] font-medium uppercase leading-[1.15] text-graphite transition-colors duration-500 [@media(hover:hover)]:group-hover:text-ink max-lg:mt-[2.5vw] max-lg:text-[clamp(1.05rem,4.6vw,1.6rem)]">
+              {post.data.title}
+            </h3>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+
+</BaseLayout>

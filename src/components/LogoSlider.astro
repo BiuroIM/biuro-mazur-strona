@@ -1,0 +1,91 @@
+---
+import type { ImageMetadata } from 'astro';
+import { Image } from 'astro:assets';
+
+interface Logo {
+  name: string;
+  image?: ImageMetadata;
+  scale?: number;
+  mobileScale?: number;
+}
+
+interface Props {
+  logos: Logo[];
+  mobileRows?: Logo[][];
+  repeat?: number;
+  delay?: number;
+}
+
+const { logos, mobileRows, repeat = 2, delay = 0.5 } = Astro.props;
+
+const REFERENCE_RATIO = 2.5;
+const logoScale = (image: ImageMetadata, scale = 1) =>
+  (Math.min(1.3, Math.max(0.6, Math.sqrt(REFERENCE_RATIO / (image.width / image.height)))) * scale).toFixed(3);
+
+const buildSet = (items: Logo[], times: number) => {
+  const group = Array.from({ length: items.length * times }, (_, i) => items[i % items.length]);
+  return [...group, ...group];
+};
+
+const rows = [
+  { items: logos, set: buildSet(logos, repeat), reverse: false, visibility: mobileRows && 'max-lg:hidden' },
+  ...(mobileRows ?? []).map((items, row) => ({
+    items,
+    set: buildSet(items, Math.ceil((logos.length * repeat) / items.length)),
+    reverse: row % 2 === 1,
+    visibility: 'hidden max-lg:block',
+  })),
+];
+---
+<section class="mt-[3.9vw] max-lg:mt-[7.5vw] max-lg:flex max-lg:flex-col max-lg:gap-[3vw]">
+  {
+    rows.map(({ items, set, reverse, visibility }) => (
+      <div
+        class:list={['overflow-hidden', visibility]}
+        data-reveal-lines="once"
+        data-stagger={reverse ? '0' : '0.05'}
+        data-delay={(reverse ? delay + 0.1 : delay).toString()}
+        data-trigger="[data-hero]"
+        data-start="top bottom"
+      >
+        <div class:list={['marquee-track marquee-track--clients flex w-max items-center', reverse && 'marquee-track--reverse']}>
+          {
+            set.map((logo, i) => {
+              const decorative = i >= items.length;
+
+              return logo.image ? (
+                <div
+                  class="reveal-line mr-[clamp(2.5rem,5vw,6rem)] flex h-[clamp(4rem,6.6vw,8.25rem)] shrink-0 items-center max-lg:mr-[9vw] max-lg:h-[clamp(3.5rem,16vw,5.5rem)]"
+                  aria-hidden={decorative ? 'true' : undefined}
+                >
+                  <Image
+                    src={logo.image}
+                    alt={decorative ? '' : logo.name}
+                    height={Math.min(logo.image.height, 240)}
+                    class="h-[calc(clamp(2.4rem,3.7vw,4.6rem)*var(--logo-scale))] w-auto max-lg:h-[calc(clamp(2rem,9vw,3.1rem)*var(--logo-scale-mobile))]"
+                    style={`--logo-scale: ${logoScale(logo.image, logo.scale)}; --logo-scale-mobile: ${logoScale(logo.image, logo.mobileScale ?? logo.scale)}`}
+                    loading="eager"
+                  />
+                </div>
+              ) : (
+                <div
+                  class="reveal-line mr-[clamp(2rem,4.2vw,5rem)] flex h-[clamp(3rem,4.8vw,6rem)] shrink-0 items-center gap-[clamp(2rem,4.2vw,5rem)] max-lg:mr-[7vw] max-lg:h-[clamp(2.5rem,12vw,4rem)] max-lg:gap-[7vw]"
+                  aria-hidden={decorative ? 'true' : undefined}
+                >
+                  <span class="whitespace-nowrap font-display text-[clamp(1.1rem,2.2vw,2.5rem)] font-medium uppercase leading-none tracking-[0.02em] text-graphite max-lg:text-[clamp(1.25rem,6.2vw,2.25rem)]">
+                    {logo.name}
+                  </span>
+                  <div
+                    class="h-[clamp(1.1rem,2.2vw,2.5rem)] w-[clamp(3px,0.25vw,5px)] shrink-0 rounded-full bg-graphite max-lg:h-[clamp(1.25rem,6.2vw,2.25rem)]"
+                    aria-hidden="true"
+                  >
+                  </div>
+                </div>
+              );
+            })
+          }
+        </div>
+      </div>
+    ))
+  }
+</section>

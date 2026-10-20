@@ -1,0 +1,74 @@
+---
+import HoverLetters from './HoverLetters.astro';
+import { footerPages, currentPath } from '../data/navigation.js';
+import { email, phone } from '../data/contact.js';
+
+const path = currentPath(Astro.url);
+---
+<div
+  class="fixed inset-0 z-[58] bg-ink text-canvas [clip-path:inset(0%_0%_100%_0%)]"
+  id="menu"
+  data-menu
+  inert
+>
+  <button
+    type="button"
+    class="group absolute right-[2vw] top-8 z-10 flex h-[3.25rem] cursor-pointer items-center gap-[clamp(0.9rem,1.1vw,1.5rem)] rounded-full bg-canvas pl-[clamp(1.15rem,1.4vw,1.9rem)] pr-[clamp(1rem,1.2vw,1.6rem)] text-ink max-lg:right-[4vw] max-lg:top-5 max-lg:h-[2.875rem] max-lg:gap-[3.5vw] max-lg:pl-[4.5vw] max-lg:pr-[4vw]"
+    aria-label="Zamknij"
+    data-menu-close
+  >
+    <span
+      class="block font-display text-[clamp(0.95rem,1.05vw,1.15rem)] font-medium uppercase leading-none max-lg:text-[clamp(0.8rem,3.4vw,1rem)]"
+    >
+      <HoverLetters text="Zamknij" />
+    </span>
+
+    <span
+      class="relative block h-[1.4rem] w-[1.4rem] shrink-0 transition-transform duration-500 ease-out group-hover:rotate-180"
+      aria-hidden="true"
+    >
+      <span class="absolute left-0 top-1/2 h-[2px] w-full -translate-y-1/2 rotate-45 rounded-full bg-ink"></span>
+      <span class="absolute left-0 top-1/2 h-[2px] w-full -translate-y-1/2 -rotate-45 rounded-full bg-ink"></span>
+    </span>
+  </button>
+
+  <nav
+    class="flex h-full flex-col justify-between px-[2vw] pb-[max(2rem,6vh)] pt-[max(6.5rem,13vh)] max-lg:px-[4vw] max-lg:pt-[max(5.5rem,14vh)]"
+    aria-label="Menu"
+  >
+    <ul class="flex flex-col max-lg:gap-[0.8vh]">
+      {
+        footerPages.map(({ label, href, isForm }) => (
+          <li class="block overflow-hidden">
+            <a
+              href={href ?? '#'}
+              class="group flex w-fit aria-[current=page]:text-canvas/40"
+              aria-label={label}
+              aria-current={href === path ? 'page' : undefined}
+              aria-haspopup={isForm ? 'dialog' : undefined}
+              data-open-form={isForm ? true : undefined}
+              data-menu-link
+            >
+              <span
+                class="block font-display text-[clamp(2rem,min(5vw,7.5vh),5.5rem)] font-medium uppercase leading-[0.95] max-lg:text-[clamp(2.25rem,11vw,4rem)]"
+                data-menu-line
+              >
+                <HoverLetters text={label} />
+              </span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="-mb-[0.12em] overflow-hidden">
+      <div
+        class="flex flex-col gap-[0.4vh] pb-[0.12em] font-sans text-[clamp(1rem,1.2vw,1.35rem)] leading-[1.35] text-canvas/60 max-lg:text-[clamp(0.95rem,4vw,1.15rem)]"
+        data-menu-line
+      >
+        <a href={phone.href}>{phone.label}</a>
+        <a href={email.href}>{email.label}</a>
+      </div>
+    </div>
+  </nav>
+</div>

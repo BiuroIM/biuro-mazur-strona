@@ -1,0 +1,106 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { Image } from 'astro:assets';
+import HoverLetters from '../components/HoverLetters.astro';
+import { footerPages } from '../data/navigation.js';
+import emptyCorridor from '../assets/photos/reception-corridor-logo.jpg';
+
+const MARQUEE_REPEATS = 3;
+const DASH_LENGTH = 'clamp(3.5rem,9vw,11rem)';
+const DASH_THICKNESS = 'clamp(0.3rem,0.8vw,1rem)';
+
+const links = footerPages.filter(({ href }) => href !== '/');
+---
+
+<BaseLayout
+  noindex
+  title="Nie ma takiej strony"
+  description="Strona, której szukasz, zmieniła adres albo już jej nie ma. Wróć na stronę główną Biura Rachunkowego Iwona Mazur."
+>
+  <section class="px-[2vw] pb-[8vw] pt-40 max-lg:px-[4vw] max-lg:pb-[16vw] max-lg:pt-28">
+    <div class="-mx-[2vw] overflow-hidden pt-[0.5vw] pb-[3.6vw] -mt-[0.5vw] -mb-[1.6vw] max-lg:-mx-[4vw] max-lg:pt-[0.6vw] max-lg:pb-[4.2vw] max-lg:-mt-[0.6vw] max-lg:mb-[4.8vw]" aria-hidden="true">
+      <div
+        class="marquee-track marquee-track--hero flex w-max items-center gap-[clamp(1rem,3vw,4rem)]"
+      >
+        {
+          Array.from({ length: MARQUEE_REPEATS * 2 }).map(() => (
+            <>
+              <span class="text-trim shrink-0 font-display text-[18vw] font-medium uppercase leading-[0.85] text-ink max-lg:text-[21vw]">
+                404
+              </span>
+              <span
+                class="shrink-0 rounded-full bg-ink"
+                style={`width:${DASH_LENGTH};height:${DASH_THICKNESS}`}
+              ></span>
+            </>
+          ))
+        }
+      </div>
+    </div>
+
+    <div class="mt-[5vw] grid grid-cols-[25fr_75fr] items-start gap-[5vw] max-lg:mt-[10vw] max-lg:grid-cols-1">
+      <div
+        class="relative aspect-[3/4] w-full overflow-hidden rounded-[clamp(1rem,1.5vw,2rem)] max-lg:aspect-[4/3]"
+        data-image-reveal
+      >
+        <Image
+          src={emptyCorridor}
+          alt="Pusty korytarz biura z logo na ścianie"
+          class="parallax-img parallax-img--soft"
+          data-parallax
+          widths={[480, 857, 1143]}
+          sizes="(width < 64rem) 92vw, 25vw"
+          loading="eager"
+        />
+        <div class="reveal-panel absolute inset-0 z-10"></div>
+      </div>
+
+      <div class="flex flex-col">
+        <h1
+          class="font-display text-[clamp(2rem,4.5vw,5.5rem)] font-medium uppercase leading-[1.05] text-graphite max-lg:text-[clamp(1.6rem,8vw,3.25rem)]"
+          data-reveal-lines
+        >
+          <span class="block overflow-hidden -mb-[0.15em]"><span class="reveal-line block pb-[0.15em]">Tej strony</span></span>
+          <span class="block overflow-hidden -mb-[0.15em]"><span class="reveal-line block pb-[0.15em]">tu nie ma</span></span>
+        </h1>
+
+        <p
+          class="mt-[2vw] max-w-[36vw] font-sans text-[clamp(0.95rem,1.1vw,1.25rem)] font-medium leading-[1.35] text-graphite max-lg:mt-[4vw] max-lg:max-w-none"
+          data-animate="fade-up"
+        >
+          Strona, której szukasz, mogła zmienić adres albo już jej nie ma.
+          Wróć na stronę główną albo przejdź do jednej z zakładek poniżej.
+        </p>
+
+        <span class="mt-[clamp(1.5rem,2.4vw,3rem)] flex overflow-hidden max-lg:mt-[6vw]">
+          <a
+            href="/"
+            class="group relative z-10 inline-flex w-fit cursor-pointer items-center gap-[clamp(1rem,1.4vw,2rem)] overflow-hidden whitespace-nowrap rounded-full border-2 border-transparent bg-ink py-[clamp(0.75rem,0.9vw,1.15rem)] pl-[clamp(1.5rem,2.2vw,3rem)] pr-[clamp(0.75rem,1.1vw,1.5rem)] text-canvas transition-colors duration-700 hover:border-ink max-lg:gap-[4vw] max-lg:whitespace-normal max-lg:py-[3vw] max-lg:pl-[5vw] max-lg:pr-[3vw]"
+            data-animate="fade-up"
+          >
+            <span class="relative z-10 font-display text-[clamp(1rem,1.15vw,1.375rem)] font-normal uppercase transition-all duration-[400ms] group-hover:translate-x-[1.2vw] group-hover:text-ink max-lg:text-[0.85rem]">Wróć na stronę główną</span>
+            <span class="relative z-0 flex h-[clamp(1.75rem,2vw,2.75rem)] w-[clamp(1.75rem,2vw,2.75rem)] shrink-0 rounded-full bg-canvas transition-transform duration-700 ease-out group-hover:duration-[1600ms] group-hover:scale-[55]"></span>
+          </a>
+        </span>
+
+        <ul
+          class="mt-[clamp(2.5rem,5vw,7rem)] flex flex-wrap gap-x-[clamp(1.5rem,2.5vw,3.5rem)] gap-y-[clamp(0.75rem,1vw,1.25rem)] border-t border-graphite/20 pt-[clamp(1.5rem,2.4vw,3rem)] max-lg:mt-[12vw] max-lg:pt-[6vw]"
+          data-animate="fade-up"
+        >
+          {
+            links.map(({ label, href }) => (
+              <li>
+                <a
+                  href={href}
+                  class="group inline-flex border-b-2 border-graphite pb-[1px] font-display uppercase text-[clamp(1.1rem,1.6vw,1.75rem)] font-medium text-graphite transition-colors duration-500 hover:border-ink hover:text-ink"
+                >
+                  <HoverLetters text={label} />
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

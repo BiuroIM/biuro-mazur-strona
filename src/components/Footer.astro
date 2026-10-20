@@ -1,0 +1,98 @@
+---
+import HoverLetters from './HoverLetters.astro';
+import { footerPages, currentPath } from '../data/navigation.js';
+import { address, email, facebook, legalName, phone, registry } from '../data/contact.js';
+
+const path = currentPath(Astro.url);
+const year = new Date().getFullYear();
+
+const bands = Array.from({ length: 10 });
+
+const contactRows = [
+  { label: 'Tel.', value: phone.label, href: phone.href },
+  { label: 'E-mail', value: email.label, href: email.href },
+  { label: 'Adres', value: address.label, href: null },
+];
+---
+<section class="relative h-[260vh] max-lg:h-[200vh]" data-footer-transition data-stagger="0.18">
+  <div class="sticky top-0 h-screen overflow-hidden">
+    <div class="absolute inset-0 z-0 flex flex-col" aria-hidden="true">
+      {
+        bands.map(() => (
+          <div class="w-full flex-1 origin-top scale-y-0 bg-ink" data-panel />
+        ))
+      }
+    </div>
+
+    <footer
+      class="absolute inset-0 z-10 flex flex-col justify-between px-[2vw] py-[6vh] text-canvas max-lg:justify-start max-lg:px-[4vw] max-lg:py-[4vh]"
+      data-footer-content
+    >
+      <div class="flex items-start justify-between gap-[4vw] max-lg:flex-col max-lg:gap-[2.5vh]">
+        <div class="flex flex-col items-start max-lg:contents">
+          <a href="/" class="font-display text-[clamp(2.5rem,7vw,9rem)] font-medium uppercase leading-[0.9] max-lg:text-[14vw]" aria-label="Strona główna">
+            Iwona<br />Mazur
+          </a>
+
+          <a
+            href="#"
+            class="group relative z-10 mt-[3vh] inline-flex w-fit cursor-pointer items-center gap-[clamp(1rem,1.4vw,2rem)] overflow-hidden whitespace-nowrap rounded-full border-2 border-transparent bg-canvas py-[clamp(0.75rem,0.9vw,1.15rem)] pl-[clamp(1.5rem,2.2vw,3rem)] pr-[clamp(0.75rem,1.1vw,1.5rem)] text-ink transition-colors duration-700 hover:border-canvas max-lg:order-2 max-lg:mt-0 max-lg:gap-[4vw] max-lg:whitespace-normal max-lg:py-[3vw] max-lg:pl-[5vw] max-lg:pr-[3vw]"
+            aria-haspopup="dialog"
+            data-open-form
+          >
+            <span class="relative z-10 font-display text-[clamp(1rem,1.15vw,1.375rem)] font-normal uppercase transition-all duration-[400ms] group-hover:translate-x-[1.2vw] group-hover:text-canvas max-lg:text-[0.85rem]">Zapisz się na konsultację</span>
+            <span class="relative z-0 flex h-[clamp(1.75rem,2vw,2.75rem)] w-[clamp(1.75rem,2vw,2.75rem)] shrink-0 rounded-full bg-ink transition-transform duration-700 ease-out group-hover:duration-[1600ms] group-hover:scale-[55]"></span>
+          </a>
+        </div>
+
+        <p class="max-w-[28vw] font-sans text-[clamp(0.9rem,1.2vw,1.4rem)] font-normal leading-[1.35] text-canvas/70 max-lg:order-1 max-lg:mt-[3.5vh] max-lg:max-w-none">
+          Księgowość, kadry i płace oraz doradztwo podatkowe dla firm
+          z Dębicy i okolic.
+        </p>
+      </div>
+
+      <div class="flex items-end justify-between gap-[4vw] max-lg:mt-[4vh] max-lg:flex-1 max-lg:flex-col max-lg:items-start max-lg:gap-[2.5vh]">
+        <ul class="flex flex-col gap-[0.6vh]">
+          {
+            contactRows.map(({ label, value, href }) => (
+              <li class="flex items-baseline gap-[1vw] font-sans text-[clamp(0.9rem,1.2vw,1.4rem)] leading-[1.3] max-lg:gap-[3vw]">
+                <span class="w-[5vw] shrink-0 text-canvas/45 max-lg:w-[16vw]">{label}</span>
+                {href ? <a href={href}>{value}</a> : <span>{value}</span>}
+              </li>
+            ))
+          }
+        </ul>
+
+        <ul class="flex flex-col items-end gap-0 font-sans text-[clamp(1.05rem,1.7vw,2rem)] font-medium uppercase leading-[1.15] max-lg:mb-[3.5vh] max-lg:mt-auto max-lg:w-full max-lg:flex-row max-lg:flex-wrap max-lg:items-start max-lg:justify-center max-lg:gap-x-[clamp(1rem,5vw,2.25rem)] max-lg:gap-y-[1.2vh] max-lg:text-[clamp(0.9rem,4vw,1.25rem)] max-lg:leading-[1.3]">
+          {
+            footerPages.map(({ label, href, isForm }) => (
+              <li class="max-lg:shrink-0">
+                <a
+                  href={href ?? '#'}
+                  class="group inline-flex items-baseline"
+                  aria-current={href === path ? 'page' : undefined}
+                  aria-haspopup={isForm ? 'dialog' : undefined}
+                  data-open-form={isForm ? true : undefined}
+                >
+                  <HoverLetters text={label} />
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div class="border-t border-canvas/20 pt-[2vh] max-lg:mt-auto max-lg:pt-[1.5vh] max-lg:pb-[clamp(5.5rem,22vw,6.5rem)]">
+        <div class="flex items-center gap-[clamp(1rem,2vw,3rem)] font-sans text-[clamp(0.75rem,0.9vw,1rem)] font-normal text-canvas/45 max-sm:flex-col max-sm:items-start max-sm:gap-[0.5vh]">
+          <p>© {year} {legalName}</p>
+          <p class="shrink-0">NIP {registry.taxId}</p>
+          <p class="shrink-0">KRS {registry.courtRegister}</p>
+          <p class="shrink-0">Doradca podatkowy nr {registry.taxAdvisorNumber}</p>
+          <a href="/polityka-prywatnosci" class="shrink-0">Polityka prywatności</a>
+          <a href="/sygnalisci" class="shrink-0">Sygnaliści</a>
+          <a href={facebook.href} class="shrink-0" target="_blank" rel="noopener">{facebook.label}</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+</section>

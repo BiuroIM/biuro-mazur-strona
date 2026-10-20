@@ -1,0 +1,97 @@
+---
+import { Image } from 'astro:assets';
+import FormFields from './FormFields.astro';
+import ArrowButton from './ArrowButton.astro';
+import { address, callback, phone } from '../data/contact.js';
+import accountantsDiscussing from '../assets/photos/three-accountants-discussing-documents-portrait.jpg';
+---
+<div class="pointer-events-none fixed inset-0 z-[60]" data-form inert>
+  <div
+    class="absolute inset-0 opacity-0 bg-ink/25 backdrop-blur-[6px]"
+    data-form-backdrop
+  >
+  </div>
+
+  <aside
+    class="absolute right-0 top-0 flex h-full w-full max-w-[900px] flex-col overflow-y-auto bg-ink text-canvas [clip-path:inset(0%_0%_0%_100%)]"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Formularz kontaktowy"
+    data-form-panel
+    data-lenis-prevent
+  >
+    <button
+      type="button"
+      class="group absolute right-[56px] top-[32px] z-10 flex h-[44px] w-[44px] cursor-pointer items-center justify-center rounded-full max-sm:right-[16px] max-sm:top-[16px]"
+      aria-label="Zamknij formularz"
+      data-close-form
+    >
+      <span
+        class="absolute inset-0 scale-[0.7] rounded-full border border-canvas/40 opacity-0 transition-all duration-500 ease-out group-hover:scale-100 group-hover:opacity-100"
+        aria-hidden="true"></span>
+
+      <span
+        class="relative block h-[18px] w-[18px] transition-transform duration-500 ease-out group-hover:rotate-90"
+        aria-hidden="true"
+      >
+        <span class="absolute left-0 top-1/2 h-[1.5px] w-full -translate-y-1/2 rotate-45 rounded-full bg-canvas"
+        ></span>
+        <span class="absolute left-0 top-1/2 h-[1.5px] w-full -translate-y-1/2 -rotate-45 rounded-full bg-canvas"
+        ></span>
+      </span>
+    </button>
+
+    <div
+      class="flex flex-1 flex-wrap content-start items-start gap-[32px] px-[64px] py-[48px] max-sm:gap-[24px] max-sm:px-[24px] max-sm:pb-[32px] max-sm:pt-[76px]"
+      data-form-block
+    >
+      <div
+        class="aspect-[3/4] w-[240px] shrink-0 overflow-hidden rounded-[20px] bg-placeholder max-sm:aspect-[16/9] max-sm:w-full"
+        data-form-field
+      >
+        <Image
+          src={accountantsDiscussing}
+          alt="Trzy księgowe omawiają dokumenty przy biurku w biurze"
+          class="h-full w-full object-cover max-sm:object-[50%_23%]"
+          widths={[240, 480, 857]}
+          sizes="(max-width: 640px) 100vw, 240px"
+          loading="lazy"
+        />
+      </div>
+
+      <div class="flex min-w-[300px] flex-1 flex-col justify-between gap-[32px] self-stretch max-sm:min-w-full max-sm:gap-[20px]">
+        <p
+          class="max-w-[300px] font-sans text-[16px] font-normal leading-[1.5] text-canvas/60 max-sm:max-w-none"
+          data-form-field
+        >
+          Zostaw kontakt, a {callback.clause} i umówimy bezpłatną rozmowę
+          o Twojej firmie. Sprawdzimy, jak dziś wygląda Twoja księgowość
+          i co można w niej uprościć.
+        </p>
+
+        <div
+          class="flex flex-wrap items-end gap-x-[40px] gap-y-[8px] font-sans text-[17px] font-normal text-canvas"
+          data-form-field
+        >
+          <p><a href={phone.href}>{phone.label}</a></p>
+          <p>{address.label}</p>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="relative flex flex-1 flex-col justify-center border-t border-canvas/15 px-[64px] py-[48px] max-sm:px-[24px] max-sm:py-[32px]"
+      data-form-block
+    >
+      <FormFields idPrefix="panel">
+        <ArrowButton
+          slot="after-submit"
+          text="Zamknij"
+          arrow={false}
+          data-close-form
+        />
+      </FormFields>
+    </div>
+  </aside>
+</div>
+

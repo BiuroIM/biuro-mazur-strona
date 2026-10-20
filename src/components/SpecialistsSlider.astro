@@ -1,0 +1,72 @@
+---
+import { Image } from 'astro:assets';
+
+interface Specialist {
+  name: string;
+  department: string;
+  bio: string;
+  photo: ImageMetadata;
+  photoFocus: string;
+  photoZoom: number;
+  photoAlt: string;
+}
+
+interface Props {
+  specialists: Specialist[];
+  headingLines?: string[];
+}
+
+const { specialists, headingLines = ['Nasi zaufani', 'specjaliści'] } = Astro.props;
+---
+<section class="mt-[20vw] hidden max-lg:block">
+  <h2
+    class="px-[4vw] font-display text-[clamp(1.6rem,8vw,3.25rem)] font-medium uppercase leading-[1.05] text-graphite"
+    data-reveal-lines
+  >
+    {
+      headingLines.map((line) => (
+        <span class="block overflow-hidden -mb-[0.15em]"><span class="reveal-line block pb-[0.15em]">{line}</span></span>
+      ))
+    }
+  </h2>
+
+  <div
+    class="slider-track mt-[7vw] flex gap-[4vw] overflow-x-auto overflow-y-hidden pl-[4vw] pr-[17vw] pb-[20vw]"
+    data-rise-swipe
+  >
+    {
+      specialists.map(({ name, department, bio, photo, photoFocus, photoZoom, photoAlt }) => (
+        <article
+          class="flex aspect-[4/5] w-[76vw] shrink-0 flex-col justify-between bg-graphite p-[5vw]"
+          data-rise-item
+        >
+          <div class="flex items-center gap-[4vw]">
+            <div class="aspect-square w-[16vw] shrink-0 overflow-hidden rounded-full bg-placeholder">
+              <Image
+                src={photo}
+                alt={photoAlt}
+                class="h-full w-full object-cover"
+                style={`object-position: ${photoFocus}; transform-origin: ${photoFocus}; transform: scale(${photoZoom})`}
+                widths={[220, 440, 700]}
+                sizes="45vw"
+              />
+            </div>
+
+            <div class="min-w-0">
+              <p class="font-sans text-[clamp(1rem,4.2vw,1.4rem)] font-medium uppercase leading-[1.15] text-canvas">
+                {name}
+              </p>
+              <p class="mt-[1.5vw] font-sans text-[clamp(0.8rem,3.4vw,1.1rem)] font-normal leading-[1.2] text-canvas/60">
+                {department}
+              </p>
+            </div>
+          </div>
+
+          <p class="mt-[7vw] font-sans text-[clamp(0.95rem,4.3vw,1.4rem)] font-normal leading-[1.35] text-canvas/85">
+            {bio}
+          </p>
+        </article>
+      ))
+    }
+  </div>
+</section>

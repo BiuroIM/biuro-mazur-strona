@@ -1,0 +1,61 @@
+---
+interface Props {
+  text?: string;
+  copies?: number;
+}
+
+const { text = 'Napisz do nas.', copies = 3 } = Astro.props;
+
+const group = Array.from({ length: copies });
+const set = [...group, ...group];
+
+const arrow =
+  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="h-[1em] w-[1em]" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>';
+
+const ABOVE_FILL = 'relative z-10';
+---
+<div
+  class="pointer-events-none fixed bottom-[24px] right-[2vw] z-[56] max-lg:bottom-[16px] max-lg:left-1/2 max-lg:right-auto max-lg:-translate-x-1/2"
+  data-contact-pill
+>
+  <button
+    type="button"
+    class="group pointer-events-auto relative flex h-[76px] w-[312px] cursor-pointer items-center gap-[14px] overflow-hidden rounded-full bg-ink pl-[24px] pr-[26px] text-canvas shadow-lift transition-colors duration-300 ease-out hover:text-ink max-lg:h-[62px] max-lg:w-[262px] max-lg:gap-[12px] max-lg:pl-[20px] max-lg:pr-[22px]"
+    aria-haspopup="dialog"
+    aria-label={text.replace(/\.$/, '')}
+    data-open-form
+  >
+    <span
+      class="pointer-events-none absolute inset-0 origin-bottom scale-y-0 bg-white transition-transform duration-300 ease-out group-hover:scale-y-100"
+      aria-hidden="true"></span>
+
+    <span
+      class={`${ABOVE_FILL} min-w-0 flex-1 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_14px,black_calc(100%-14px),transparent)]`}
+      aria-hidden="true"
+    >
+      <span class="marquee-track marquee-track--short flex w-max">
+        {
+          set.map(() => (
+            <span class="mr-[28px] shrink-0 whitespace-nowrap font-display text-[16px] font-medium uppercase leading-none max-lg:mr-[22px] max-lg:text-[14px]">
+              {text}
+            </span>
+          ))
+        }
+      </span>
+    </span>
+
+    <span
+      class={`${ABOVE_FILL} block h-[1.15em] w-[1.15em] shrink-0 overflow-hidden text-[16px] max-lg:text-[14px]`}
+      aria-hidden="true"
+    >
+      <span
+        class="absolute inset-0 flex items-center justify-center transition-transform duration-500 ease-out group-hover:translate-x-[150%]"
+        set:html={arrow}
+      />
+      <span
+        class="absolute inset-0 flex -translate-x-[150%] items-center justify-center transition-transform duration-500 ease-out group-hover:translate-x-0"
+        set:html={arrow}
+      />
+    </span>
+  </button>
+</div>
