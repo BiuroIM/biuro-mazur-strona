@@ -20,9 +20,4 @@ export const questions = [
     answer:
       'Tak. Pomagamy przy rejestracji, wyborze formy opodatkowania i zgłoszeniu do ZUS. Doradzamy też, co warto zrobić na starcie, a co może poczekać.',
   },
-  {
-    question: 'Kto odpowiada za błędy w rozliczeniach?',
-    answer:
-      'Za rozliczenia, które prowadzimy, odpowiadamy my. Mamy ubezpieczenie odpowiedzialności cywilnej, a jeśli trzeba złożyć korektę, przygotowujemy ją na własny koszt.',
-  },
 ];
