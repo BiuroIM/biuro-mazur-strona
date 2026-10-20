@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-const RECIPIENT = 'biuro@biuro-mazur.pl';
-const SENDER = 'formularz@biuro-mazur.pl';
-const SENDER_NAME = 'Formularz biuro-mazur.pl';
+const CONFIG_FILE = __DIR__ . '/contact-config.php';
 const RATE_LIMIT = 5;
 const RATE_WINDOW = 600;
 
@@ -66,9 +64,41 @@ function isRateLimited(): bool
     return false;
 }
 
-function encodeHeader(string $value): string
+function webhookUrl(): string
 {
-    return '=?UTF-8?B?' . base64_encode($value) . '?=';
+    if (!is_file(CONFIG_FILE)) return '';
+    $config = require CONFIG_FILE;
+    $url = is_array($config) ? ($config['teams_webhook_url'] ?? '') : '';
+    return is_string($url) && str_starts_with($url, 'https://') ? $url : '';
+}
+
+function postJson(string $url, string $json): bool
+{
+    if (function_exists('curl_init')) {
+        $curl = curl_init($url);
+        curl_setopt_array($curl, [
+            CURLOPT_POST => true,
+            CURLOPT_POSTFIELDS => $json,
+            CURLOPT_HTTPHEADER => ['Content-Type: application/json'],
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_TIMEOUT => 15,
+        ]);
+        $result = curl_exec($curl);
+        $status = (int) curl_getinfo($curl, CURLINFO_RESPONSE_CODE);
+        curl_close($curl);
+        return $result !== false && $status >= 200 && $status < 300;
+    }
+
+    $context = stream_context_create(['http' => [
+        'method' => 'POST',
+        'header' => "Content-Type: application/json\r\n",
+        'content' => $json,
+        'timeout' => 15,
+        'ignore_errors' => true,
+    ]]);
+    $result = @file_get_contents($url, false, $context);
+    $statusLine = $http_response_header[0] ?? '';
+    return $result !== false && preg_match('#^HTTP/\S+\s+2\d\d#', $statusLine) === 1;
 }
 
 if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') respond(405, false);
@@ -95,39 +125,40 @@ if (!$valid) respond(422, false);
 
 if (isRateLimited()) respond(429, false);
 
+$webhook = webhookUrl();
+if ($webhook === '') respond(500, false);
+
 $dash = '—';
-$body = implode("\r\n", [
-    'Nowe zgłoszenie z formularza na biuro-mazur.pl',
-    '',
-    'Imię i nazwisko: ' . $name,
-    'Telefon: ' . $phone,
-    'E-mail: ' . $email,
-    'Forma działalności: ' . $businessForm,
-    'Czego potrzebuje: ' . ($scope !== '' ? $scope : $dash),
-    '',
-    'Wiadomość:',
-    $message !== '' ? str_replace(["\r\n", "\r", "\n"], "\r\n", $message) : $dash,
-    '',
-    '---',
-    'Wysłano: ' . (new DateTimeImmutable('now', new DateTimeZone('Europe/Warsaw')))->format('d.m.Y, H:i'),
-    'Formularz: ' . $source,
-    'Odpowiedz na tę wiadomość, żeby napisać bezpośrednio do klienta.',
-]);
+$sentAt = (new DateTimeImmutable('now', new DateTimeZone('Europe/Warsaw')))->format('d.m.Y, H:i');
 
-$headers = implode("\r\n", [
-    'From: ' . encodeHeader(SENDER_NAME) . ' <' . SENDER . '>',
-    'Reply-To: ' . encodeHeader($name) . ' <' . $email . '>',
-    'MIME-Version: 1.0',
-    'Content-Type: text/plain; charset=UTF-8',
-    'Content-Transfer-Encoding: base64',
-]);
+$card = [
+    '$schema' => 'http://adaptivecards.io/schemas/adaptive-card.json',
+    'type' => 'AdaptiveCard',
+    'version' => '1.4',
+    'body' => [
+        ['type' => 'TextBlock', 'size' => 'Medium', 'weight' => 'Bolder', 'text' => 'Nowe zgłoszenie ze strony'],
+        ['type' => 'TextBlock', 'isSubtle' => true, 'spacing' => 'None', 'text' => $sentAt . ' | formularz: ' . $source],
+        ['type' => 'FactSet', 'facts' => [
+            ['title' => 'Imię i nazwisko', 'value' => $name],
+            ['title' => 'Telefon', 'value' => $phone],
+            ['title' => 'E-mail', 'value' => $email],
+            ['title' => 'Forma działalności', 'value' => $businessForm],
+            ['title' => 'Czego potrzebuje', 'value' => $scope !== '' ? $scope : $dash],
+        ]],
+        ['type' => 'TextBlock', 'weight' => 'Bolder', 'text' => 'Wiadomość'],
+        ['type' => 'TextBlock', 'wrap' => true, 'spacing' => 'Small', 'text' => $message !== '' ? $message : $dash],
+    ],
+];
 
-$sent = mail(
-    RECIPIENT,
-    encodeHeader('Nowe zgłoszenie: ' . $name),
-    chunk_split(base64_encode($body)),
-    $headers,
-    '-f' . SENDER
-);
+$payload = json_encode([
+    'type' => 'message',
+    'attachments' => [[
+        'contentType' => 'application/vnd.microsoft.card.adaptive',
+        'contentUrl' => null,
+        'content' => $card,
+    ]],
+], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 
-respond($sent ? 200 : 500, $sent);
+$sent = $payload !== false && postJson($webhook, $payload);
+
+respond($sent ? 200 : 502, $sent);

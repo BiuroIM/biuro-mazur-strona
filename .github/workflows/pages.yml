@@ -25,6 +25,8 @@ jobs:
           node-version: 24
           cache: npm
 
+      - run: php -l public/contact.php
+
       - run: npm install --no-audit --no-fund
 
       - run: npm run build

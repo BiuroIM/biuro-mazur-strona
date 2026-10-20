@@ -2,6 +2,10 @@ Options -Indexes
 DirectorySlash On
 ErrorDocument 404 /404.html
 
+<Files "contact-config.php">
+Require all denied
+</Files>
+
 <IfModule mod_rewrite.c>
 RewriteEngine On
 
