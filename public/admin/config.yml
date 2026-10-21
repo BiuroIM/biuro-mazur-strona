@@ -660,6 +660,7 @@ collections:
             search_fields: ['{{logos.*.name}}']
           - name: names
             label: Firmy na przesuwanych kafelkach (telefon)
+            label_singular: firmę
             widget: list
             min: 5
             field:
