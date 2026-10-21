@@ -1,42 +1,62 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getEntry, render } from 'astro:content';
+import { address, legalName } from '../data/contact.js';
 
-const entry = await getEntry('legal', 'whistleblowers');
-const { Content } = await render(entry);
-const { title, description, documents = [] } = entry.data;
+const WHISTLEBLOWER_EMAIL = 'sygnalista@biuro-mazur.pl';
+
+const documents = [
+  { label: 'Procedura zgłoszeń wewnętrznych', href: '/documents/whistleblower-procedure.pdf' },
+  { label: 'Wzór formularza zgłoszenia', href: '/documents/whistleblower-report-form.pdf' },
+  { label: 'Wzór potwierdzenia przyjęcia zgłoszenia', href: '/documents/whistleblower-report-confirmation.pdf' },
+  { label: 'Wzór rejestru zgłoszeń', href: '/documents/whistleblower-report-register.pdf' },
+];
 ---
 <BaseLayout
-  title={title}
-  description={description}
+  title="Sygnaliści"
+  description="Procedura zgłoszeń wewnętrznych Biura Rachunkowego Iwona Mazur: jak zgłosić naruszenie prawa i jak chronimy osobę, która je zgłasza."
 >
   <article>
     <section class="px-[2vw] pt-[clamp(9rem,15vw,16rem)] max-lg:px-[4vw] max-lg:pt-[clamp(7rem,40vw,11rem)]">
       <h1
         class="mx-auto w-[72vw] text-center font-display text-[clamp(1.75rem,4.8vw,6.25rem)] font-medium uppercase leading-[1.02] text-graphite max-lg:w-full max-lg:text-[clamp(1.6rem,8vw,3.25rem)]"
       >
-        {title}
+        Sygnaliści
       </h1>
     </section>
 
     <section class="mt-[5vw] px-[2vw] pb-[8vw] max-lg:mt-[12vw] max-lg:px-[4vw] max-lg:pb-[20vw]">
       <div class="post-body mx-auto w-[52vw] max-lg:w-full" data-animate="fade-up">
-        <Content />
+        <p>
+          {legalName} ma procedurę zgłoszeń wewnętrznych przyjętą na podstawie ustawy z 14 czerwca
+          2024 r. o ochronie sygnalistów. Procedura opisuje, jak zgłosić naruszenie prawa związane
+          z pracą lub współpracą z biurem, kto takie zgłoszenie przyjmuje i jak chronimy osobę,
+          która je składa.
+        </p>
 
-        {
-          documents.length > 0 && (
-            <>
-              <h2>Dokumenty</h2>
-              <ul>
-                {documents.map(({ label, file }) => (
-                  <li>
-                    <a href={file} target="_blank" rel="noopener">{label}</a> (PDF)
-                  </li>
-                ))}
-              </ul>
-            </>
-          )
-        }
+        <h2>Jak zgłosić naruszenie</h2>
+        <ul>
+          <li>
+            E-mailem na adres <a href={`mailto:${WHISTLEBLOWER_EMAIL}`}>{WHISTLEBLOWER_EMAIL}</a>,
+            w tytule wpisz „zgłoszenie sygnalisty”. Możesz skorzystać z wzoru formularza poniżej.
+          </li>
+          <li>Listownie na adres biura: {address.label}, z dopiskiem „zgłoszenie sygnalisty”.</li>
+          <li>Ustnie, na spotkaniu, które umówimy w ciągu 14 dni od otrzymania prośby.</li>
+        </ul>
+        <p>
+          Zgłoszenie może też trafić bezpośrednio do Rzecznika Praw Obywatelskich albo właściwego
+          organu publicznego, bez wcześniejszego zgłoszenia do nas.
+        </p>
+
+        <h2>Dokumenty</h2>
+        <ul>
+          {
+            documents.map(({ label, href }) => (
+              <li>
+                <a href={href} target="_blank" rel="noopener">{label}</a> (PDF)
+              </li>
+            ))
+          }
+        </ul>
       </div>
     </section>
   </article>

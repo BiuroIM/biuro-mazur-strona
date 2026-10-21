@@ -1,33 +1,206 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getEntry, render } from 'astro:content';
-import { formatDate, isoDate } from '../data/blog.js';
+import { address, email, legalName, openingHours, phone, registry } from '../data/contact.js';
 
-const entry = await getEntry('legal', 'privacy');
-const { Content, headings } = await render(entry);
+const updatedAt = '2026-10-14';
+const updatedLabel = 'Ostatnia aktualizacja: 14 października 2026';
 
-const sections = headings.filter((heading) => heading.depth === 2);
-const { title, description, updated } = entry.data;
+const sections = [
+  {
+    slug: 'administrator-danych',
+    title: 'Kto odpowiada za Twoje dane',
+    blocks: [
+      {
+        type: 'text',
+        value: `Administratorem danych osobowych podanych na tej stronie jest ${legalName} z siedzibą w Dębicy, ${address.label}, NIP ${registry.taxId}, KRS ${registry.courtRegister}, REGON ${registry.statisticalId}.`,
+      },
+      {
+        type: 'text',
+        value: `W każdej sprawie dotyczącej danych osobowych możesz napisać na adres ${email.label} albo zadzwonić pod numer ${phone.label}. Odbieramy ${openingHours.sentence}.`,
+      },
+    ],
+  },
+  {
+    slug: 'jakie-dane-zbieramy',
+    title: 'Jakie dane zbieramy',
+    blocks: [
+      {
+        type: 'text',
+        value:
+          'Zbieramy wyłącznie to, co sam wpiszesz w formularzu kontaktowym. Formularz jest jedynym miejscem na tej stronie, które przyjmuje dane.',
+      },
+      {
+        type: 'list',
+        items: [
+          'Imię i nazwisko. Pole obowiązkowe.',
+          'Numer telefonu. Pole obowiązkowe.',
+          'Adres e-mail. Pole obowiązkowe.',
+          'Forma prowadzonej działalności. Pole opcjonalne.',
+          'Zakres potrzebnej pomocy. Pole opcjonalne.',
+          'Treść wiadomości. Pole opcjonalne.',
+        ],
+      },
+      {
+        type: 'text',
+        value:
+          'Do każdego zgłoszenia dopisujemy datę i godzinę wysłania oraz informację o tym, z której części strony zostało wysłane. Twojego numeru IP nie dopisujemy do zgłoszenia.',
+      },
+      {
+        type: 'text',
+        value:
+          'Serwer, na którym stoi strona, prowadzi zwykłe logi dostępu: adres IP, czas zapytania i rodzaj przeglądarki. Odpowiada za nie dostawca hostingu.',
+      },
+    ],
+  },
+  {
+    slug: 'cel-i-podstawa',
+    title: 'Po co nam te dane i na jakiej podstawie',
+    blocks: [
+      {
+        type: 'list',
+        items: [
+          'Żeby się z Tobą skontaktować i przygotować odpowiedź na zapytanie. Podstawą jest art. 6 ust. 1 lit. b RODO, czyli działania podejmowane na Twoje żądanie przed zawarciem umowy.',
+          'Żeby wykazać przebieg kontaktu i bronić się przed ewentualnymi roszczeniami. Podstawą jest art. 6 ust. 1 lit. f RODO, czyli nasz prawnie uzasadniony interes.',
+        ],
+      },
+      {
+        type: 'text',
+        value:
+          'Nie profilujemy Cię i nie podejmujemy wobec Ciebie żadnych decyzji w sposób wyłącznie automatyczny. Nie wykorzystujemy tych danych do wysyłki marketingowej.',
+      },
+    ],
+  },
+  {
+    slug: 'jak-dlugo',
+    title: 'Jak długo przechowujemy zgłoszenia',
+    blocks: [
+      {
+        type: 'text',
+        value:
+          'Zgłoszenie z formularza przechowujemy przez czas potrzebny do odpowiedzi i rozmów o współpracy, a następnie do upływu terminu przedawnienia ewentualnych roszczeń. Po tym czasie usuwamy je z naszej skrzynki pocztowej.',
+      },
+      {
+        type: 'text',
+        value:
+          'Jeżeli ze zgłoszenia wyniknie współpraca, dane związane z jej rozliczeniem przechowujemy tak długo, jak wymagają tego przepisy podatkowe i przepisy o rachunkowości.',
+      },
+    ],
+  },
+  {
+    slug: 'komu-przekazujemy',
+    title: 'Komu przekazujemy dane',
+    blocks: [
+      {
+        type: 'text',
+        value:
+          'Nie sprzedajemy danych i nie udostępniamy ich nikomu do własnych celów. Korzystamy natomiast z narzędzi, których dostawcy przetwarzają dane w naszym imieniu i na podstawie umowy powierzenia.',
+      },
+      {
+        type: 'list',
+        items: [
+          'Dostawca hostingu, na którym stoi ta strona. Jego serwer odbiera zgłoszenie i wysyła je e-mailem do biura.',
+          'Microsoft. Zgłoszenia trafiają do naszej firmowej skrzynki pocztowej w Microsoft 365.',
+        ],
+      },
+      {
+        type: 'text',
+        value:
+          'Jeżeli którykolwiek z tych dostawców przetwarza dane poza Europejskim Obszarem Gospodarczym, odbywa się to na podstawie decyzji Komisji Europejskiej stwierdzającej odpowiedni stopień ochrony albo standardowych klauzul umownych zatwierdzonych przez Komisję.',
+      },
+    ],
+  },
+  {
+    slug: 'twoje-prawa',
+    title: 'Twoje prawa',
+    blocks: [
+      {
+        type: 'text',
+        value: 'W związku z przetwarzaniem danych przysługuje Ci prawo do tego, żeby:',
+      },
+      {
+        type: 'list',
+        items: [
+          'uzyskać dostęp do swoich danych i otrzymać ich kopię,',
+          'sprostować dane, które są nieprawidłowe lub niekompletne,',
+          'żądać usunięcia danych,',
+          'żądać ograniczenia przetwarzania,',
+          'wnieść sprzeciw wobec przetwarzania opartego na naszym prawnie uzasadnionym interesie,',
+          'przenieść dane do innego administratora.',
+        ],
+      },
+      {
+        type: 'text',
+        value: `Żeby skorzystać z któregokolwiek z tych praw, wystarczy napisać na adres ${email.label}. Odpowiadamy w ciągu miesiąca od otrzymania zgłoszenia.`,
+      },
+      {
+        type: 'text',
+        value:
+          'Masz też prawo wnieść skargę do organu nadzorczego, którym jest Prezes Urzędu Ochrony Danych Osobowych, ul. Stawki 2, 00-193 Warszawa.',
+      },
+    ],
+  },
+  {
+    slug: 'czy-trzeba-podawac',
+    title: 'Czy podanie danych jest obowiązkowe',
+    blocks: [
+      {
+        type: 'text',
+        value:
+          'Podanie danych jest w pełni dobrowolne. Bez imienia, numeru telefonu i adresu e-mail nie przyjmiemy jednak zgłoszenia, bo nie mielibyśmy jak na nie odpowiedzieć.',
+      },
+    ],
+  },
+  {
+    slug: 'cookies',
+    title: 'Pliki cookies i pamięć przeglądarki',
+    blocks: [
+      {
+        type: 'text',
+        value:
+          'Ta strona nie zapisuje plików cookies. Nie korzystamy z narzędzi analitycznych ani reklamowych: nie ma tu Google Analytics, Menedżera tagów ani pikseli serwisów społecznościowych.',
+      },
+      {
+        type: 'text',
+        value:
+          'Używamy wyłącznie pamięci sesji przeglądarki, żeby po zmianie szerokości okna wrócić w to samo miejsce strony. Ten zapis znika w chwili zamknięcia karty i nie zawiera żadnych informacji o Tobie.',
+      },
+      {
+        type: 'text',
+        value:
+          'Kroje pisma serwujemy z własnego serwera, więc otwarcie strony nie wysyła zapytania do zewnętrznych dostawców fontów.',
+      },
+    ],
+  },
+  {
+    slug: 'zmiany',
+    title: 'Zmiany w tym dokumencie',
+    blocks: [
+      {
+        type: 'text',
+        value:
+          'Jeżeli zmieni się zakres zbieranych danych albo narzędzia, z których korzystamy, zaktualizujemy ten dokument i zmienimy datę widoczną na górze strony.',
+      },
+    ],
+  },
+];
 ---
 <BaseLayout
-  title={title}
-  description={description}
+  title="Polityka prywatności"
+  description="Jakie dane zbieramy przez formularz kontaktowy, po co, jak długo je przechowujemy i jakie prawa Ci przysługują."
 >
   <article>
     <section class="px-[2vw] pt-[clamp(9rem,15vw,16rem)] max-lg:px-[4vw] max-lg:pt-[clamp(7rem,40vw,11rem)]">
       <h1
         class="mx-auto w-[72vw] text-center font-display text-[clamp(1.75rem,4.8vw,6.25rem)] font-medium uppercase leading-[1.02] text-graphite max-lg:w-full max-lg:text-[clamp(1.6rem,8vw,3.25rem)]"
       >
-        {title}
+        Polityka prywatności
       </h1>
 
-      {
-        updated && (
-          <p class="mt-[clamp(0.75rem,1.2vw,1.75rem)] text-center font-display text-[clamp(0.6rem,0.75vw,0.9rem)] font-medium uppercase tracking-[0.03em] text-graphite/60 max-lg:mt-[4vw] max-lg:text-[clamp(0.65rem,3vw,0.95rem)]">
-            <time datetime={isoDate(updated)}>Ostatnia aktualizacja: {formatDate(updated)}</time>
-          </p>
-        )
-      }
+      <p
+        class="mt-[clamp(0.75rem,1.2vw,1.75rem)] text-center font-display text-[clamp(0.6rem,0.75vw,0.9rem)] font-medium uppercase tracking-[0.03em] text-graphite/60 max-lg:mt-[4vw] max-lg:text-[clamp(0.65rem,3vw,0.95rem)]"
+      >
+        <time datetime={updatedAt}>{updatedLabel}</time>
+      </p>
     </section>
 
     <section class="relative mt-[5vw] px-[2vw] pb-[8vw] max-lg:mt-[12vw] max-lg:px-[4vw] max-lg:pb-[20vw]">
@@ -39,13 +212,13 @@ const { title, description, updated } = entry.data;
 
           <ul class="mt-[clamp(0.75rem,1.1vw,1.5rem)] flex flex-col gap-[clamp(0.4rem,0.6vw,0.8rem)] border-t border-graphite/20 pt-[clamp(0.75rem,1.1vw,1.5rem)]">
             {
-              sections.map((heading) => (
+              sections.map(({ slug, title }) => (
                 <li>
                   <a
-                    href={`#${heading.slug}`}
+                    href={`#${slug}`}
                     class="font-sans text-[clamp(0.8rem,0.95vw,1.05rem)] font-normal leading-[1.3] text-graphite/70 transition-colors duration-500 [@media(hover:hover)]:hover:text-ink"
                   >
-                    {heading.text}
+                    {title}
                   </a>
                 </li>
               ))
@@ -55,7 +228,24 @@ const { title, description, updated } = entry.data;
       </aside>
 
       <div class="post-body mx-auto w-[52vw] max-lg:w-full" data-animate="fade-up">
-        <Content />
+        {
+          sections.map(({ slug, title, blocks }) => (
+            <>
+              <h2 id={slug}>{title}</h2>
+              {blocks.map((block) =>
+                block.type === 'list' ? (
+                  <ul>
+                    {block.items.map((item) => (
+                      <li>{item}</li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p>{block.value}</p>
+                )
+              )}
+            </>
+          ))
+        }
       </div>
     </section>
   </article>

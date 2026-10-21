@@ -3,7 +3,8 @@ title: 'KSeF w praktyce: jak działa w małej firmie i co zmieni się od 2027 ro
 lead: 'Od kwietnia 2026 roku prawie każda firma wystawia faktury w KSeF. Opisujemy, jak to wygląda na co dzień i co trzeba przygotować przed 1 stycznia 2027 roku, kiedy kończy się okres przejściowy.'
 date: 2026-09-24
 category: 'Podatki'
-cover: '/src/assets/photos/accountant-with-phone-in-office-wide.jpg'
+readingMinutes: 4
+cover: '../../assets/photos/accountant-with-phone-in-office-wide.jpg'
 coverAlt: 'Księgowa z telefonem w dłoni w biurze'
 softParallax: true
 ---

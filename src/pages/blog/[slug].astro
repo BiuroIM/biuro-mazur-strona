@@ -2,19 +2,17 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import HoverLetters from '../../components/HoverLetters.astro';
 import { Image } from 'astro:assets';
-import { render } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 import {
   formatDate,
   formatDateMonthFirst,
   isoDate,
-  publishedPosts,
   readingLabel,
-  readingMinutes,
   relatedPosts,
 } from '../../data/blog.js';
 
 export async function getStaticPaths() {
-  const posts = await publishedPosts();
+  const posts = await getCollection('blog');
 
   return posts.map((post) => ({
     params: { slug: post.id },
@@ -49,7 +47,7 @@ const related = relatedPosts(posts, post);
         <span class="h-[0.3em] w-[0.3em] shrink-0 rounded-full bg-graphite/40"></span>
         <time datetime={isoDate(post.data.date)}>{formatDate(post.data.date)}</time>
         <span class="h-[0.3em] w-[0.3em] shrink-0 rounded-full bg-graphite/40"></span>
-        <span>{readingLabel(readingMinutes(post))}</span>
+        <span>{readingLabel(post.data.readingMinutes)}</span>
       </div>
 
       <h1

@@ -1,6 +1,4 @@
-import { getCollection } from 'astro:content';
-
-const dateFormatter =new Intl.DateTimeFormat('pl-PL', {
+const dateFormatter = new Intl.DateTimeFormat('pl-PL', {
   day: 'numeric',
   month: 'long',
   year: 'numeric',
@@ -17,14 +15,7 @@ export const formatDateMonthFirst = (date) => {
 
 export const isoDate = (date) => date.toISOString().slice(0, 10);
 
-const WORDS_PER_MINUTE = 200;
-
-export const readingMinutes = (post) =>
-  Math.max(1, Math.round(post.body.trim().split(/\s+/).length / WORDS_PER_MINUTE));
-
 export const readingLabel = (minutes) => `${minutes} min czytania`;
-
-export const publishedPosts = () => getCollection('blog', ({ data }) => !data.draft);
 
 const newestFirst = (a, b) => b.data.date.valueOf() - a.data.date.valueOf();
 

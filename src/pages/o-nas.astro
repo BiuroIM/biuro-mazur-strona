@@ -3,20 +3,118 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import SpecialistsSlider from '../components/SpecialistsSlider.astro';
 import { Image } from 'astro:assets';
 import officeTeam from '../assets/photos/two-women-reviewing-printout.jpg';
-import { pageData } from '../data/content.js';
+import portraitBookkeeping from '../assets/photos/blonde-grey-blazer-portrait-arms-crossed.jpg';
+import portraitTaxAdvisory from '../assets/photos/floral-suit-portrait-hand-in-pocket.jpg';
+import portraitPayroll from '../assets/photos/grey-blazer-portrait-arms-crossed.jpg';
+import portraitLedgers from '../assets/photos/beige-blazer-portrait-curly-hair.jpg';
+import portraitSocialSecurity from '../assets/photos/olive-blazer-portrait-hands-on-hips.jpg';
+import portraitFlatRate from '../assets/photos/black-suit-portrait-hand-in-pocket.jpg';
+import portraitVat from '../assets/photos/white-blazer-glasses-portrait.jpg';
+import portraitAnalysis from '../assets/photos/black-blazer-portrait-long-hair.jpg';
+import portraitFrontDesk from '../assets/photos/black-blazer-white-trousers-portrait.jpg';
+import portraitAssistant from '../assets/photos/black-shirt-portrait-arms-crossed.jpg';
 
 const MARQUEE_REPEATS = 3;
 const DASH_LENGTH = 'clamp(3.5rem,9vw,11rem)';
 const DASH_THICKNESS = 'clamp(0.3rem,0.8vw,1rem)';
 
-const content = await pageData('about');
-
-const specialists = content.team.map(({ role, ...member }) => ({ ...member, department: role }));
+const specialists = [
+  {
+    name: 'Iwona Mazur',
+    department: 'Założycielka biura',
+    bio: 'Od 2002 roku prowadzi biuro i pilnuje wszystkiego, co się w nim dzieje. Jako doradca podatkowy pomaga też klientom przy umowach i zmianie formy opodatkowania.',
+    photo: portraitTaxAdvisory,
+    photoFocus: '41.2% 12.1%',
+    photoZoom: 1.6,
+    photoAlt: 'Iwona Mazur',
+  },
+  {
+    name: 'Ewelina Tomaszek',
+    department: 'Kierowniczka działu księgowości',
+    bio: 'Pilnuje przede wszystkim ksiąg handlowych, a na koniec roku przygotowuje sprawozdania finansowe. Rozdziela zadania w dziale i sprawdza pracę pozostałych osób.',
+    photo: portraitPayroll,
+    photoFocus: '44.7% 17.5%',
+    photoZoom: 1.6,
+    photoAlt: 'Ewelina Tomaszek',
+  },
+  {
+    name: 'Klaudia Barszcz',
+    department: 'Księgowa',
+    bio: 'Weryfikuje i księguje dokumenty oraz rozlicza transakcje. Kontaktuje się z klientami i urzędami skarbowymi, a przy deklaracjach podatkowych pomaga reszcie zespołu.',
+    photo: portraitBookkeeping,
+    photoFocus: '42% 12.1%',
+    photoZoom: 1.6,
+    photoAlt: 'Klaudia Barszcz',
+  },
+  {
+    name: 'Patrycja Bukowska',
+    department: 'Księgowa',
+    bio: 'Zajmuje się kadrami i płacami, od dokumentacji pracowniczej po wynagrodzenia i rozliczenia z ZUS. Pilnuje terminów i chętnie odpowiada na pytania klientów.',
+    photo: portraitLedgers,
+    photoFocus: '44.7% 12.1%',
+    photoZoom: 1.6,
+    photoAlt: 'Patrycja Bukowska',
+  },
+  {
+    name: 'Kinga Okoń',
+    department: 'Księgowa',
+    bio: 'W dziale księgowości obsługuje dokumenty finansowe: sprawdza faktury i wprowadza dane do systemu. Prowadzi też dokumentację i pomaga w bieżących sprawach biurowych.',
+    photo: portraitSocialSecurity,
+    photoFocus: '50% 12.1%',
+    photoZoom: 1.6,
+    photoAlt: 'Kinga Okoń',
+  },
+  {
+    name: 'Karolina Orkisz',
+    department: 'Księgowa',
+    bio: 'Wprowadza dokumenty klientów do programu księgowego i prowadzi ich dokumentację. Na co dzień zajmuje się też bieżącymi sprawami biura.',
+    photo: portraitFlatRate,
+    photoFocus: '50% 9.5%',
+    photoZoom: 1.6,
+    photoAlt: 'Karolina Orkisz',
+  },
+  {
+    name: 'Kamila Baran',
+    department: 'Księgowa',
+    bio: 'Pomaga księgowym jako asystentka i przejmuje od nich część codziennych obowiązków. Opracowuje i wystawia faktury, a także utrzymuje kontakt z klientami.',
+    photo: portraitVat,
+    photoFocus: '50% 17.5%',
+    photoZoom: 1.6,
+    photoAlt: 'Kamila Baran',
+  },
+  {
+    name: 'Monika Pieniążek',
+    department: 'Księgowa',
+    bio: 'Na co dzień jest w kontakcie przede wszystkim z klientami, ale też z urzędami. Prowadzi bieżące sprawy biura i ma oko na wszystko, co się w nim dzieje.',
+    photo: portraitAnalysis,
+    photoFocus: '44.7% 12.1%',
+    photoZoom: 1.6,
+    photoAlt: 'Monika Pieniążek',
+  },
+  {
+    name: 'Julia Kaczor',
+    department: 'Księgowa',
+    bio: 'Prowadzi księgowość firm na KPiR i ryczałcie: księguje dokumenty i przygotowuje rozliczenia PIT. Gdy czegoś brakuje w dokumentach, kontaktuje się z klientem.',
+    photo: portraitFrontDesk,
+    photoFocus: '44.7% 13.9%',
+    photoZoom: 1.6,
+    photoAlt: 'Julia Kaczor',
+  },
+  {
+    name: 'Paweł Garncarz',
+    department: 'Informatyk',
+    bio: 'Pracuje na zapleczu biura i dba o to, żeby codzienna praca szła sprawnie. Przygotowuje analizy i automatyzuje zadania, które wcześniej trzeba było robić ręcznie.',
+    photo: portraitAssistant,
+    photoFocus: '48.1% 16%',
+    photoZoom: 1.6,
+    photoAlt: 'Paweł Garncarz',
+  },
+];
 
 ---
 <BaseLayout
-  title={content.seo.title}
-  description={content.seo.description}
+  title="O nas"
+  description="Biuro rachunkowe w Dębicy z ponad 20-letnim doświadczeniem. Dziesięć osób w zespole i ponad 90 firm, którym prowadzimy księgowość, kadry i podatki."
 >
   <section class="flex min-h-screen flex-col px-[2vw] pt-40 max-lg:px-[4vw] max-lg:pt-28">
     <div class="-mx-[2vw] overflow-hidden pt-[0.5vw] pb-[3.6vw] -mt-[0.5vw] -mb-[1.6vw] max-lg:-mx-[4vw] max-lg:pt-[0.6vw] max-lg:pb-[4.2vw] max-lg:-mt-[0.6vw] max-lg:mb-[4.8vw]" aria-hidden="true">
@@ -67,24 +165,44 @@ const specialists = content.team.map(({ role, ...member }) => ({ ...member, depa
       data-start="top 92%"
       data-end="bottom 68%"
     >
-      {content.intro}
+      Od ponad dwudziestu lat prowadzimy księgowość firm z Dębicy i całej
+      Polski. Spokojnie, terminowo i z księgowym, który zna Twoją firmę.
     </p>
 
     <div class="ml-[20vw] mt-[6vw] flex gap-[5vw] max-lg:ml-0 max-lg:mt-[16vw] max-lg:flex-col max-lg:gap-[10vw]">
-      {
-        content.paragraphs.map((paragraph) => (
-          <p
-            class="flex-1 font-sans text-[clamp(0.9rem,1.05vw,1.3rem)] font-medium leading-[1.4] text-graphite max-lg:text-[clamp(0.95rem,4vw,1.5rem)] max-lg:leading-[1.35]"
-            data-words-scrub
-            data-from="0.2"
-            data-to="1"
-            data-start="top 90%"
-            data-end="bottom 68%"
-          >
-            {paragraph}
-          </p>
-        ))
-      }
+      <p
+        class="flex-1 font-sans text-[clamp(0.9rem,1.05vw,1.3rem)] font-medium leading-[1.4] text-graphite max-lg:text-[clamp(0.95rem,4vw,1.5rem)] max-lg:leading-[1.35]"
+        data-words-scrub
+        data-from="0.2"
+        data-to="1"
+        data-start="top 90%"
+        data-end="bottom 68%"
+      >
+        Biuro Rachunkowe Iwona Mazur od ponad dwudziestu lat prowadzi księgi
+        firm z Dębicy i okolic. Na początku obsługiwaliśmy kilka lokalnych
+        działalności i wystarczała do tego jedna księgowa przy telefonie.
+        Dziś mamy ponad dziewięćdziesięciu klientów, od jednoosobowych
+        działalności po spółki handlowe i zakłady produkcyjne, a w zespole
+        pracuje dziesięć osób. Jedno się nie zmieniło: każdy klient ma
+        swojego księgowego, który zna jego firmę i jej historię, więc pyta
+        o sprawę, zanim zrobi się z niej problem.
+      </p>
+
+      <p
+        class="flex-1 font-sans text-[clamp(0.9rem,1.05vw,1.3rem)] font-medium leading-[1.4] text-graphite max-lg:text-[clamp(0.95rem,4vw,1.5rem)] max-lg:leading-[1.35]"
+        data-words-scrub
+        data-from="0.2"
+        data-to="1"
+        data-start="top 90%"
+        data-end="bottom 68%"
+      >
+        W biurze prowadzimy pełną księgowość i księgi przychodów i rozchodów,
+        kadry i płace oraz doradztwo podatkowe. Rozliczamy VAT krajowy
+        i transakcje zagraniczne oraz przygotowujemy sprawozdania finansowe. Pracujemy
+        w Comarch Optima i w elektronicznym obiegu dokumentów, więc do
+        współpracy nie trzeba przyjeżdżać do biura. Firmę z drugiego końca
+        Polski obsługujemy tak samo jak tę z Dębicy.
+      </p>
     </div>
   </section>
 
@@ -169,7 +287,8 @@ const specialists = content.team.map(({ role, ...member }) => ({ ...member, depa
             class="mt-[2vw] max-w-[42vw] text-center font-sans text-[clamp(0.95rem,1.1vw,1.25rem)] font-medium leading-[1.35] text-graphite max-lg:mt-[3vh] max-lg:max-w-none"
             data-extra-words
           >
-            {content.closing}
+            Rozmowa trwa trzydzieści minut i do niczego nie zobowiązuje.
+            Przejrzymy Twoją obecną księgowość i powiemy, co da się w niej uprościć.
           </p>
 
           <span class="mt-[clamp(1rem,1.4vw,2rem)] flex overflow-hidden max-lg:mt-[3vh]">

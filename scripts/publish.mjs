@@ -1,17 +1,16 @@
 import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { readFile, readdir } from 'node:fs/promises';
-import { PassThrough, Readable } from 'node:stream';
+import { readFile, readdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { Client } from 'basic-ftp';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DIST = path.join(ROOT, 'dist');
-const STATE_FILE = '.publish-state.json';
+const STATE = path.join(ROOT, 'scripts', 'publish-state.json');
 
 const { FTP_HOST, FTP_USER, FTP_PASSWORD } = process.env;
-const FTP_DIR = process.env.FTP_DIR || '/';
+const FTP_DIR = process.env.FTP_DIR ?? '/';
 const STRICT_TLS = process.env.FTP_STRICT_TLS === 'true';
 
 const step = (message) => console.log(`\n=== ${message} ===`);
@@ -42,33 +41,41 @@ const collectFiles = async (directory, prefix = '') => {
   return files;
 };
 
-const readRemoteState = async (client) => {
-  const chunks = [];
-  const sink = new PassThrough();
-  sink.on('data', (chunk) => chunks.push(chunk));
-
+const readState = async () => {
   try {
-    await client.downloadTo(sink, STATE_FILE);
-    return JSON.parse(Buffer.concat(chunks).toString('utf8'));
+    return JSON.parse(await readFile(STATE, 'utf8'));
   } catch {
     return null;
   }
 };
 
-const writeRemoteState = async (client, files) => {
-  const state = { files: Object.fromEntries(files.map((file) => [file.relative, file.hash])) };
-  await client.uploadFrom(Readable.from([JSON.stringify(state)]), STATE_FILE);
-};
-
 const main = async () => {
   if (!FTP_HOST || !FTP_USER || !FTP_PASSWORD) {
-    throw new Error('Brakuje FTP_HOST, FTP_USER albo FTP_PASSWORD w pliku .env albo w sekretach GitHuba');
+    throw new Error('Brakuje FTP_HOST, FTP_USER albo FTP_PASSWORD w pliku .env');
   }
 
   step('Buduję stronę');
   runNode([path.join(ROOT, 'node_modules', 'astro', 'bin', 'astro.mjs'), 'build'], 'budowanie strony');
 
-  step('Łączę z serwerem');
+  step('Porównuję z tym, co jest na serwerze');
+  const previous = await readState();
+  const files = await collectFiles(DIST);
+  const previousHashes = new Map(Object.entries(previous?.files ?? {}));
+
+  const changed = files.filter((file) => previousHashes.get(file.relative) !== file.hash);
+  const currentPaths = new Set(files.map((file) => file.relative));
+  const obsolete = previous ? [...previousHashes.keys()].filter((relative) => !currentPaths.has(relative)) : [];
+
+  console.log(`Plików w dist: ${files.length}`);
+  console.log(`Do wysłania: ${changed.length}`);
+  console.log(`Do usunięcia z serwera: ${obsolete.length}`);
+
+  if (changed.length === 0 && obsolete.length === 0) {
+    console.log('\nNic się nie zmieniło. Kończę bez łączenia z FTP.');
+    return;
+  }
+
+  step('Wysyłam na serwer');
   const client = new Client(30000);
 
   try {
@@ -83,25 +90,6 @@ const main = async () => {
     await client.ensureDir(FTP_DIR);
     const base = await client.pwd();
 
-    step('Porównuję z tym, co jest na serwerze');
-    const previous = await readRemoteState(client);
-    const files = await collectFiles(DIST);
-    const previousHashes = new Map(Object.entries(previous?.files ?? {}));
-
-    const changed = files.filter((file) => previousHashes.get(file.relative) !== file.hash);
-    const currentPaths = new Set(files.map((file) => file.relative));
-    const obsolete = previous ? [...previousHashes.keys()].filter((relative) => !currentPaths.has(relative)) : [];
-
-    console.log(`Plików w dist: ${files.length}`);
-    console.log(`Do wysłania: ${changed.length}`);
-    console.log(`Do usunięcia z serwera: ${obsolete.length}`);
-
-    if (changed.length === 0 && obsolete.length === 0) {
-      console.log('\nNic się nie zmieniło.');
-      return;
-    }
-
-    step('Wysyłam na serwer');
     const byDirectory = new Map();
     for (const file of changed) {
       const directory = path.posix.dirname(file.relative);
@@ -130,15 +118,15 @@ const main = async () => {
         console.log(`  nie udało się usunąć ${relative}, pomijam`);
       }
     }
-
-    await client.cd(base);
-    await writeRemoteState(client, files);
-
-    step('Gotowe');
-    console.log(`Wysłano ${changed.length} plików, usunięto ${obsolete.length}.`);
   } finally {
     client.close();
   }
+
+  const state = { files: Object.fromEntries(files.map((file) => [file.relative, file.hash])) };
+  await writeFile(STATE, `${JSON.stringify(state, null, 2)}\n`, 'utf8');
+
+  step('Gotowe');
+  console.log(`Wysłano ${changed.length} plików, usunięto ${obsolete.length}.`);
 };
 
 const FTP_HINTS = {

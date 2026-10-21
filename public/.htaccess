@@ -2,13 +2,9 @@ Options -Indexes
 DirectorySlash On
 ErrorDocument 404 /404.html
 
-<FilesMatch "^(contact-config|cms-config)\.php$">
+<Files "contact-config.php">
 Require all denied
-</FilesMatch>
-
-<FilesMatch "^(oauth\.php|\.publish-state\.json)$">
-Require all denied
-</FilesMatch>
+</Files>
 
 <IfModule mod_rewrite.c>
 RewriteEngine On

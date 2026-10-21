@@ -1,19 +1,18 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { Image } from 'astro:assets';
-import { formatDateMonthFirst, isoDate, publishedPosts, sortPosts } from '../data/blog.js';
-import { pageData } from '../data/content.js';
+import { getCollection } from 'astro:content';
+import { formatDateMonthFirst, isoDate, sortPosts } from '../data/blog.js';
 
 const MARQUEE_REPEATS = 3;
 const DASH_LENGTH = 'clamp(3.5rem,9vw,11rem)';
 const DASH_THICKNESS = 'clamp(0.3rem,0.8vw,1rem)';
 
-const posts = sortPosts(await publishedPosts());
-const content = await pageData('blogPage');
+const posts = sortPosts(await getCollection('blog'));
 ---
 <BaseLayout
-  title={content.seo.title}
-  description={content.seo.description}
+  title="Blog o księgowości i podatkach"
+  description="Poradniki księgowe dla przedsiębiorców: KSeF, forma opodatkowania, zatrudnienie pracownika i zamknięcie roku. Piszemy o tym, co zmienia rozliczenia małych firm."
 >
   <section class="px-[2vw] pt-40 max-lg:px-[4vw] max-lg:pt-28">
     <div class="-mx-[2vw] overflow-hidden pt-[0.5vw] pb-[3.6vw] -mt-[0.5vw] -mb-[1.6vw] max-lg:-mx-[4vw] max-lg:pt-[0.6vw] max-lg:pb-[4.2vw] max-lg:-mt-[0.6vw] max-lg:mb-[4.8vw]" aria-hidden="true">
@@ -106,7 +105,8 @@ const content = await pageData('blogPage');
             class="mt-[2vw] max-w-[42vw] text-center font-sans text-[clamp(0.95rem,1.1vw,1.25rem)] font-medium leading-[1.35] text-graphite max-lg:mt-[3vh] max-lg:max-w-none"
             data-extra-words
           >
-            {content.closing}
+            Wpisy opisują typowe sytuacje, a Twoja firma może mieć inne. Napisz
+            do nas, a policzymy to na Twoich dokumentach.
           </p>
 
           <span class="mt-[clamp(1rem,1.4vw,2rem)] flex overflow-hidden max-lg:mt-[3vh]">
