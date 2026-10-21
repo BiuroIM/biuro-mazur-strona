@@ -4,18 +4,20 @@ import { Image } from 'astro:assets';
 import HoverLetters from '../components/HoverLetters.astro';
 import { footerPages } from '../data/navigation.js';
 import emptyCorridor from '../assets/photos/reception-corridor-logo.jpg';
+import { pageData } from '../data/content.js';
 
 const MARQUEE_REPEATS = 3;
 const DASH_LENGTH = 'clamp(3.5rem,9vw,11rem)';
 const DASH_THICKNESS = 'clamp(0.3rem,0.8vw,1rem)';
 
 const links = footerPages.filter(({ href }) => href !== '/');
+const content = await pageData('notFound');
 ---
 
 <BaseLayout
   noindex
-  title="Nie ma takiej strony"
-  description="Strona, której szukasz, zmieniła adres albo już jej nie ma. Wróć na stronę główną Biura Rachunkowego Iwona Mazur."
+  title={content.seo.title}
+  description={content.seo.description}
 >
   <section class="px-[2vw] pb-[8vw] pt-40 max-lg:px-[4vw] max-lg:pb-[16vw] max-lg:pt-28">
     <div class="-mx-[2vw] overflow-hidden pt-[0.5vw] pb-[3.6vw] -mt-[0.5vw] -mb-[1.6vw] max-lg:-mx-[4vw] max-lg:pt-[0.6vw] max-lg:pb-[4.2vw] max-lg:-mt-[0.6vw] max-lg:mb-[4.8vw]" aria-hidden="true">
@@ -68,8 +70,7 @@ const links = footerPages.filter(({ href }) => href !== '/');
           class="mt-[2vw] max-w-[36vw] font-sans text-[clamp(0.95rem,1.1vw,1.25rem)] font-medium leading-[1.35] text-graphite max-lg:mt-[4vw] max-lg:max-w-none"
           data-animate="fade-up"
         >
-          Strona, której szukasz, mogła zmienić adres albo już jej nie ma.
-          Wróć na stronę główną albo przejdź do jednej z zakładek poniżej.
+          {content.text}
         </p>
 
         <span class="mt-[clamp(1.5rem,2.4vw,3rem)] flex overflow-hidden max-lg:mt-[6vw]">

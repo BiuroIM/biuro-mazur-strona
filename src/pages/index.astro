@@ -1,8 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import LogoSlider from '../components/LogoSlider.astro';
-import { questions } from '../data/questions.js';
-import { address, callback } from '../data/contact.js';
+import { address } from '../data/contact.js';
 import { Image } from 'astro:assets';
 import teamGroup from '../assets/photos/team-group.jpg';
 import reviewingDocuments from '../assets/photos/two-accountants-documents.jpg';
@@ -11,95 +10,32 @@ import loungeConversation from '../assets/photos/lounge-conversation-two-women.j
 import clientConversation from '../assets/photos/client-conversation.jpg';
 import accountantAtWorkstation from '../assets/photos/accountant-at-workstation.jpg';
 import officeBuilding from '../assets/photos/office-building-exterior.jpg';
-import crDieselLogo from '../assets/client-logos/cr-diesel.png';
-import deGazLogo from '../assets/client-logos/de-gaz.png';
-import dlRegmetLogo from '../assets/client-logos/dl-regmet.png';
-import aestheticRevolutionsLogo from '../assets/client-logos/estetyczne-rewolucje.png';
-import fsDrewnoLogo from '../assets/client-logos/fs-drewno.png';
-import hotelGoldLogo from '../assets/client-logos/hotel-gold.png';
-import ralGlassLogo from '../assets/client-logos/r-al-glass.png';
-import simpleLightsLogo from '../assets/client-logos/simple-lights.png';
 import HoverLetters from '../components/HoverLetters.astro';
-import { getCollection } from 'astro:content';
-import { formatDateMonthFirst, isoDate, sortPosts } from '../data/blog.js';
+import { formatDateMonthFirst, isoDate, publishedPosts, sortPosts } from '../data/blog.js';
+import { pageData } from '../data/content.js';
 
-const ralGlass = { name: 'R-AL Glass', image: ralGlassLogo };
-const aestheticRevolutions = { name: 'Estetyczne Rewolucje', image: aestheticRevolutionsLogo, scale: 1.25, mobileScale: 1.5 };
-const deGaz = { name: 'DE-GAZ', image: deGazLogo };
-const crDiesel = { name: 'CR Diesel', image: crDieselLogo, scale: 1.08 };
-const dlRegmet = { name: 'DL Regmet', image: dlRegmetLogo, scale: 1.03 };
-const fsDrewno = { name: 'FS Drewno', image: fsDrewnoLogo, scale: 1.1 };
-const simpleLights = { name: 'Simple Lights', image: simpleLightsLogo, scale: 0.8 };
-const hotelGold = { name: 'Hotel Gold', image: hotelGoldLogo, scale: 1.2 };
+const content = await pageData('home');
+const clients = await pageData('clients');
 
-const sliderLogos = [ralGlass, dlRegmet, aestheticRevolutions, crDiesel, deGaz, fsDrewno, simpleLights, hotelGold];
-const sliderMobileRows = [
-  [ralGlass, fsDrewno, deGaz, dlRegmet],
-  [simpleLights, hotelGold, aestheticRevolutions, crDiesel],
+const logosByName = new Map(clients.logos.map((logo) => [logo.name, logo]));
+const sliderLogos = clients.logos;
+const sliderMobileRows = [clients.mobileTopRow, clients.mobileBottomRow].map((row) =>
+  row.map((name) => logosByName.get(name))
+);
+
+const clientLogos = clients.names.map((name) => ({ name }));
+
+const WALL_HEIGHTS = [
+  [26, 18, 30, 22, 28],
+  [20, 32, 18, 26, 22],
+  [30, 20, 26, 28, 18],
+  [22, 28, 20, 30, 24],
+  [26, 22, 30, 18, 28],
 ];
 
-const clientLogos = [
-  { name: 'Apis' },
-  { name: 'Hotel Gold' },
-  { name: 'Newman Polska' },
-  { name: 'R-AL Glass' },
-  { name: 'BR-GAZ' },
-  { name: 'DE-GAZ' },
-  { name: 'Estetyczne Rewolucje' },
-  { name: 'FS Drewno' },
-  { name: 'Kinesis' },
-  { name: 'KRP Motors' },
-  { name: 'Lodowiec' },
-  { name: 'Omega System' },
-  { name: 'Simple Lights' },
-  { name: 'Sław-Mar' },
-  { name: 'DL Regmet' },
-  { name: 'PAT-Instal' },
-  { name: 'CR Diesel' },
-  { name: 'Fox-Instal' },
-  { name: 'DWOperations' },
-  { name: 'Joker' },
-  { name: 'MSK Investment' },
-  { name: 'Gąsiorek' },
-];
-
-const logoWall = [
-  [
-    { name: 'Sław-Mar', height: 26 },
-    { name: 'Kinesis', height: 18 },
-    { name: 'CR Diesel', height: 30 },
-    { name: 'DE-GAZ', height: 22 },
-    { name: 'KRP Motors', height: 28 },
-  ],
-  [
-    { name: 'Joker', height: 20 },
-    { name: 'Gąsiorek', height: 32 },
-    { name: 'PAT-Instal', height: 18 },
-    { name: 'MSK Investment', height: 26 },
-    { name: 'BR-GAZ', height: 22 },
-  ],
-  [
-    { name: 'Simple Lights', height: 30 },
-    { name: 'Newman Polska', height: 20 },
-    { name: 'Lodowiec', height: 26 },
-    { name: 'Apis', height: 28 },
-    { name: 'Fox-Instal', height: 18 },
-  ],
-  [
-    { name: 'DL Regmet', height: 22 },
-    { name: 'Hotel Gold', height: 28 },
-    { name: 'DWOperations', height: 20 },
-    { name: 'Omega System', height: 30 },
-    { name: 'R-AL Glass', height: 24 },
-  ],
-  [
-    { name: 'Estetyczne Rewolucje', height: 26 },
-    { name: 'FS Drewno', height: 22 },
-    { name: 'Newman Polska', height: 30 },
-    { name: 'Joker', height: 18 },
-    { name: 'Gąsiorek', height: 28 },
-  ],
-];
+const logoWall = clients.wall.map((column, c) =>
+  column.names.map((name, r) => ({ name, height: WALL_HEIGHTS[c][r] }))
+);
 
 const marqueeRows = [0, 1, 2, 3].map((band) => ({
   logo: clientLogos.map((_, i) => clientLogos[(i + band * 2) % clientLogos.length]),
@@ -107,28 +43,7 @@ const marqueeRows = [0, 1, 2, 3].map((band) => ({
   time: [3.6, 4.4, 3.2, 4][band] * clientLogos.length,
 }));
 
-const services = [
-  {
-    name: 'Księgowość',
-    description: 'Prowadzimy KPiR i księgi handlowe, wystawiamy i księgujemy faktury, a o terminach deklaracji pamiętamy za Ciebie, co miesiąc.',
-  },
-  {
-    name: 'Kadry i płace',
-    description: 'Przygotowujemy umowy i listy płac, rozliczamy składki ZUS i na bieżąco prowadzimy akta pracowników, także gdy zatrudniasz kolejne osoby.',
-  },
-  {
-    name: 'Rozliczenia z ZUS i US',
-    description: 'Składamy deklaracje w terminie i odpowiadamy na pisma z urzędów. Sprawy, które da się załatwić bez Twojego udziału, bierzemy na siebie.',
-  },
-  {
-    name: 'Doradztwo podatkowe',
-    description: 'Pomagamy wybrać formę opodatkowania i doradzamy przy bieżących decyzjach, żeby zmiana przepisów w trakcie roku nie była dla Ciebie zaskoczeniem.',
-  },
-  {
-    name: 'Zakładanie i przekształcenia firm',
-    description: 'Rejestrujemy działalność i przeprowadzamy zmianę formy prawnej. Wypełniamy wnioski i zgłaszamy firmę do ZUS oraz urzędu skarbowego.',
-  },
-];
+const services = content.services;
 
 const FIRST_ROTATION = -5;
 const LAST_ROTATION = 6;
@@ -137,21 +52,18 @@ const cardRotation = (i) =>
     ? FIRST_ROTATION + ((LAST_ROTATION - FIRST_ROTATION) * i) / (services.length - 1)
     : FIRST_ROTATION;
 
-const articles = sortPosts(await getCollection('blog')).slice(0, 3);
+const articles = sortPosts(await publishedPosts()).slice(0, 3);
 
-const numbers = [
-  { label: 'Specjalistów w zespole', value: '10+' },
-  { label: 'Lat doświadczenia', value: '20+' },
-  { label: 'Dokumentów miesięcznie', value: '12 000' },
-  { label: 'Obsługiwanych firm', value: '90+' },
-  { label: 'Obsługiwanych branż', value: '15+' },
-];
+const numbers = content.numbers;
+const questions = content.faq;
+
+const pad = (n) => String(n).padStart(2, '0');
 ---
 <BaseLayout
   loadingScreen
-  title="Biuro rachunkowe w Dębicy"
-  documentTitle="Biuro rachunkowe Dębica | Doradca podatkowy Iwona Mazur"
-  description="Biuro rachunkowe w Dębicy: księgowość, kadry i płace, rozliczenia z ZUS i US oraz doradztwo podatkowe. Umów bezpłatną 30-minutową konsultację."
+  title={content.seo.title}
+  documentTitle={content.seo.fullTitle}
+  description={content.seo.description}
 >
   <section class="px-[2vw] pt-40 max-lg:px-[4vw] max-lg:pt-28" data-hero>
     <div class="font-display font-medium uppercase leading-[0.85] text-ink max-lg:flex max-lg:flex-col max-lg:gap-0">
@@ -280,10 +192,7 @@ const numbers = [
           data-from="0.3"
           data-to="1"
         >
-          Prowadzimy pełną księgowość i księgi przychodów i rozchodów, rozliczamy
-          firmy z urzędem skarbowym i ZUS, zajmujemy się też kadrami i płacami.
-          Pomagamy też przy bieżących decyzjach finansowych, więc na
-          prowadzenie firmy zostaje Ci więcej czasu.
+          {content.intro}
         </p>
         <div class="relative w-full overflow-hidden rounded-[clamp(1rem,1.5vw,2rem)] h-[clamp(15rem,25vw,32rem)] max-lg:order-4 max-lg:h-[52vw]" data-image-reveal>
           <Image
@@ -462,9 +371,7 @@ const numbers = [
           data-from="0.3"
           data-to="1"
         >
-          Obsługujemy jednoosobowe działalności, spółki handlowe i zakłady
-          produkcyjne. Pilnujemy terminów rozliczeń i odpowiadamy na pytania,
-          zanim zamienią się w problem.
+          {content.servicesIntro}
         </p>
 
         <div class="mt-[2vw] max-lg:mt-[2vh]">
@@ -537,101 +444,33 @@ const numbers = [
         </h2>
       </div>
 
-      <div
-        class="pointer-events-none absolute inset-0 flex flex-col items-center justify-center px-[2vw] pb-[clamp(4rem,10vh,9rem)] max-lg:px-[4vw]"
-        data-headline-group
-      >
-        <div class="mb-[clamp(0.75rem,1.4vw,1.75rem)] overflow-hidden">
-          <span class="headline-line block pb-[0.15em] font-display text-[clamp(0.8rem,1vw,1.15rem)] font-medium uppercase tracking-[0.03em] text-canvas/50">Krok 01 / 04</span>
-        </div>
-
-        <h3 class="text-center font-display text-[clamp(1.75rem,4vw,5rem)] font-medium uppercase leading-[1.05] text-canvas max-lg:text-[clamp(1.4rem,7vw,2.75rem)]">
-          <span class="block overflow-hidden -mb-[0.15em]"><span class="headline-line block pb-[0.15em]">Odzywasz się</span></span>
-          <span class="block overflow-hidden -mb-[0.15em]"><span class="headline-line block pb-[0.15em]">do nas</span></span>
-        </h3>
-
-        <div class="flex flex-col items-center" data-headline-extra>
-          <p
-            class="mt-[2vw] max-w-[42vw] text-center font-sans text-[clamp(0.95rem,1.1vw,1.25rem)] font-normal leading-[1.4] text-canvas/70 max-lg:mt-[5vw] max-lg:max-w-none"
-            data-extra-words
+      {
+        content.steps.map((step, i) => (
+          <div
+            class="pointer-events-none absolute inset-0 flex flex-col items-center justify-center px-[2vw] pb-[clamp(4rem,10vh,9rem)] max-lg:px-[4vw]"
+            data-headline-group
           >
-            Piszesz albo dzwonisz. Zadajemy kilka podstawowych pytań
-            o Twoją firmę i umawiamy termin spotkania online.
-          </p>
-        </div>
-      </div>
+            <div class="mb-[clamp(0.75rem,1.4vw,1.75rem)] overflow-hidden">
+              <span class="headline-line block pb-[0.15em] font-display text-[clamp(0.8rem,1vw,1.15rem)] font-medium uppercase tracking-[0.03em] text-canvas/50">Krok {pad(i + 1)} / {pad(content.steps.length)}</span>
+            </div>
 
-      <div
-        class="pointer-events-none absolute inset-0 flex flex-col items-center justify-center px-[2vw] pb-[clamp(4rem,10vh,9rem)] max-lg:px-[4vw]"
-        data-headline-group
-      >
-        <div class="mb-[clamp(0.75rem,1.4vw,1.75rem)] overflow-hidden">
-          <span class="headline-line block pb-[0.15em] font-display text-[clamp(0.8rem,1vw,1.15rem)] font-medium uppercase tracking-[0.03em] text-canvas/50">Krok 02 / 04</span>
-        </div>
+            <h3 class="text-center font-display text-[clamp(1.75rem,4vw,5rem)] font-medium uppercase leading-[1.05] text-canvas max-lg:text-[clamp(1.4rem,7vw,2.75rem)]">
+              {step.title.map((line) => (
+                <span class="block overflow-hidden -mb-[0.15em]"><span class="headline-line block pb-[0.15em]">{line}</span></span>
+              ))}
+            </h3>
 
-        <h3 class="text-center font-display text-[clamp(1.75rem,4vw,5rem)] font-medium uppercase leading-[1.05] text-canvas max-lg:text-[clamp(1.4rem,7vw,2.75rem)]">
-          <span class="block overflow-hidden -mb-[0.15em]"><span class="headline-line block pb-[0.15em]">Trzydzieści minut</span></span>
-          <span class="block overflow-hidden -mb-[0.15em]"><span class="headline-line block pb-[0.15em]">o Twojej firmie</span></span>
-        </h3>
-
-        <div class="flex flex-col items-center" data-headline-extra>
-          <p
-            class="mt-[2vw] max-w-[42vw] text-center font-sans text-[clamp(0.95rem,1.1vw,1.25rem)] font-normal leading-[1.4] text-canvas/70 max-lg:mt-[5vw] max-lg:max-w-none"
-            data-extra-words
-          >
-            Rozmawiamy o formie działalności, obrotach, zatrudnieniu i o tym,
-            co dziś sprawia najwięcej kłopotu. Rozmowa do niczego nie zobowiązuje.
-          </p>
-        </div>
-      </div>
-
-      <div
-        class="pointer-events-none absolute inset-0 flex flex-col items-center justify-center px-[2vw] pb-[clamp(4rem,10vh,9rem)] max-lg:px-[4vw]"
-        data-headline-group
-      >
-        <div class="mb-[clamp(0.75rem,1.4vw,1.75rem)] overflow-hidden">
-          <span class="headline-line block pb-[0.15em] font-display text-[clamp(0.8rem,1vw,1.15rem)] font-medium uppercase tracking-[0.03em] text-canvas/50">Krok 03 / 04</span>
-        </div>
-
-        <h3 class="text-center font-display text-[clamp(1.75rem,4vw,5rem)] font-medium uppercase leading-[1.05] text-canvas max-lg:text-[clamp(1.4rem,7vw,2.75rem)]">
-          <span class="block overflow-hidden -mb-[0.15em]"><span class="headline-line block pb-[0.15em]">Dobieramy zakres</span></span>
-          <span class="block overflow-hidden -mb-[0.15em]"><span class="headline-line block pb-[0.15em]">i wariant dla Ciebie</span></span>
-        </h3>
-
-        <div class="flex flex-col items-center" data-headline-extra>
-          <p
-            class="mt-[2vw] max-w-[42vw] text-center font-sans text-[clamp(0.95rem,1.1vw,1.25rem)] font-normal leading-[1.4] text-canvas/70 max-lg:mt-[5vw] max-lg:max-w-none"
-            data-extra-words
-          >
-            Przedstawiamy warianty współpracy z ceną i zakresem każdego z nich.
-            Wybierasz ten, który przy Twojej skali wychodzi najkorzystniej.
-          </p>
-        </div>
-      </div>
-
-      <div
-        class="pointer-events-none absolute inset-0 flex flex-col items-center justify-center px-[2vw] pb-[clamp(4rem,10vh,9rem)] max-lg:px-[4vw]"
-        data-headline-group
-      >
-        <div class="mb-[clamp(0.75rem,1.4vw,1.75rem)] overflow-hidden">
-          <span class="headline-line block pb-[0.15em] font-display text-[clamp(0.8rem,1vw,1.15rem)] font-medium uppercase tracking-[0.03em] text-canvas/50">Krok 04 / 04</span>
-        </div>
-
-        <h3 class="text-center font-display text-[clamp(1.75rem,4vw,5rem)] font-medium uppercase leading-[1.05] text-canvas max-lg:text-[clamp(1.4rem,7vw,2.75rem)]">
-          <span class="block overflow-hidden -mb-[0.15em]"><span class="headline-line block pb-[0.15em]">Prowadzimy księgi</span></span>
-          <span class="block overflow-hidden -mb-[0.15em]"><span class="headline-line block pb-[0.15em]">miesiąc po miesiącu</span></span>
-        </h3>
-
-        <div class="flex flex-col items-center" data-headline-extra>
-          <p
-            class="mt-[2vw] max-w-[42vw] text-center font-sans text-[clamp(0.95rem,1.1vw,1.25rem)] font-normal leading-[1.4] text-canvas/70 max-lg:mt-[5vw] max-lg:max-w-none"
-            data-extra-words
-          >
-            Terminy, deklaracje i kontakt z urzędami bierzemy na siebie.
-            O sprawach, które wymagają Twojej decyzji, mówimy z wyprzedzeniem.
-          </p>
-        </div>
-      </div>
+            <div class="flex flex-col items-center" data-headline-extra>
+              <p
+                class="mt-[2vw] max-w-[42vw] text-center font-sans text-[clamp(0.95rem,1.1vw,1.25rem)] font-normal leading-[1.4] text-canvas/70 max-lg:mt-[5vw] max-lg:max-w-none"
+                data-extra-words
+              >
+                {step.text}
+              </p>
+            </div>
+          </div>
+        ))
+      }
 
       <div
         class="pointer-events-none absolute inset-0 flex flex-col items-center justify-center px-[2vw] pb-[clamp(4rem,10vh,9rem)] max-lg:px-[4vw]"
@@ -646,8 +485,7 @@ const numbers = [
             class="mt-[2vw] max-w-[42vw] text-center font-sans text-[clamp(0.95rem,1.1vw,1.25rem)] font-normal leading-[1.4] text-canvas/70 max-lg:mt-[5vw] max-lg:max-w-none"
             data-extra-words
           >
-            Wypełnij krótki formularz, a {callback.clause}.
-            Pierwsza rozmowa jest bezpłatna i do niczego nie zobowiązuje.
+            {content.closing}
           </p>
 
           <span class="mt-[clamp(1rem,1.4vw,2rem)] flex overflow-hidden">

@@ -1,11 +1,12 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { address, callback, email, openingHours, phone } from '../data/contact.js';
+import { address, email, openingHours, phone } from '../data/contact.js';
 import { Image } from 'astro:assets';
 import FormFields from '../components/FormFields.astro';
 import HoverLetters from '../components/HoverLetters.astro';
 import accountantsDiscussingWide from '../assets/photos/three-accountants-discussing-documents.jpg';
 import accountantsDiscussing from '../assets/photos/three-accountants-discussing-documents-portrait.jpg';
+import { pageData } from '../data/content.js';
 
 const MARQUEE_REPEATS = 3;
 const DASH_LENGTH = 'clamp(3.5rem,9vw,11rem)';
@@ -22,10 +23,12 @@ const contactDetails = [
   },
   { label: 'Godziny pracy', value: openingHours.label },
 ];
+
+const content = await pageData('contactPage');
 ---
 <BaseLayout
-  title="Kontakt z biurem w Dębicy"
-  description={`Biuro rachunkowe w Dębicy, ${address.label}, tel. ${phone.label}. Zostaw kontakt, a ${callback.clause} i umówimy bezpłatną rozmowę.`}
+  title={content.seo.title}
+  description={content.seo.description}
 >
   <section class="px-[2vw] pb-[8vw] pt-40 max-lg:px-[4vw] max-lg:pb-[16vw] max-lg:pt-28">
     <div class="-mx-[2vw] overflow-hidden pt-[0.5vw] pb-[3.6vw] -mt-[0.5vw] -mb-[1.6vw] max-lg:-mx-[4vw] max-lg:pt-[0.6vw] max-lg:pb-[4.2vw] max-lg:-mt-[0.6vw] max-lg:mb-[4.8vw]" aria-hidden="true">

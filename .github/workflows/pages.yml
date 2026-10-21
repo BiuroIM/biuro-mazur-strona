@@ -25,7 +25,7 @@ jobs:
           node-version: 24
           cache: npm
 
-      - run: php -l public/contact.php
+      - run: for file in public/contact.php public/cms-auth/*.php; do php -l "$file"; done
 
       - run: npm install --no-audit --no-fund
 

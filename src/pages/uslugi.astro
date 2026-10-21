@@ -1,121 +1,17 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { callback } from '../data/contact.js';
 import { Image } from 'astro:assets';
 import servicesHero from '../assets/photos/open-space-reviewing-screen.jpg';
-import accountingPhoto from '../assets/photos/accountant-with-binder-at-desk.jpg';
-import payrollPhoto from '../assets/photos/curly-haired-accountant-smiling-at-desk.jpg';
-import taxPhoto from '../assets/photos/floral-suit-advising-client.jpg';
 import closingPhoto from '../assets/photos/conversation-by-logo-wall.jpg';
+import { pageData } from '../data/content.js';
 
 const MARQUEE_REPEATS = 3;
 const DASH_LENGTH = 'clamp(3.5rem,9vw,11rem)';
 const DASH_THICKNESS = 'clamp(0.3rem,0.8vw,1rem)';
 
-const serviceGroups = [
-  {
-    title: ['Księgowość'],
-    lead: 'Od księgi przychodów i rozchodów po bilans spółki.',
-    photo: accountingPhoto,
-    photoAlt: 'Księgowa z segregatorem przy biurku',
-    services: [
-      {
-        name: 'Pełna księgowość',
-        lead: 'Księgi rachunkowe spółek',
-        description:
-          'Obsługujemy spółki, które muszą prowadzić księgi rachunkowe. Plan kont układamy pod Twoją firmę, prowadzimy ewidencję środków trwałych i rozrachunki z kontrahentami, a raporty zarządcze przygotowujemy wtedy, gdy ich potrzebujesz.',
-      },
-      {
-        name: 'Księga przychodów i rozchodów',
-        lead: 'Dla JDG i spółek cywilnych',
-        description:
-          'Prowadzimy KPiR jednoosobowych działalności i spółek cywilnych. Dokumenty księgujemy na bieżąco, sprawdzamy limity i to, co można zaliczyć do kosztów, a co miesiąc wyliczamy zaliczkę na podatek, więc znasz kwotę przed terminem.',
-      },
-      {
-        name: 'Ewidencja ryczałtowa',
-        lead: 'Dla firm na ryczałcie',
-        description:
-          'Prowadzimy ewidencję przychodów dla firm rozliczających się ryczałtem. Pilnujemy, żeby każdy przychód miał właściwą stawkę, co miesiąc liczymy podatek, a składkę zdrowotną według progu przychodu. Przed końcem roku sprawdzamy, czy ryczałt nadal się opłaca.',
-      },
-      {
-        name: 'Ewidencja VAT',
-        lead: 'Rejestry sprzedaży i zakupu',
-        description:
-          'Prowadzimy rejestry sprzedaży i zakupu, sprawdzamy kontrahentów na białej liście i pilnujemy, w którym miesiącu przysługuje odliczenie podatku. Faktury korygujące ujmujemy w okresie, w którym wymagają tego przepisy.',
-      },
-      {
-        name: 'Pliki JPK',
-        lead: 'JPK_V7 i pliki z ksiąg',
-        description:
-          'Wysyłamy JPK_V7 w Twoim imieniu i pilnujemy oznaczeń transakcji oraz terminów, żeby urząd nie miał powodów do pytań. Przygotowujemy też pliki JPK z ksiąg, które od rozliczenia za 2026 rok trafiają do urzędu skarbowego.',
-      },
-      {
-        name: 'Sprawozdania finansowe',
-        lead: 'Bilans i rachunek zysków i strat',
-        description:
-          'Przygotowujemy bilans, rachunek zysków i strat oraz informację dodatkową w formacie wymaganym przez KRS. Przypominamy o terminie zatwierdzenia i pilnujemy elektronicznych podpisów członków zarządu.',
-      },
-    ],
-  },
-  {
-    title: ['Kadry, płace', 'i ZUS'],
-    lead: 'Umowy, wypłaty i składki Twoich pracowników.',
-    photo: payrollPhoto,
-    photoAlt: 'Uśmiechnięta księgowa przy biurku',
-    services: [
-      {
-        name: 'Kadry',
-        lead: 'Umowy, akta i czas pracy',
-        description:
-          'Przygotowujemy umowy, prowadzimy akta osobowe i ewidencję czasu pracy oraz resztę dokumentów związanych z zatrudnieniem. Pilnujemy, żeby wszystkie formalności zgadzały się z aktualnym prawem pracy.',
-      },
-      {
-        name: 'Płace',
-        lead: 'Wynagrodzenia, urlopy i zwolnienia',
-        description:
-          'Sporządzamy listy płac i naliczamy wynagrodzenia. Rozliczamy urlopy, zwolnienia lekarskie i inne świadczenia, a za pracowników przygotowujemy deklaracje i rozliczenia podatkowe.',
-      },
-      {
-        name: 'ZUS',
-        lead: 'Zgłoszenia, składki i deklaracje',
-        description:
-          'Zgłaszamy do ZUS i wyrejestrowujemy pracowników oraz właściciela firmy, naliczamy składki i składamy deklaracje. Załatwiamy też pozostałe formalności ubezpieczeniowe i pilnujemy, żeby każde rozliczenie poszło na czas.',
-      },
-    ],
-  },
-  {
-    title: ['Podatki', 'i urzędy'],
-    lead: 'Rozliczenia roczne i doradztwo podatkowe.',
-    photo: taxPhoto,
-    photoAlt: 'Doradczyni omawia sprawę z klientką',
-    services: [
-      {
-        name: 'Deklaracje i rozliczenia roczne',
-        lead: 'PIT i CIT za cały rok',
-        description:
-          'Przygotowujemy PIT i CIT oraz wszystko, co wiąże się z zamknięciem roku. Sprawdzamy, z jakich ulg i odliczeń możesz skorzystać, a gotowe zeznanie wysyłamy elektronicznie.',
-      },
-      {
-        name: 'Doradztwo podatkowe',
-        lead: 'Skutki podatkowe przed decyzją',
-        description:
-          'Zanim podpiszesz umowę albo zmienisz formę opodatkowania, sprawdzamy skutki podatkowe. Proponujemy rozwiązanie zgodne z przepisami i korzystne dla firmy, a wnioski przekazujemy na piśmie.',
-      },
-    ],
-  },
-  {
-    title: ['Nowa firma'],
-    lead: 'Pierwsze kroki od wyboru formy do rejestracji.',
-    services: [
-      {
-        name: 'Zakładanie działalności i spółek',
-        lead: 'Rejestracja w CEIDG albo KRS',
-        description:
-          'Pomagamy wybrać formę prawną i sposób opodatkowania, wypełniamy wnioski do CEIDG lub KRS i zgłaszamy firmę do urzędu skarbowego oraz ZUS. W pierwszych miesiącach tłumaczymy każdy krok.',
-      },
-    ],
-  },
-];
+const content = await pageData('services');
+
+const serviceGroups = content.groups;
 
 const numberedGroups = serviceGroups.reduce(
   (acc, group) => {
@@ -127,29 +23,13 @@ const numberedGroups = serviceGroups.reduce(
   { groups: [], next: 1 }
 ).groups;
 
-const standards = [
-  {
-    title: ['Jedna osoba', 'prowadząca'],
-    description:
-      'Twoje sprawy prowadzi jedna księgowa, która zna Twoją firmę. Kontaktujesz się z nią bezpośrednio, bez przełączania między działami.',
-  },
-  {
-    title: ['Terminy', 'po naszej stronie'],
-    description:
-      'Pilnujemy terminów deklaracji, plików JPK i składek ZUS. Pisma z urzędów odbieramy i odpowiadamy na nie w Twoim imieniu, więc nie musisz śledzić kalendarza podatkowego.',
-  },
-  {
-    title: ['Decyzje', 'z wyprzedzeniem'],
-    description:
-      'Gdy zbliża się zmiana przepisów, przekroczenie limitu albo czas na wybór formy opodatkowania, dajemy znać wcześniej. Decyzję podejmujesz na spokojnie, zanim minie termin.',
-  },
-];
+const standards = content.standards;
 
 const pad = (n) => String(n).padStart(2, '0');
 ---
 <BaseLayout
-  title="Usługi księgowe i kadrowe"
-  description="Usługi biura rachunkowego w Dębicy: pełna księgowość, KPiR i ryczałt, VAT i JPK, kadry i płace, rozliczenia ZUS, doradztwo podatkowe i zakładanie firm."
+  title={content.seo.title}
+  description={content.seo.description}
 >
   <section class="flex min-h-screen flex-col px-[2vw] pt-40 max-lg:px-[4vw] max-lg:pt-28">
     <div class="-mx-[2vw] overflow-hidden pt-[0.5vw] pb-[3.6vw] -mt-[0.5vw] -mb-[1.6vw] max-lg:-mx-[4vw] max-lg:pt-[0.6vw] max-lg:pb-[4.2vw] max-lg:-mt-[0.6vw] max-lg:mb-[4.8vw]" aria-hidden="true">
@@ -200,8 +80,7 @@ const pad = (n) => String(n).padStart(2, '0');
       data-start="top 92%"
       data-end="bottom 68%"
     >
-      Prowadzimy za Ciebie księgowość, a Ty możesz zająć się swoją firmą.
-      Kadry, podatki i sprawy w urzędach też załatwisz w jednym biurze.
+      {content.intro}
     </p>
   </section>
 
@@ -393,7 +272,7 @@ const pad = (n) => String(n).padStart(2, '0');
               style="text-wrap: balance"
               data-extra-words
             >
-              Wypełnij formularz, a {callback.clause} z propozycją zakresu obsługi i wyceną.
+              {content.closing}
             </p>
 
             <span class="mt-[clamp(1rem,1.4vw,2rem)] flex overflow-hidden max-lg:mt-[3vh]">

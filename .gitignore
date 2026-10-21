@@ -17,9 +17,6 @@ pnpm-debug.log*
 .env
 .env.production
 
-# stan wysyłki FTP z lokalnego komputera
-scripts/publish-state.json
-
 # macOS-specific files
 .DS_Store
 
@@ -32,3 +29,4 @@ scripts/publish-state.json
 CLAUDE.md
 PRZED_PUBLIKACJA.md
 contact-config.php
+cms-config.php

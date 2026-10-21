@@ -3,8 +3,7 @@ title: 'Skala, liniowy czy ryczałt: jak wybrać formę opodatkowania na 2027 ro
 lead: 'Formę opodatkowania wybierasz na cały rok, a różnice w składce zdrowotnej bywają większe niż w samym podatku. Pokazujemy, jak porównać skalę, podatek liniowy i ryczałt na własnych liczbach.'
 date: 2026-10-01
 category: 'Podatki'
-readingMinutes: 3
-cover: '../../assets/photos/reception-standing-conversation-wide.jpg'
+cover: '/src/assets/photos/reception-standing-conversation-wide.jpg'
 coverAlt: 'Rozmowa dwóch księgowych w recepcji biura'
 ---
 

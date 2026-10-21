@@ -1,0 +1,688 @@
+app_title: Biuro Mazur, panel strony
+
+backend:
+  name: github
+  repo: BiuroIM/biuro-mazur-strona
+  branch: main
+  base_url: https://biuro-mazur.pl
+  auth_endpoint: cms-auth/auth.php
+  commit_messages:
+    create: 'Panel: nowy wpis {{slug}} w {{collection}}'
+    update: 'Panel: zmiana {{slug}} w {{collection}}'
+    delete: 'Panel: usunięcie {{slug}} z {{collection}}'
+    uploadMedia: 'Panel: nowy plik {{path}}'
+    deleteMedia: 'Panel: usunięcie pliku {{path}}'
+
+media_folder: /src/assets/photos
+public_folder: /src/assets/photos
+
+media_libraries:
+  all:
+    max_file_size: 20000000
+    transformations:
+      raster_image:
+        format: webp
+        quality: 85
+        width: 2400
+        height: 2400
+
+slug:
+  encoding: ascii
+  clean_accents: true
+  maxlength: 70
+
+output:
+  omit_empty_optional_fields: true
+  yaml:
+    quote: single
+
+collections:
+  - name: blog
+    label: Blog
+    label_singular: wpis
+    description: Wpisy na blogu. Szkic nie pojawia się na stronie, dopóki nie odznaczysz pola „Szkic”.
+    icon: article
+    folder: src/content/blog
+    extension: md
+    format: frontmatter
+    create: true
+    delete: true
+    identifier_field: title
+    summary: '{{title}}'
+    sortable_fields:
+      fields: [date, title]
+      default:
+        field: date
+        direction: descending
+    view_filters:
+      filters:
+        - name: drafts
+          label: Szkice
+          field: draft
+          pattern: true
+    fields:
+      - name: title
+        label: Tytuł
+        widget: string
+        maxlength: 90
+        hint: Krótko i konkretnie. Tytuł wyświetla się wielkimi literami.
+      - name: lead
+        label: Wstęp
+        widget: text
+        maxlength: 300
+        hint: Jedno lub dwa zdania. Pokazują się też w Google i przy udostępnianiu linku.
+      - name: date
+        label: Data publikacji
+        widget: datetime
+        type: date
+      - name: category
+        label: Kategoria
+        widget: select
+        options:
+          - Podatki
+          - Księgowość
+          - Kadry i płace
+          - ZUS
+          - Prowadzenie firmy
+      - name: cover
+        label: Zdjęcie główne
+        widget: image
+        hint: Poziome zdjęcie. Większe pliki zmniejszamy automatycznie przy wgrywaniu.
+      - name: coverAlt
+        label: Opis zdjęcia
+        widget: string
+        maxlength: 120
+        hint: Co widać na zdjęciu, np. „Księgowa przegląda dokumenty przy biurku”. Czytają to osoby niewidome i Google.
+      - name: draft
+        label: Szkic
+        widget: boolean
+        default: false
+        required: false
+        hint: Zaznaczony szkic nie trafia na stronę.
+      - name: softParallax
+        widget: hidden
+        default: false
+      - name: body
+        label: Treść
+        widget: richtext
+        buttons: [bold, italic, link, heading-two, heading-three, bulleted-list, numbered-list, quote]
+        editor_components: []
+        hint: Śródtytuły ustawiaj jako „Nagłówek 2”. Z nich powstaje spis treści obok wpisu.
+
+  - divider: true
+
+  - name: pages
+    label: Strony
+    description: Teksty na podstronach. Duże nagłówki i układ strony zostają w kodzie.
+    icon: web
+    files:
+      - name: home
+        label: Strona główna
+        file: src/content/pages/home.yml
+        fields:
+          - name: seo
+            label: Wynik w Google
+            widget: object
+            collapsed: true
+            fields:
+              - name: title
+                label: Krótki tytuł
+                widget: string
+                maxlength: 70
+              - name: fullTitle
+                label: Pełny tytuł na karcie przeglądarki
+                widget: string
+                maxlength: 70
+              - name: description
+                label: Opis
+                widget: text
+                minlength: 50
+                maxlength: 200
+          - name: intro
+            label: Akapit w sekcji „Prowadzimy księgowość”
+            widget: text
+            maxlength: 400
+          - name: numbers
+            label: Biuro w liczbach
+            label_singular: liczbę
+            widget: list
+            min: 3
+            max: 6
+            summary: '{{value}} {{label}}'
+            fields:
+              - name: value
+                label: Liczba
+                widget: string
+                maxlength: 8
+                hint: Np. 90+ albo 12 000.
+              - name: label
+                label: Podpis
+                widget: string
+                maxlength: 40
+          - name: servicesIntro
+            label: Akapit w sekcji „Szukasz biura rachunkowego”
+            widget: text
+            maxlength: 300
+          - name: services
+            label: Karty usług
+            label_singular: kartę
+            widget: list
+            min: 3
+            max: 6
+            summary: '{{name}}'
+            fields:
+              - name: name
+                label: Nazwa
+                widget: string
+                maxlength: 40
+              - name: description
+                label: Opis
+                widget: text
+                maxlength: 200
+          - name: steps
+            label: Jak działamy (4 kroki)
+            label_singular: krok
+            widget: list
+            min: 4
+            max: 4
+            allow_add: false
+            allow_remove: false
+            summary: '{{title}}'
+            fields:
+              - name: title
+                label: Nagłówek kroku
+                widget: list
+                min: 1
+                max: 3
+                hint: Każda linijka nagłówka osobno, do 24 znaków.
+                field:
+                  name: line
+                  label: Linijka
+                  widget: string
+                  maxlength: 24
+              - name: text
+                label: Opis
+                widget: text
+                maxlength: 180
+          - name: closing
+            label: Tekst nad przyciskiem „Wypełnij formularz”
+            widget: text
+            maxlength: 220
+          - name: faq
+            label: Pytania i odpowiedzi
+            label_singular: pytanie
+            widget: list
+            min: 1
+            max: 10
+            summary: '{{question}}'
+            fields:
+              - name: question
+                label: Pytanie
+                widget: string
+                maxlength: 90
+              - name: answer
+                label: Odpowiedź
+                widget: text
+                maxlength: 400
+
+      - name: about
+        label: O nas
+        file: src/content/pages/about.yml
+        fields:
+          - &seo
+            name: seo
+            label: Wynik w Google
+            widget: object
+            collapsed: true
+            fields:
+              - name: title
+                label: Tytuł strony
+                widget: string
+                maxlength: 70
+                hint: Pokazuje się na karcie przeglądarki i w wynikach Google, z dopiskiem nazwy biura.
+              - name: description
+                label: Opis
+                widget: text
+                minlength: 50
+                maxlength: 200
+                hint: Dwa zdania pod tytułem w wynikach Google. Najlepiej 120 do 160 znaków.
+          - name: intro
+            label: Duży akapit pod zdjęciem
+            widget: text
+            maxlength: 200
+          - name: paragraphs
+            label: Dwie kolumny tekstu
+            label_singular: kolumnę
+            widget: list
+            min: 2
+            max: 2
+            allow_add: false
+            allow_remove: false
+            field:
+              name: paragraph
+              label: Tekst
+              widget: text
+              maxlength: 700
+          - name: team
+            label: Zespół
+            label_singular: osobę
+            widget: list
+            min: 1
+            summary: '{{name}}, {{role}}'
+            thumbnail: photo
+            fields:
+              - name: name
+                label: Imię i nazwisko
+                widget: string
+                maxlength: 40
+              - name: role
+                label: Stanowisko
+                widget: string
+                maxlength: 40
+              - name: bio
+                label: Opis
+                widget: text
+                maxlength: 220
+              - name: photo
+                label: Zdjęcie
+                widget: image
+                hint: Portret w pionie, twarz w górnej części kadru.
+              - name: photoAlt
+                label: Opis zdjęcia
+                widget: string
+                hint: Zwykle imię i nazwisko.
+              - name: photoFocus
+                label: Środek kadru
+                widget: string
+                default: '50% 15%'
+                pattern: ['^\d+(\.\d+)?% \d+(\.\d+)?%$', 'Dwie wartości w procentach, np. 50% 15%']
+                hint: 'Gdzie jest twarz na zdjęciu: poziomo i pionowo, np. 50% 15%. Zmieniaj tylko, jeśli twarz jest ucięta.'
+              - name: photoZoom
+                label: Powiększenie
+                widget: number
+                value_type: float
+                min: 1
+                max: 3
+                step: 0.1
+                default: 1.6
+          - name: closing
+            label: Tekst nad przyciskiem konsultacji
+            widget: text
+            maxlength: 220
+
+      - name: services
+        label: Usługi
+        file: src/content/pages/services.yml
+        fields:
+          - *seo
+          - name: intro
+            label: Duży akapit pod zdjęciem
+            widget: text
+            maxlength: 200
+          - name: groups
+            label: Grupy usług
+            label_singular: grupę
+            widget: list
+            min: 1
+            summary: '{{title}}'
+            fields:
+              - name: title
+                label: Nagłówek grupy
+                widget: list
+                min: 1
+                max: 3
+                hint: Każda linijka nagłówka osobno, do 16 znaków.
+                field:
+                  name: line
+                  label: Linijka
+                  widget: string
+                  maxlength: 16
+              - name: lead
+                label: Zdanie pod nagłówkiem
+                widget: string
+                maxlength: 80
+              - name: photo
+                label: Zdjęcie
+                widget: image
+                required: false
+                hint: Na komputerze zdjęcia grup zmieniają się przy przewijaniu. Grupa bez zdjęcia zostaje przy poprzednim.
+              - name: photoAlt
+                label: Opis zdjęcia
+                widget: string
+                required: false
+              - name: services
+                label: Usługi
+                label_singular: usługę
+                widget: list
+                min: 1
+                summary: '{{name}}'
+                fields:
+                  - name: name
+                    label: Nazwa
+                    widget: string
+                    maxlength: 40
+                  - name: lead
+                    label: Podtytuł
+                    widget: string
+                    maxlength: 50
+                  - name: description
+                    label: Opis
+                    widget: text
+                    maxlength: 400
+          - name: standards
+            label: W każdej usłudze
+            label_singular: punkt
+            widget: list
+            min: 1
+            max: 5
+            summary: '{{title}}'
+            fields:
+              - name: title
+                label: Nagłówek
+                widget: list
+                min: 1
+                max: 3
+                hint: Każda linijka nagłówka osobno, do 20 znaków.
+                field:
+                  name: line
+                  label: Linijka
+                  widget: string
+                  maxlength: 20
+              - name: description
+                label: Opis
+                widget: text
+                maxlength: 260
+          - name: closing
+            label: Tekst przy „Potrzebujesz wyceny?”
+            widget: text
+            maxlength: 200
+
+      - name: blog
+        label: Blog (lista wpisów)
+        file: src/content/pages/blog.yml
+        fields:
+          - *seo
+          - name: closing
+            label: Tekst przy „Masz pytanie?”
+            widget: text
+            maxlength: 220
+
+      - name: contact
+        label: Kontakt
+        file: src/content/pages/contact.yml
+        fields:
+          - *seo
+
+      - name: not-found
+        label: Strona 404
+        file: src/content/pages/not-found.yml
+        fields:
+          - *seo
+          - name: text
+            label: Tekst pod nagłówkiem
+            widget: text
+            maxlength: 220
+
+  - name: legal
+    label: Dokumenty
+    description: Polityka prywatności i informacje dla sygnalistów.
+    icon: gavel
+    files:
+      - name: privacy
+        label: Polityka prywatności
+        file: src/content/legal/privacy.md
+        format: frontmatter
+        fields:
+          - name: title
+            label: Tytuł
+            widget: string
+          - name: description
+            label: Opis w Google
+            widget: text
+            maxlength: 200
+          - name: updated
+            label: Data ostatniej aktualizacji
+            widget: datetime
+            type: date
+            hint: Zmień przy każdej zmianie treści. Data wyświetla się pod tytułem.
+          - name: body
+            label: Treść
+            widget: richtext
+            buttons: [bold, italic, link, heading-two, bulleted-list, numbered-list]
+            editor_components: []
+            hint: Każda sekcja zaczyna się od „Nagłówka 2”. Z nich powstaje spis treści.
+      - name: whistleblowers
+        label: Sygnaliści
+        file: src/content/legal/whistleblowers.md
+        format: frontmatter
+        fields:
+          - name: title
+            label: Tytuł
+            widget: string
+          - name: description
+            label: Opis w Google
+            widget: text
+            maxlength: 200
+          - name: body
+            label: Treść
+            widget: richtext
+            buttons: [bold, italic, link, heading-two, bulleted-list, numbered-list]
+            editor_components: []
+          - name: documents
+            label: Dokumenty do pobrania
+            label_singular: dokument
+            widget: list
+            required: false
+            summary: '{{label}}'
+            fields:
+              - name: label
+                label: Nazwa
+                widget: string
+              - name: file
+                label: Plik PDF
+                widget: file
+                accept: application/pdf
+                media_folder: /public/documents
+                public_folder: /documents
+
+  - divider: true
+
+  - name: settings
+    label: Ustawienia
+    description: Dane firmy i lista klientów.
+    icon: settings
+    files:
+      - name: company
+        label: Dane firmy
+        file: src/content/settings/company.yml
+        fields:
+          - name: brandName
+            label: Nazwa biura
+            widget: string
+          - name: legalName
+            label: Pełna nazwa prawna
+            widget: string
+          - name: tagline
+            label: Opis w stopce
+            widget: text
+            maxlength: 140
+          - name: phone
+            label: Telefon
+            widget: string
+            pattern: ['^[\d ]{9,13}$', 'Sam numer, np. 14 681 63 01']
+          - name: email
+            label: E-mail
+            widget: string
+            type: email
+          - name: address
+            label: Adres
+            widget: object
+            fields:
+              - name: street
+                label: Ulica i numer
+                widget: string
+              - name: postalCode
+                label: Kod pocztowy
+                widget: string
+                pattern: ['^\d{2}-\d{3}$', 'Format 00-000']
+              - name: city
+                label: Miasto
+                widget: string
+          - name: hours
+            label: Godziny pracy
+            widget: object
+            fields:
+              - name: label
+                label: Krótko
+                widget: string
+                maxlength: 40
+                hint: Np. pon. do pt. 8:00 do 16:00
+              - name: sentence
+                label: W zdaniu
+                widget: string
+                maxlength: 100
+                hint: Pasuje do zdania „Odbieramy …”
+              - name: opens
+                label: Otwarcie
+                widget: string
+                pattern: ['^\d{2}:\d{2}$', 'Format 08:00']
+              - name: closes
+                label: Zamknięcie
+                widget: string
+                pattern: ['^\d{2}:\d{2}$', 'Format 16:00']
+          - name: callback
+            label: Odpowiedź po wysłaniu formularza
+            widget: object
+            collapsed: true
+            fields:
+              - name: clause
+                label: Część zdania
+                widget: string
+                maxlength: 80
+                hint: Pasuje do zdania „Zostaw kontakt, a …”
+              - name: sentence
+                label: Osobne zdanie
+                widget: string
+                maxlength: 80
+          - name: facebook
+            label: Facebook
+            widget: string
+            type: url
+          - name: registry
+            label: Dane rejestrowe
+            widget: object
+            collapsed: true
+            fields:
+              - name: taxId
+                label: NIP
+                widget: string
+                pattern: ['^\d{10}$', '10 cyfr bez kresek']
+              - name: courtRegister
+                label: KRS
+                widget: string
+                pattern: ['^\d{10}$', '10 cyfr']
+              - name: statisticalId
+                label: REGON
+                widget: string
+                pattern: ['^\d{9}(\d{5})?$', '9 albo 14 cyfr']
+              - name: taxAdvisorNumber
+                label: Numer wpisu doradcy podatkowego
+                widget: string
+          - name: geo
+            label: Położenie na mapie
+            widget: object
+            collapsed: true
+            fields:
+              - name: latitude
+                label: Szerokość geograficzna
+                widget: number
+                value_type: float
+              - name: longitude
+                label: Długość geograficzna
+                widget: number
+                value_type: float
+
+      - name: clients
+        label: Klienci
+        file: src/content/settings/clients.yml
+        fields:
+          - name: logos
+            label: Logotypy w pasku pod zdjęciem
+            label_singular: logo
+            widget: list
+            min: 4
+            summary: '{{name}}'
+            thumbnail: image
+            fields:
+              - name: name
+                label: Nazwa firmy
+                widget: string
+              - name: image
+                label: Logo
+                widget: image
+                media_folder: /src/assets/client-logos
+                public_folder: /src/assets/client-logos
+                hint: Plik PNG z przezroczystym tłem, w kolorze grafitowym jak pozostałe logotypy.
+              - name: scale
+                label: Skala
+                widget: number
+                value_type: float
+                min: 0.5
+                max: 2
+                step: 0.05
+                default: 1
+                hint: Wyrównuje optycznie wielkość logo. 1 to bez zmian.
+              - name: mobileScale
+                label: Skala na telefonie
+                widget: number
+                value_type: float
+                min: 0.5
+                max: 2
+                step: 0.05
+                required: false
+          - name: mobileTopRow
+            label: Telefon, górny rząd logotypów
+            widget: relation
+            collection: settings
+            file: clients
+            multiple: true
+            min: 1
+            value_field: '{{logos.*.name}}'
+            search_fields: ['{{logos.*.name}}']
+          - name: mobileBottomRow
+            label: Telefon, dolny rząd logotypów
+            widget: relation
+            collection: settings
+            file: clients
+            multiple: true
+            min: 1
+            value_field: '{{logos.*.name}}'
+            search_fields: ['{{logos.*.name}}']
+          - name: names
+            label: Firmy na przesuwanych kafelkach (telefon)
+            widget: list
+            min: 5
+            field:
+              name: name
+              label: Nazwa firmy
+              widget: string
+              maxlength: 30
+          - name: wall
+            label: Ściana kafelków na komputerze (5 kolumn po 5 nazw)
+            label_singular: kolumnę
+            widget: list
+            min: 5
+            max: 5
+            allow_add: false
+            allow_remove: false
+            fields:
+              - name: names
+                label: Nazwy w kolumnie, od góry
+                widget: relation
+                collection: settings
+                file: clients
+                multiple: true
+                min: 5
+                max: 5
+                value_field: '{{names.*}}'
+                search_fields: ['{{names.*}}']

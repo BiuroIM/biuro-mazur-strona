@@ -1,7 +1,7 @@
 ---
 import HoverLetters from './HoverLetters.astro';
 import { footerPages, currentPath } from '../data/navigation.js';
-import { address, email, facebook, legalName, phone, registry } from '../data/contact.js';
+import { address, email, facebook, legalName, phone, registry, tagline } from '../data/contact.js';
 
 const path = currentPath(Astro.url);
 const year = new Date().getFullYear();
@@ -46,8 +46,7 @@ const contactRows = [
         </div>
 
         <p class="max-w-[28vw] font-sans text-[clamp(0.9rem,1.2vw,1.4rem)] font-normal leading-[1.35] text-canvas/70 max-lg:order-1 max-lg:mt-[3.5vh] max-lg:max-w-none">
-          Księgowość, kadry i płace oraz doradztwo podatkowe dla firm
-          z Dębicy i okolic.
+          {tagline}
         </p>
       </div>
 

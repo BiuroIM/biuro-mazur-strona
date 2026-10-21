@@ -3,8 +3,7 @@ title: 'Zamknięcie roku 2026 w firmie: lista zadań od października'
 lead: 'Jak przygotować firmę do zamknięcia roku bez grudniowego pośpiechu. Lista zadań na październik, listopad i grudzień, z tym, co w tym roku jest nowe: koniec okresu przejściowego w KSeF i pierwsze pliki JPK z ksiąg.'
 date: 2026-10-08
 category: 'Księgowość'
-readingMinutes: 3
-cover: '../../assets/photos/two-women-stamping-document-wide.jpg'
+cover: '/src/assets/photos/two-women-stamping-document-wide.jpg'
 coverAlt: 'Dwie księgowe przy biurku podbijają pieczątką dokument'
 ---
 

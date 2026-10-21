@@ -3,8 +3,7 @@ title: 'Zatrudnienie pierwszego pracownika w 2026 roku: obowiązki pracodawcy'
 lead: 'Co załatwić przed zatrudnieniem pierwszego pracownika, a co w jego pierwszych dniach i tygodniach pracy. Rekrutacja po zmianach w jawności płac, umowa, badania, BHP, ZUS i akta osobowe.'
 date: 2026-09-17
 category: 'Kadry i płace'
-readingMinutes: 3
-cover: '../../assets/photos/manager-guiding-accountant-at-computer.jpg'
+cover: '/src/assets/photos/manager-guiding-accountant-at-computer.jpg'
 coverAlt: 'Doświadczona księgowa wprowadza koleżankę w pracę przy komputerze'
 ---
 
