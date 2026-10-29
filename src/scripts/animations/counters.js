@@ -20,7 +20,25 @@ export function initCounters() {
     const write = () => {
       el.textContent = prefix + groupDigits(Math.round(state.value)) + suffix;
     };
+
+    const reserveWidth = () => {
+      const shown = el.textContent;
+      el.style.minWidth = '';
+      const fontSize = parseFloat(getComputedStyle(el).fontSize) || 1;
+      const widest = Math.max(
+        ...Array.from({ length: 10 }, (_, digit) => {
+          el.textContent = prefix + groupDigits(target).replace(/\d/g, String(digit)) + suffix;
+          return el.getBoundingClientRect().width;
+        })
+      );
+      el.style.minWidth = `${widest / fontSize}em`;
+      el.style.textAlign = 'right';
+      el.textContent = shown;
+    };
+
     write();
+    reserveWidth();
+    document.fonts?.ready.then(reserveWidth);
 
     gsap.to(state, {
       value: target,

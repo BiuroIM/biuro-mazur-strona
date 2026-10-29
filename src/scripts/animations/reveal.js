@@ -36,8 +36,6 @@ export function initLineReveal() {
     const lines = el.querySelectorAll('.reveal-line');
     if (!lines.length) return;
 
-    const once = el.dataset.revealLines === 'once';
-
     const fromTop = el.dataset.direction === 'down';
     const from = fromTop ? -110 : 110;
 
@@ -62,7 +60,7 @@ export function initLineReveal() {
           ...(endTriggerEl ? { endTrigger: endTriggerEl } : {}),
           start: el.dataset.start ?? 'top 85%',
           end: el.dataset.end ?? 'bottom top',
-          toggleActions: once ? 'play none none none' : 'play reverse play reverse',
+          toggleActions: 'play none none none',
         },
       }
     );

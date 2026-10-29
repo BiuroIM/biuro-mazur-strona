@@ -42,7 +42,7 @@ const rows = [
     rows.map(({ items, set, reverse, visibility }) => (
       <div
         class:list={['overflow-hidden', visibility]}
-        data-reveal-lines="once"
+        data-reveal-lines
         data-stagger={reverse ? '0' : '0.05'}
         data-delay={(reverse ? delay + 0.1 : delay).toString()}
         data-trigger="[data-hero]"
