@@ -11,6 +11,7 @@ import loungeConversation from '../assets/photos/lounge-conversation-two-women.j
 import clientConversation from '../assets/photos/client-conversation.jpg';
 import accountantAtWorkstation from '../assets/photos/accountant-at-workstation.jpg';
 import officeBuilding from '../assets/photos/office-building-exterior.jpg';
+import brGazLogo from '../assets/client-logos/br-gaz.png';
 import crDieselLogo from '../assets/client-logos/cr-diesel.png';
 import deGazLogo from '../assets/client-logos/de-gaz.png';
 import dlRegmetLogo from '../assets/client-logos/dl-regmet.png';
@@ -25,6 +26,7 @@ import { formatDateMonthFirst, isoDate, sortPosts } from '../data/blog.js';
 
 const ralGlass = { name: 'R-AL Glass', image: ralGlassLogo };
 const aestheticRevolutions = { name: 'Estetyczne Rewolucje', image: aestheticRevolutionsLogo, scale: 1.25, mobileScale: 1.5 };
+const brGaz = { name: 'BR-GAZ', image: brGazLogo, scale: 1.1 };
 const deGaz = { name: 'DE-GAZ', image: deGazLogo };
 const crDiesel = { name: 'CR Diesel', image: crDieselLogo, scale: 1.08 };
 const dlRegmet = { name: 'DL Regmet', image: dlRegmetLogo, scale: 1.03 };
@@ -32,10 +34,10 @@ const fsDrewno = { name: 'FS Drewno', image: fsDrewnoLogo, scale: 1.1 };
 const simpleLights = { name: 'Simple Lights', image: simpleLightsLogo, scale: 0.8 };
 const hotelGold = { name: 'Hotel Gold', image: hotelGoldLogo, scale: 1.2 };
 
-const sliderLogos = [ralGlass, dlRegmet, aestheticRevolutions, crDiesel, deGaz, fsDrewno, simpleLights, hotelGold];
+const sliderLogos = [ralGlass, dlRegmet, aestheticRevolutions, brGaz, crDiesel, deGaz, fsDrewno, simpleLights, hotelGold];
 const sliderMobileRows = [
   [ralGlass, fsDrewno, deGaz, dlRegmet],
-  [simpleLights, hotelGold, aestheticRevolutions, crDiesel],
+  [simpleLights, hotelGold, brGaz, aestheticRevolutions, crDiesel],
 ];
 
 const clientLogos = [
@@ -158,7 +160,7 @@ const numbers = [
       <div class="flex items-end justify-start gap-10 max-lg:contents">
         <div
           class="overflow-hidden pt-[0.6vw] -mt-[0.6vw] pb-[0.6vw] -mb-[0.6vw] max-lg:order-1 max-lg:pt-[0.9vw] max-lg:-mt-[0.9vw] max-lg:pb-[0.9vw] max-lg:-mb-[0.9vw]"
-          data-reveal-lines
+          data-reveal-lines="once"
           data-duration="1.6"
         >
           <div class="reveal-line"><div class="giant-type text-trim text-[18vw] max-lg:text-[21vw]">Biuro</div></div>
@@ -166,7 +168,7 @@ const numbers = [
 
         <div
           class="max-w-md font-sans font-normal normal-case tracking-normal max-lg:order-3 max-lg:mt-[2.5vh] max-lg:max-w-none"
-          data-reveal-lines
+          data-reveal-lines="once"
           data-stagger="0.1"
           data-delay="0.28"
         >
@@ -211,7 +213,7 @@ const numbers = [
 
         <div
           class="shrink-0 overflow-hidden pt-[0.6vw] -mt-[0.6vw] pb-[0.6vw] -mb-[0.6vw] max-lg:order-2 max-lg:mt-[calc(1.6vh-0.9vw)] max-lg:pt-[0.9vw] max-lg:pb-[0.9vw] max-lg:-mb-[0.9vw]"
-          data-reveal-lines
+          data-reveal-lines="once"
           data-direction="down"
           data-duration="1.6"
           data-delay="0.12"
