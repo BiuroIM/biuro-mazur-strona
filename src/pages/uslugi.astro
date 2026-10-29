@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { email } from '../data/contact.js';
+import { email, registry } from '../data/contact.js';
 import { Image } from 'astro:assets';
 import servicesHero from '../assets/photos/open-space-reviewing-screen.jpg';
 import accountingPhoto from '../assets/photos/accountant-with-binder-at-desk.jpg';
@@ -35,7 +35,7 @@ const serviceGroups = [
         name: 'Ewidencja ryczałtowa',
         lead: 'Dla firm na ryczałcie',
         description:
-          'Prowadzimy ewidencję przychodów dla firm rozliczających się ryczałtem. Pilnujemy, żeby każdy przychód miał właściwą stawkę, co miesiąc liczymy podatek, a składkę zdrowotną według progu przychodu. Przed końcem roku sprawdzamy, czy ryczałt nadal się opłaca.',
+          'Prowadzimy ewidencję przychodów dla firm na ryczałcie. Pilnujemy, żeby każdy przychód miał właściwą stawkę, i co miesiąc liczymy podatek. Przed końcem roku sprawdzamy, czy ryczałt nadal się opłaca.',
       },
       {
         name: 'Ewidencja VAT',
@@ -77,29 +77,28 @@ const serviceGroups = [
       },
       {
         name: 'ZUS',
-        lead: 'Zgłoszenia, składki i deklaracje',
+        lead: 'Zgłoszenia, składki i zaświadczenia A1',
         description:
-          'Zgłaszamy do ZUS i wyrejestrowujemy pracowników oraz właściciela firmy, naliczamy składki i składamy deklaracje. Załatwiamy też pozostałe formalności ubezpieczeniowe i pilnujemy, żeby każde rozliczenie poszło na czas.',
+          'Zgłaszamy do ZUS i wyrejestrowujemy pracowników oraz właściciela firmy, naliczamy składki i składamy deklaracje. Jeśli Ty albo Twój pracownik pracujecie w innym kraju UE, składamy wniosek o zaświadczenie A1. Każde rozliczenie wysyłamy na czas.',
       },
     ],
   },
   {
     title: ['Podatki', 'i urzędy'],
-    lead: 'Rozliczenia roczne i doradztwo podatkowe.',
+    lead: 'Doradztwo podatkowe i rozliczenia roczne.',
     photo: taxPhoto,
     photoAlt: 'Doradczyni omawia sprawę z klientką',
     services: [
+      {
+        name: 'Doradztwo podatkowe',
+        lead: 'Doradca podatkowy z KIDP',
+        description: `Biuro prowadzi Iwona Mazur, doradca podatkowy nr ${registry.taxAdvisorNumber}, członek Krajowej Izby Doradców Podatkowych. Zanim podpiszesz umowę albo zmienisz formę opodatkowania, sprawdzamy skutki podatkowe i proponujemy rozwiązanie zgodne z przepisami. Pod koniec roku liczymy, czy od stycznia nie opłaca się przejść na inną formę opodatkowania. Wnioski dostajesz na piśmie.`,
+      },
       {
         name: 'Deklaracje i rozliczenia roczne',
         lead: 'PIT i CIT za cały rok',
         description:
           'Przygotowujemy PIT i CIT oraz wszystko, co wiąże się z zamknięciem roku. Sprawdzamy, z jakich ulg i odliczeń możesz skorzystać, a gotowe zeznanie wysyłamy elektronicznie.',
-      },
-      {
-        name: 'Doradztwo podatkowe',
-        lead: 'Skutki podatkowe przed decyzją',
-        description:
-          'Zanim podpiszesz umowę albo zmienisz formę opodatkowania, sprawdzamy skutki podatkowe. Proponujemy rozwiązanie zgodne z przepisami i korzystne dla firmy, a wnioski przekazujemy na piśmie.',
       },
     ],
   },
