@@ -9,11 +9,13 @@ interface Props {
   type?: 'button' | 'submit';
   surface?: 'dark' | 'light';
   size?: 'default' | 'roomy';
+  href?: string;
   [key: string]: unknown;
 }
 
 const {
   text,
+  href,
   direction = 'right',
   arrow: withArrow = true,
   variant = 'text',
@@ -45,10 +47,12 @@ const paths =
 const arrow = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="h-[1em] w-[1em]" aria-hidden="true">${paths}</svg>`;
 
 const leaving = direction === 'right' ? 'group-hover:translate-x-[150%]' : 'group-hover:-translate-x-[150%]';
+const Tag = href ? 'a' : 'button';
 const incoming = direction === 'right' ? '-translate-x-[150%]' : 'translate-x-[150%]';
 ---
-<button
-  type={type}
+<Tag
+  type={href ? undefined : type}
+  href={href}
   class={`group relative inline-flex cursor-pointer items-center gap-[12px] font-display uppercase text-[22px] font-medium leading-none max-sm:gap-[8px] max-sm:text-[17px] ${variantClasses}`}
   {...rest}
 >
@@ -96,4 +100,4 @@ const incoming = direction === 'right' ? '-translate-x-[150%]' : 'translate-x-[1
       </>
     )
   }
-</button>
+</Tag>

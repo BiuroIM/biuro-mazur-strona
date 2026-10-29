@@ -1,9 +1,13 @@
 ---
 import { Image } from 'astro:assets';
-import FormFields from './FormFields.astro';
 import ArrowButton from './ArrowButton.astro';
-import { address, callback, phone } from '../data/contact.js';
+import { address, email, openingHours, phone } from '../data/contact.js';
 import accountantsDiscussing from '../assets/photos/three-accountants-discussing-documents-portrait.jpg';
+
+const reachOptions = [
+  { label: 'Zadzwoń', value: phone.label, href: phone.href },
+  { label: 'Napisz', value: email.label, href: email.href },
+];
 ---
 <div class="pointer-events-none fixed inset-0 z-[60]" data-form inert>
   <div
@@ -16,14 +20,14 @@ import accountantsDiscussing from '../assets/photos/three-accountants-discussing
     class="absolute right-0 top-0 flex h-full w-full max-w-[900px] flex-col overflow-y-auto bg-ink text-canvas [clip-path:inset(0%_0%_0%_100%)]"
     role="dialog"
     aria-modal="true"
-    aria-label="Formularz kontaktowy"
+    aria-label="Kontakt z biurem"
     data-form-panel
     data-lenis-prevent
   >
     <button
       type="button"
       class="group absolute right-[56px] top-[32px] z-10 flex h-[44px] w-[44px] cursor-pointer items-center justify-center rounded-full max-sm:right-[16px] max-sm:top-[16px]"
-      aria-label="Zamknij formularz"
+      aria-label="Zamknij"
       data-close-form
     >
       <span
@@ -64,7 +68,7 @@ import accountantsDiscussing from '../assets/photos/three-accountants-discussing
           class="max-w-[300px] font-sans text-[16px] font-normal leading-[1.5] text-canvas/60 max-sm:max-w-none"
           data-form-field
         >
-          Zostaw kontakt, a {callback.clause} i umówimy bezpłatną rozmowę
+          Zadzwoń albo napisz do nas, a umówimy bezpłatną rozmowę
           o Twojej firmie. Sprawdzimy, jak dziś wygląda Twoja księgowość
           i co można w niej uprościć.
         </p>
@@ -83,14 +87,29 @@ import accountantsDiscussing from '../assets/photos/three-accountants-discussing
       class="relative flex flex-1 flex-col justify-center border-t border-canvas/15 px-[64px] py-[48px] max-sm:px-[24px] max-sm:py-[32px]"
       data-form-block
     >
-      <FormFields idPrefix="panel">
-        <ArrowButton
-          slot="after-submit"
-          text="Zamknij"
-          arrow={false}
-          data-close-form
-        />
-      </FormFields>
+      <div class="flex flex-col gap-[36px] max-sm:gap-[28px]">
+        {
+          reachOptions.map(({ label, value, href }) => (
+            <div data-form-field>
+              <p class="mb-[10px] font-sans text-[13px] font-normal text-canvas/45">{label}</p>
+              <a
+                href={href}
+                class="font-display text-[40px] font-medium leading-[1.05] text-canvas max-sm:text-[26px]"
+              >
+                {value}
+              </a>
+            </div>
+          ))
+        }
+
+        <p class="font-sans text-[16px] font-normal leading-[1.5] text-canvas/60" data-form-field>
+          Telefony odbieramy {openingHours.sentence}.
+        </p>
+
+        <div data-form-field>
+          <ArrowButton text="Zamknij" arrow={false} data-close-form />
+        </div>
+      </div>
     </div>
   </aside>
 </div>

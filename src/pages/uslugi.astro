@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { callback } from '../data/contact.js';
+import { email } from '../data/contact.js';
 import { Image } from 'astro:assets';
 import servicesHero from '../assets/photos/open-space-reviewing-screen.jpg';
 import accountingPhoto from '../assets/photos/accountant-with-binder-at-desk.jpg';
@@ -393,7 +393,7 @@ const pad = (n) => String(n).padStart(2, '0');
               style="text-wrap: balance"
               data-extra-words
             >
-              Wypełnij formularz, a {callback.clause} z propozycją zakresu obsługi i wyceną.
+              Zadzwoń albo napisz na {email.label}, a przygotujemy propozycję zakresu obsługi i wycenę.
             </p>
 
             <span class="mt-[clamp(1rem,1.4vw,2rem)] flex overflow-hidden max-lg:mt-[3vh]">

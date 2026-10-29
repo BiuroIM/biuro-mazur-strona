@@ -273,7 +273,7 @@ function bindFormSteps(root, signal) {
     form?.reset();
     clearErrors();
     form?.classList.remove('hidden');
-    gsap.set(form, { autoAlpha: 1, y: 0 });
+    if (form) gsap.set(form, { autoAlpha: 1, y: 0 });
     thanks?.classList.add('hidden');
     errorNote?.classList.add('hidden');
 

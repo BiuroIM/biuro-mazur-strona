@@ -2,7 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import LogoSlider from '../components/LogoSlider.astro';
 import { questions } from '../data/questions.js';
-import { address, callback } from '../data/contact.js';
+import { address, email, phone } from '../data/contact.js';
 import { Image } from 'astro:assets';
 import teamGroup from '../assets/photos/team-group.jpg';
 import reviewingDocuments from '../assets/photos/two-accountants-documents.jpg';
@@ -646,16 +646,16 @@ const numbers = [
             class="mt-[2vw] max-w-[42vw] text-center font-sans text-[clamp(0.95rem,1.1vw,1.25rem)] font-normal leading-[1.4] text-canvas/70 max-lg:mt-[5vw] max-lg:max-w-none"
             data-extra-words
           >
-            Wypełnij krótki formularz, a {callback.clause}.
+            Zadzwoń albo napisz na {email.label}.
             Pierwsza rozmowa jest bezpłatna i do niczego nie zobowiązuje.
           </p>
 
           <span class="mt-[clamp(1rem,1.4vw,2rem)] flex overflow-hidden">
             <a
-              href="/kontakt"
+              href={phone.href}
               class="extra-line group relative z-10 inline-flex w-fit cursor-pointer items-center gap-[clamp(1rem,1.4vw,2rem)] overflow-hidden whitespace-nowrap rounded-full border-2 border-transparent bg-canvas py-[clamp(0.75rem,0.9vw,1.15rem)] pl-[clamp(1.5rem,2.2vw,3rem)] pr-[clamp(0.75rem,1.1vw,1.5rem)] max-lg:gap-[4vw] max-lg:whitespace-normal max-lg:py-[3vw] max-lg:pl-[5vw] max-lg:pr-[3vw] text-ink transition-colors duration-700 hover:border-canvas"
             >
-              <span class="relative z-10 font-display text-[clamp(1rem,1.15vw,1.375rem)] font-normal uppercase transition-all duration-[400ms] group-hover:translate-x-[1.2vw] max-lg:text-[clamp(0.65rem,3.4vw,1.05rem)] group-hover:text-canvas">Wypełnij formularz</span>
+              <span class="relative z-10 font-display text-[clamp(1rem,1.15vw,1.375rem)] font-normal uppercase transition-all duration-[400ms] group-hover:translate-x-[1.2vw] max-lg:text-[clamp(0.65rem,3.4vw,1.05rem)] group-hover:text-canvas">Zadzwoń do nas</span>
               <span class="relative z-0 flex h-[clamp(1.75rem,2vw,2.75rem)] w-[clamp(1.75rem,2vw,2.75rem)] shrink-0 rounded-full bg-ink transition-transform duration-700 ease-out group-hover:duration-[1600ms] group-hover:scale-[55]"></span>
             </a>
           </span>

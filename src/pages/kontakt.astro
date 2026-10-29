@@ -1,9 +1,8 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { address, callback, email, openingHours, phone } from '../data/contact.js';
+import { address, email, openingHours, phone } from '../data/contact.js';
 import { Image } from 'astro:assets';
-import FormFields from '../components/FormFields.astro';
-import HoverLetters from '../components/HoverLetters.astro';
+import ArrowButton from '../components/ArrowButton.astro';
 import accountantsDiscussingWide from '../assets/photos/three-accountants-discussing-documents.jpg';
 import accountantsDiscussing from '../assets/photos/three-accountants-discussing-documents-portrait.jpg';
 
@@ -25,7 +24,7 @@ const contactDetails = [
 ---
 <BaseLayout
   title="Kontakt z biurem w Dębicy"
-  description={`Biuro rachunkowe w Dębicy, ${address.label}, tel. ${phone.label}. Zostaw kontakt, a ${callback.clause} i umówimy bezpłatną rozmowę.`}
+  description={`Biuro rachunkowe w Dębicy, ${address.label}, tel. ${phone.label}, e-mail ${email.label}. Zadzwoń albo napisz, a umówimy bezpłatną rozmowę.`}
 >
   <section class="px-[2vw] pb-[8vw] pt-40 max-lg:px-[4vw] max-lg:pb-[16vw] max-lg:pt-28">
     <div class="-mx-[2vw] overflow-hidden pt-[0.5vw] pb-[3.6vw] -mt-[0.5vw] -mb-[1.6vw] max-lg:-mx-[4vw] max-lg:pt-[0.6vw] max-lg:pb-[4.2vw] max-lg:-mt-[0.6vw] max-lg:mb-[4.8vw]" aria-hidden="true">
@@ -98,26 +97,26 @@ const contactDetails = [
       </div>
 
       <div
-        class="relative w-full"
-        data-form-page
+        class="relative flex w-full flex-col items-start gap-[clamp(1.5rem,2.2vw,3rem)] max-lg:gap-[6vw]"
         data-animate="fade-up"
       >
-        <FormFields idPrefix="kontakt" surface="light" steps={false}>
-          <a
-            slot="after-submit"
-            href="/"
-            class="group relative inline-flex pb-[0.15em] font-display text-[22px] font-medium uppercase leading-none text-graphite max-sm:text-[17px]"
-          >
-            <HoverLetters text="Wróć na stronę główną" />
+        <p class="font-display text-[clamp(2rem,4.5vw,5.5rem)] font-medium uppercase leading-[1.05] text-graphite max-lg:text-[clamp(1.6rem,8vw,3.25rem)]">
+          Zadzwoń albo napisz
+        </p>
 
-            <span
-              class="absolute bottom-0 left-0 h-[2px] w-full origin-right bg-graphite transition-transform duration-300 ease-in group-hover:scale-x-0"
-              aria-hidden="true"></span>
-            <span
-              class="absolute bottom-0 left-0 h-[2px] w-full origin-left scale-x-0 bg-graphite transition-transform delay-300 duration-300 ease-out group-hover:scale-x-100"
-              aria-hidden="true"></span>
-          </a>
-        </FormFields>
+        <p class="max-w-[52ch] font-sans text-[clamp(1rem,1.2vw,1.45rem)] font-normal leading-[1.45] text-graphite max-lg:text-[clamp(1rem,4.2vw,1.25rem)]">
+          Najszybciej złapiesz nas telefonicznie, {openingHours.sentence}.
+          Możesz też napisać na <a href={email.href} class="underline decoration-graphite/40 underline-offset-[0.2em]">{email.label}</a>.
+          Pierwsza rozmowa jest bezpłatna i do niczego nie zobowiązuje.
+        </p>
+
+        <ArrowButton
+          text={`Zadzwoń: ${phone.label}`}
+          href={phone.href}
+          variant="full"
+          surface="light"
+          size="roomy"
+        />
       </div>
     </div>
   </section>
