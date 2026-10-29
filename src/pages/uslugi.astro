@@ -23,37 +23,37 @@ const serviceGroups = [
         name: 'Pełna księgowość',
         lead: 'Księgi rachunkowe spółek',
         description:
-          'Obsługujemy spółki, które muszą prowadzić księgi rachunkowe. Plan kont układamy pod Twoją firmę, prowadzimy ewidencję środków trwałych i rozrachunki z kontrahentami, a raporty zarządcze przygotowujemy wtedy, gdy ich potrzebujesz.',
+          'Prowadzimy księgi rachunkowe spółek. Plan kont układamy pod Twoją działalność, pilnujemy środków trwałych i rozrachunków z kontrahentami. Gdy chcesz zobaczyć, jak firma stoi, przygotowujemy raport.',
       },
       {
         name: 'Księga przychodów i rozchodów',
         lead: 'Dla JDG i spółek cywilnych',
         description:
-          'Prowadzimy KPiR jednoosobowych działalności i spółek cywilnych. Dokumenty księgujemy na bieżąco, sprawdzamy limity i to, co można zaliczyć do kosztów, a co miesiąc wyliczamy zaliczkę na podatek, więc znasz kwotę przed terminem.',
+          'Dokumenty księgujemy na bieżąco, więc wysokość zaliczki na podatek znasz przed terminem, a nie w dniu płatności. Przy okazji sprawdzamy, co możesz wrzucić w koszty i czy nie zbliżasz się do limitów.',
       },
       {
         name: 'Ewidencja ryczałtowa',
         lead: 'Dla firm na ryczałcie',
         description:
-          'Prowadzimy ewidencję przychodów dla firm na ryczałcie. Pilnujemy, żeby każdy przychód miał właściwą stawkę, i co miesiąc liczymy podatek. Przed końcem roku sprawdzamy, czy ryczałt nadal się opłaca.',
+          'Każdy przychód ma swoją stawkę ryczałtu i to my pilnujemy, żeby była właściwa. Podatek liczymy co miesiąc. Przed końcem roku siadamy do liczb i sprawdzamy, czy ryczałt nadal Ci się opłaca.',
       },
       {
         name: 'Ewidencja VAT',
         lead: 'Rejestry sprzedaży i zakupu',
         description:
-          'Prowadzimy rejestry sprzedaży i zakupu, sprawdzamy kontrahentów na białej liście i pilnujemy, w którym miesiącu przysługuje odliczenie podatku. Faktury korygujące ujmujemy w okresie, w którym wymagają tego przepisy.',
+          'Kontrahentów sprawdzamy na białej liście, a przy każdej fakturze kosztowej patrzymy, w którym miesiącu możesz odliczyć VAT. Korekty księgujemy w tym okresie, którego wymagają przepisy.',
       },
       {
         name: 'Pliki JPK',
         lead: 'JPK_V7 i pliki z ksiąg',
         description:
-          'Wysyłamy JPK_V7 w Twoim imieniu i pilnujemy oznaczeń transakcji oraz terminów, żeby urząd nie miał powodów do pytań. Przygotowujemy też pliki JPK z ksiąg, które od rozliczenia za 2026 rok trafiają do urzędu skarbowego.',
+          'JPK_V7 wysyłamy w Twoim imieniu, z właściwymi oznaczeniami i na czas, żeby urząd nie miał o co pytać. Od rozliczenia za 2026 rok urząd dostaje też pliki JPK z ksiąg. Te również przygotujemy.',
       },
       {
         name: 'Sprawozdania finansowe',
         lead: 'Bilans i rachunek zysków i strat',
         description:
-          'Przygotowujemy bilans, rachunek zysków i strat oraz informację dodatkową w formacie wymaganym przez KRS. Przypominamy o terminie zatwierdzenia i pilnujemy elektronicznych podpisów członków zarządu.',
+          'Po zamknięciu roku dostajesz bilans, rachunek zysków i strat oraz informację dodatkową w formacie, którego wymaga KRS. Przypominamy o terminie zatwierdzenia i pilnujemy, żeby każdy członek zarządu podpisał sprawozdanie elektronicznie.',
       },
     ],
   },
@@ -67,19 +67,19 @@ const serviceGroups = [
         name: 'Kadry',
         lead: 'Umowy, akta i czas pracy',
         description:
-          'Przygotowujemy umowy, prowadzimy akta osobowe i ewidencję czasu pracy oraz resztę dokumentów związanych z zatrudnieniem. Pilnujemy, żeby wszystkie formalności zgadzały się z aktualnym prawem pracy.',
+          'Zatrudniasz pierwszą osobę albo kolejną? Przygotujemy umowę, założymy akta osobowe i poprowadzimy ewidencję czasu pracy. Pozostałe dokumenty pracownicze też są po naszej stronie i pilnujemy, żeby zgadzały się z prawem pracy.',
       },
       {
         name: 'Płace',
         lead: 'Wynagrodzenia, urlopy i zwolnienia',
         description:
-          'Sporządzamy listy płac i naliczamy wynagrodzenia. Rozliczamy urlopy, zwolnienia lekarskie i inne świadczenia, a za pracowników przygotowujemy deklaracje i rozliczenia podatkowe.',
+          'Co miesiąc liczymy wynagrodzenia i przygotowujemy listę płac. Urlop, chorobowe albo inne świadczenie uwzględniamy w wypłacie. Deklaracje i rozliczenia podatkowe za pracowników też robimy my.',
       },
       {
         name: 'ZUS',
         lead: 'Zgłoszenia, składki i zaświadczenia A1',
         description:
-          'Zgłaszamy do ZUS i wyrejestrowujemy pracowników oraz właściciela firmy, naliczamy składki i składamy deklaracje. Jeśli Ty albo Twój pracownik pracujecie w innym kraju UE, składamy wniosek o zaświadczenie A1. Każde rozliczenie wysyłamy na czas.',
+          'Zgłaszamy do ZUS Ciebie i Twoich pracowników, a gdy ktoś odchodzi, wyrejestrowujemy go. Liczymy składki i co miesiąc składamy deklaracje. Gdy Ty albo pracownik jedziecie do pracy w innym kraju UE, składamy wniosek o zaświadczenie A1.',
       },
     ],
   },
@@ -92,13 +92,13 @@ const serviceGroups = [
       {
         name: 'Doradztwo podatkowe',
         lead: 'Doradca podatkowy z KIDP',
-        description: `Biuro prowadzi Iwona Mazur, doradca podatkowy nr ${registry.taxAdvisorNumber}, członek Krajowej Izby Doradców Podatkowych. Zanim podpiszesz umowę albo zmienisz formę opodatkowania, sprawdzamy skutki podatkowe i proponujemy rozwiązanie zgodne z przepisami. Pod koniec roku liczymy, czy od stycznia nie opłaca się przejść na inną formę opodatkowania. Wnioski dostajesz na piśmie.`,
+        description: `Biuro prowadzi Iwona Mazur, doradca podatkowy nr ${registry.taxAdvisorNumber} i członek Krajowej Izby Doradców Podatkowych. O skutki podatkowe pytasz więc u nas, bez szukania kancelarii z zewnątrz. Najlepiej przed decyzją: zanim podpiszesz umowę albo zmienisz formę opodatkowania. Pod koniec roku liczymy, czy od stycznia nie zapłacisz mniej w innej formie. Wnioski dostajesz na piśmie.`,
       },
       {
         name: 'Deklaracje i rozliczenia roczne',
         lead: 'PIT i CIT za cały rok',
         description:
-          'Przygotowujemy PIT i CIT oraz wszystko, co wiąże się z zamknięciem roku. Sprawdzamy, z jakich ulg i odliczeń możesz skorzystać, a gotowe zeznanie wysyłamy elektronicznie.',
+          'Po zamknięciu roku przygotowujemy Twój PIT albo CIT i wysyłamy go elektronicznie. Wcześniej przeglądamy ulgi i odliczenia, żeby nie przepadło nic, co Ci przysługuje.',
       },
     ],
   },
@@ -110,7 +110,7 @@ const serviceGroups = [
         name: 'Zakładanie działalności i spółek',
         lead: 'Rejestracja w CEIDG albo KRS',
         description:
-          'Pomagamy wybrać formę prawną i sposób opodatkowania, wypełniamy wnioski do CEIDG lub KRS i zgłaszamy firmę do urzędu skarbowego oraz ZUS. W pierwszych miesiącach tłumaczymy każdy krok.',
+          'Najpierw rozmawiamy o tym, czym będziesz się zajmować, i razem wybieramy formę prawną oraz sposób opodatkowania. Potem wypełniamy wnioski do CEIDG albo KRS i zgłaszamy firmę do urzędu skarbowego i ZUS. W pierwszych miesiącach tłumaczymy każdy krok.',
       },
     ],
   },
@@ -130,17 +130,17 @@ const standards = [
   {
     title: ['Jedna osoba', 'prowadząca'],
     description:
-      'Twoje sprawy prowadzi jedna księgowa, która zna Twoją firmę. Kontaktujesz się z nią bezpośrednio, bez przełączania między działami.',
+      'Masz swoją księgową, która zna Twoją firmę. Dzwonisz albo piszesz prosto do niej, bez przełączania między działami.',
   },
   {
     title: ['Terminy', 'po naszej stronie'],
     description:
-      'Pilnujemy terminów deklaracji, plików JPK i składek ZUS. Pisma z urzędów odbieramy i odpowiadamy na nie w Twoim imieniu, więc nie musisz śledzić kalendarza podatkowego.',
+      'Deklaracje, pliki JPK i składki ZUS mają swoje terminy. Pilnujemy ich za Ciebie, a pisma z urzędów odbieramy i odpowiadamy na nie w Twoim imieniu. Kalendarza podatkowego nie musisz znać.',
   },
   {
     title: ['Decyzje', 'z wyprzedzeniem'],
     description:
-      'Gdy zbliża się zmiana przepisów, przekroczenie limitu albo czas na wybór formy opodatkowania, dajemy znać wcześniej. Decyzję podejmujesz na spokojnie, zanim minie termin.',
+      'Zmieniają się przepisy, zbliżasz się do limitu albo trzeba wybrać formę opodatkowania na nowy rok? Dowiesz się o tym od nas wcześniej, a nie po terminie.',
   },
 ];
 
@@ -199,8 +199,8 @@ const pad = (n) => String(n).padStart(2, '0');
       data-start="top 92%"
       data-end="bottom 68%"
     >
-      Prowadzimy za Ciebie księgowość, a Ty możesz zająć się swoją firmą.
-      Kadry, podatki i sprawy w urzędach też załatwisz w jednym biurze.
+      Prowadzimy księgowość, kadry i podatki firm z Dębicy i z całej Polski.
+      Ty przysyłasz dokumenty, a my mówimy, ile i do kiedy zapłacić.
     </p>
   </section>
 
