@@ -1,5 +1,6 @@
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { keepRevealed } from './runtime.js';
 
 export function initDarkBackground() {
   const sections = gsap.utils.toArray('[data-dark-bg]');
@@ -181,6 +182,8 @@ export function initHeadlinePin() {
       },
     });
 
+    let revealedAt;
+
     blocks.forEach((block) => {
       const lines = gsap.utils.toArray(block.querySelectorAll('.headline-line'));
       if (!lines.length) return;
@@ -241,6 +244,7 @@ export function initHeadlinePin() {
         }
       }
 
+      revealedAt ??= tl.duration();
       tl.to({}, { duration: hold });
 
       const photoMask = photoImage?.parentElement;
@@ -280,6 +284,8 @@ export function initHeadlinePin() {
         tl.to(extra, { autoAlpha: 0, duration: exit * 0.5 }, '<');
       }
     });
+
+    if (revealedAt !== undefined) keepRevealed(tl, revealedAt);
   });
 }
 
@@ -309,6 +315,7 @@ export function initFooterTransition() {
     if (content) {
       tl.to(content, { autoAlpha: 1, y: 0, ease: 'power2.out', duration: 0.6 }, '>-0.1');
     }
+    keepRevealed(tl, tl.duration());
     tl.to({}, { duration: hold });
   });
 }

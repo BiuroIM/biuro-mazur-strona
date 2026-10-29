@@ -16,6 +16,14 @@ let afterCurtainOpen = [];
 
 export const getLenis = () => lenis;
 
+export function keepRevealed(animation, revealedAt = animation.totalDuration()) {
+  let reached = false;
+  animation.eventCallback('onUpdate', () => {
+    if (animation.totalTime() >= revealedAt - 0.001) reached = true;
+    else if (reached) animation.totalTime(revealedAt);
+  });
+}
+
 export function openCurtainGate() {
   curtainOpen = true;
   const queue = afterCurtainOpen;

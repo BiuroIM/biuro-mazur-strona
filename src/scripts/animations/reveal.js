@@ -1,6 +1,6 @@
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { isDesktopWidth } from './runtime.js';
+import { isDesktopWidth, keepRevealed } from './runtime.js';
 
 
 const VARIANTS = {
@@ -83,7 +83,7 @@ export function initWordScrub() {
     const spans = el.querySelectorAll('.scrub-word');
     if (!spans.length) return;
 
-    gsap.fromTo(
+    const scrub = gsap.fromTo(
       spans,
       { opacity: start },
       {
@@ -98,6 +98,8 @@ export function initWordScrub() {
         },
       }
     );
+
+    keepRevealed(scrub);
   });
 }
 
