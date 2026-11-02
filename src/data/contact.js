@@ -3,6 +3,16 @@ export const phone = {
   href: 'tel:+48146816301',
 };
 
+const mobile = (label) => ({ label, href: `tel:+48${label.replace(/\s/g, '')}` });
+
+export const departmentPhones = [
+  { department: 'Sekretariat', numbers: [mobile('662 395 997')] },
+  { department: 'Iwona Mazur', numbers: [mobile('692 432 712')] },
+  { department: 'Kadry', numbers: [mobile('698 616 726'), mobile('798 607 082')] },
+  { department: 'Księgi handlowe', numbers: [mobile('882 423 766'), mobile('888 743 172')] },
+  { department: 'KPiR', numbers: [mobile('539 377 102'), mobile('606 736 219')] },
+];
+
 export const email = {
   label: 'biuro@biuro-mazur.pl',
   href: 'mailto:biuro@biuro-mazur.pl',

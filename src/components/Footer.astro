@@ -1,7 +1,7 @@
 ---
 import HoverLetters from './HoverLetters.astro';
 import { footerPages, currentPath } from '../data/navigation.js';
-import { address, email, facebook, legalName, phone, registry } from '../data/contact.js';
+import { address, departmentPhones, email, facebook, legalName, phone, registry } from '../data/contact.js';
 
 const path = currentPath(Astro.url);
 const year = new Date().getFullYear();
@@ -45,23 +45,40 @@ const contactRows = [
           </a>
         </div>
 
-        <p class="max-w-[28vw] font-sans text-[clamp(0.9rem,1.2vw,1.4rem)] font-normal leading-[1.35] text-canvas/70 max-lg:order-1 max-lg:mt-[3.5vh] max-lg:max-w-none">
+        <p class="max-w-[28vw] font-sans text-[clamp(0.9rem,1.2vw,1.4rem)] font-normal leading-[1.35] text-canvas/70 max-lg:order-1 max-lg:mt-[3.5vh] max-lg:max-w-none max-lg:[@media(max-height:46rem)]:hidden">
           Księgowość, kadry i płace oraz doradztwo podatkowe dla firm
           z Dębicy i okolic.
         </p>
       </div>
 
       <div class="flex items-end justify-between gap-[4vw] max-lg:mt-[4vh] max-lg:flex-1 max-lg:flex-col max-lg:items-start max-lg:gap-[2.5vh]">
-        <ul class="flex flex-col gap-[0.6vh]">
-          {
-            contactRows.map(({ label, value, href }) => (
-              <li class="flex items-baseline gap-[1vw] font-sans text-[clamp(0.9rem,1.2vw,1.4rem)] leading-[1.3] max-lg:gap-[3vw]">
-                <span class="w-[5vw] shrink-0 text-canvas/45 max-lg:w-[16vw]">{label}</span>
-                {href ? <a href={href}>{value}</a> : <span>{value}</span>}
-              </li>
-            ))
-          }
-        </ul>
+        <div class="flex items-end gap-[5vw] max-lg:flex-col max-lg:items-start max-lg:gap-[2vh]">
+          <ul class="flex flex-col gap-[0.6vh]">
+            {
+              contactRows.map(({ label, value, href }) => (
+                <li class="flex items-baseline gap-[1vw] font-sans text-[clamp(0.9rem,1.2vw,1.4rem)] leading-[1.3] max-lg:gap-[3vw]">
+                  <span class="w-[5vw] shrink-0 text-canvas/45 max-lg:w-[16vw]">{label}</span>
+                  {href ? <a href={href}>{value}</a> : <span>{value}</span>}
+                </li>
+              ))
+            }
+          </ul>
+
+          <ul class="flex flex-col gap-[0.6vh]" aria-label="Telefony do działów">
+            {
+              departmentPhones.map(({ department, numbers }) => (
+                <li class="flex items-baseline gap-[1vw] font-sans text-[clamp(0.9rem,1.2vw,1.4rem)] leading-[1.3] max-lg:gap-[3vw] max-lg:text-[clamp(0.8rem,3.6vw,1rem)]">
+                  <span class="w-[10vw] shrink-0 text-canvas/45 max-lg:w-[30vw]">{department}</span>
+                  <span class="flex flex-wrap gap-x-[1.2vw] max-lg:gap-x-[3vw]">
+                    {numbers.map(({ label, href }) => (
+                      <a href={href} class="whitespace-nowrap">{label}</a>
+                    ))}
+                  </span>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
 
         <ul class="flex flex-col items-end gap-0 font-sans text-[clamp(1.05rem,1.7vw,2rem)] font-medium uppercase leading-[1.15] max-lg:mb-[3.5vh] max-lg:mt-auto max-lg:w-full max-lg:flex-row max-lg:flex-wrap max-lg:items-start max-lg:justify-center max-lg:gap-x-[clamp(1rem,5vw,2.25rem)] max-lg:gap-y-[1.2vh] max-lg:text-[clamp(0.9rem,4vw,1.25rem)] max-lg:leading-[1.3]">
           {
@@ -83,7 +100,7 @@ const contactRows = [
       </div>
 
       <div class="border-t border-canvas/20 pt-[2vh] max-lg:mt-auto max-lg:pt-[1.5vh] max-lg:pb-[clamp(5.5rem,22vw,6.5rem)]">
-        <div class="flex items-center gap-[clamp(1rem,2vw,3rem)] font-sans text-[clamp(0.75rem,0.9vw,1rem)] font-normal text-canvas/45 max-sm:flex-col max-sm:items-start max-sm:gap-[0.5vh]">
+        <div class="flex items-center gap-[clamp(1rem,2vw,3rem)] font-sans text-[clamp(0.75rem,0.9vw,1rem)] font-normal text-canvas/45 max-sm:flex-wrap max-sm:gap-x-[4vw] max-sm:gap-y-[0.5vh]">
           <p>© {year} {legalName}</p>
           <p class="shrink-0">NIP {registry.taxId}</p>
           <p class="shrink-0">KRS {registry.courtRegister}</p>
