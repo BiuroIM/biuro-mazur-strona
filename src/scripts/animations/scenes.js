@@ -315,7 +315,6 @@ export function initFooterTransition() {
     if (content) {
       tl.to(content, { autoAlpha: 1, y: 0, ease: 'power2.out', duration: 0.6 }, '>-0.1');
     }
-    keepRevealed(tl, tl.duration());
     tl.to({}, { duration: hold });
   });
 }
