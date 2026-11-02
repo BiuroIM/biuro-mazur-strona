@@ -1,5 +1,5 @@
 ---
-title: 'Zamknięcie roku 2026 w spółce z o.o.: co przygotować przed sprawozdaniem'
+title: 'Zamknięcie roku 2026: co spółka z o.o. powinna przygotować przed sprawozdaniem'
 lead: 'Część informacji potrzebnych do sprawozdania finansowego znajduje się poza systemem księgowym. Opisujemy, co zarząd powinien sprawdzić i przekazać księgowości przed zamknięciem ksiąg za 2026 rok.'
 date: 2026-10-19
 category: 'Księgowość'

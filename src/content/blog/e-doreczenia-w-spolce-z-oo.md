@@ -1,5 +1,5 @@
 ---
-title: 'e-Doręczenia w spółce z o.o.: kto pilnuje korespondencji i terminów'
+title: 'e-Doręczenia: kto w spółce z o.o. pilnuje korespondencji i terminów'
 lead: 'Aktywny adres do e-Doręczeń to dopiero początek. Wyjaśniamy, kiedy pismo uznaje się za doręczone, czym różni się administrator skrzynki od zarządu i jak zorganizować obsługę korespondencji w spółce.'
 date: 2026-11-02
 category: 'Spółki'
