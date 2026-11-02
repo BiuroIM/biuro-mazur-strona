@@ -24,7 +24,7 @@ const contactDetails = [
 ---
 <BaseLayout
   title="Kontakt z biurem w Dębicy"
-  description={`Biuro rachunkowe w Dębicy, ${address.label}, tel. ${phone.label}, e-mail ${email.label}. Skontaktuj się z nami telefonicznie lub mailowo i umów bezpłatną konsultację.`}
+  description={`Biuro rachunkowe w Dębicy, ${address.label}, tel. ${phone.label}, e-mail ${email.label}. Zadzwoń lub napisz i umów bezpłatne spotkanie konsultacyjne w naszym biurze.`}
 >
   <section class="px-[2vw] pb-[8vw] pt-40 max-lg:px-[4vw] max-lg:pb-[16vw] max-lg:pt-28">
     <div class="-mx-[2vw] overflow-hidden pt-[0.5vw] pb-[3.6vw] -mt-[0.5vw] -mb-[1.6vw] max-lg:-mx-[4vw] max-lg:pt-[0.6vw] max-lg:pb-[4.2vw] max-lg:-mt-[0.6vw] max-lg:mb-[4.8vw]" aria-hidden="true">
@@ -50,7 +50,7 @@ const contactDetails = [
     <h1 class="sr-only">Kontakt</h1>
 
     <div class="mt-[5vw] grid grid-cols-[25fr_75fr] items-start gap-[5vw] max-lg:mt-[10vw] max-lg:grid-cols-1">
-      <div class="flex flex-col gap-[clamp(2rem,3vw,4rem)] max-lg:gap-[10vw]">
+      <div>
         <div
           class="relative aspect-[3/4] w-full overflow-hidden rounded-[clamp(1rem,1.5vw,2rem)] max-lg:aspect-[4/3]"
           data-image-reveal
@@ -73,8 +73,30 @@ const contactDetails = [
           />
           <div class="reveal-panel absolute inset-0 z-10"></div>
         </div>
+      </div>
 
-        <dl class="flex flex-col border-t border-graphite/20" data-animate="fade-up">
+      <div
+        class="relative flex w-full flex-col items-start gap-[clamp(1.5rem,2.2vw,3rem)] max-lg:gap-[6vw]"
+        data-animate="fade-up"
+      >
+        <p class="font-display text-[clamp(2rem,4.5vw,5.5rem)] font-medium uppercase leading-[1.05] text-graphite max-lg:text-[clamp(1.6rem,8vw,3.25rem)]">
+          Zadzwoń albo napisz
+        </p>
+
+        <p class="max-w-[52ch] font-sans text-[clamp(1rem,1.2vw,1.45rem)] font-normal leading-[1.45] text-graphite max-lg:text-[clamp(1rem,4.2vw,1.25rem)]">
+          Zapraszamy na bezpłatne spotkanie konsultacyjne w naszym biurze.
+          Zadzwoń lub napisz, a ustalimy dogodny termin.
+        </p>
+
+        <ArrowButton
+          text={`Zadzwoń: ${phone.label}`}
+          href={phone.href}
+          variant="full"
+          surface="light"
+          size="roomy"
+        />
+
+        <dl class="mt-[clamp(1rem,2vw,3rem)] grid w-full max-w-[48vw] grid-cols-2 gap-x-[3vw] border-t border-graphite/20 max-lg:mt-[4vw] max-lg:max-w-none max-lg:grid-cols-1">
           {
             contactDetails.map(({ label, value, href, external }) => (
               <div class="flex flex-col gap-[clamp(0.35rem,0.5vw,0.6rem)] border-b border-graphite/20 py-[clamp(0.9rem,1.2vw,1.5rem)] max-lg:gap-[1.5vw] max-lg:py-[4vw]">
@@ -94,29 +116,6 @@ const contactDetails = [
             ))
           }
         </dl>
-      </div>
-
-      <div
-        class="relative flex w-full flex-col items-start gap-[clamp(1.5rem,2.2vw,3rem)] max-lg:gap-[6vw]"
-        data-animate="fade-up"
-      >
-        <p class="font-display text-[clamp(2rem,4.5vw,5.5rem)] font-medium uppercase leading-[1.05] text-graphite max-lg:text-[clamp(1.6rem,8vw,3.25rem)]">
-          Zadzwoń albo napisz
-        </p>
-
-        <p class="max-w-[52ch] font-sans text-[clamp(1rem,1.2vw,1.45rem)] font-normal leading-[1.45] text-graphite max-lg:text-[clamp(1rem,4.2vw,1.25rem)]">
-          Najszybciej skontaktujesz się z nami telefonicznie, {openingHours.sentence}.
-          Możesz również napisać na adres <a href={email.href} class="whitespace-nowrap underline decoration-graphite/40 underline-offset-[0.2em]">{email.label}</a>.
-          Pierwsza rozmowa jest bezpłatna i niezobowiązująca.
-        </p>
-
-        <ArrowButton
-          text={`Zadzwoń: ${phone.label}`}
-          href={phone.href}
-          variant="full"
-          surface="light"
-          size="roomy"
-        />
       </div>
     </div>
   </section>
