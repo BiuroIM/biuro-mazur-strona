@@ -14,7 +14,7 @@ export const address = {
 
 export const openingHours = {
   label: 'pon. do pt. 8:00 do 16:00',
-  sentence: 'od poniedziałku do piątku w godzinach 8:00 do 16:00',
+  sentence: 'od poniedziałku do piątku w godzinach od 8:00 do 16:00',
 };
 
 export const postalAddress = {
