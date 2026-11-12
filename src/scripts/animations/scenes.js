@@ -295,6 +295,7 @@ export function initFooterTransition() {
     if (!panels.length) return;
 
     const content = section.querySelector('[data-footer-content]');
+    const stage = section.querySelector('[data-footer-stage]');
     const stagger = parseFloat(section.dataset.stagger ?? '0.35');
     const time = parseFloat(section.dataset.time ?? '1');
     const hold = parseFloat(section.dataset.hold ?? '0.6');
@@ -306,7 +307,7 @@ export function initFooterTransition() {
       scrollTrigger: {
         trigger: section,
         start: section.dataset.start ?? 'top top',
-        end: 'bottom bottom',
+        end: stage ? () => `+=${section.offsetHeight - stage.offsetHeight}` : 'bottom bottom',
         scrub: true,
       },
     });
