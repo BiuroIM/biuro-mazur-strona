@@ -7,8 +7,8 @@ RewriteEngine On
 
 RewriteRule ^oferta/?$ https://biuro-mazur.pl/uslugi/ [R=301,L]
 
-RewriteRule ^2026/01/02/ksef-2-0-jak-przygotowac-firme-na-2026-rok/?$ https://biuro-mazur.pl/blog/ksef-w-praktyce/ [R=301,L]
-RewriteRule ^wp-content/uploads/2026/01/KSeF-Krajowy-System-e-Faktur-CO-SIEZMIENIA-I-JAK-SIE-PRZYGOTOWAC\.pdf$ https://biuro-mazur.pl/blog/ksef-w-praktyce/ [R=301,L]
+RewriteRule ^2026/01/02/ksef-2-0-jak-przygotowac-firme-na-2026-rok/?$ https://biuro-mazur.pl/blog/ksef-w-malej-firmie-2026/ [R=301,L]
+RewriteRule ^wp-content/uploads/2026/01/KSeF-Krajowy-System-e-Faktur-CO-SIEZMIENIA-I-JAK-SIE-PRZYGOTOWAC\.pdf$ https://biuro-mazur.pl/blog/ksef-w-malej-firmie-2026/ [R=301,L]
 RewriteRule ^2025/03/18/podatek-a-przeznaczenie-nieruchomosci/?$ https://biuro-mazur.pl/uslugi/ [R=301,L]
 RewriteRule ^2026/0[13]/0[45]/samodzielna-ksiegowa-samodzielny-ksiegowy-debica-stacjonarnie-hybrydowo/?$ https://biuro-mazur.pl/o-nas/ [R=301,L]
 RewriteRule ^2026/03/04/praca-mlodsza-ksiegowa-debica/?$ https://biuro-mazur.pl/o-nas/ [R=301,L]
