@@ -13,6 +13,20 @@ RewriteRule ^2025/03/18/podatek-a-przeznaczenie-nieruchomosci/?$ https://biuro-m
 RewriteRule ^2026/0[13]/0[45]/samodzielna-ksiegowa-samodzielny-ksiegowy-debica-stacjonarnie-hybrydowo/?$ https://biuro-mazur.pl/o-nas/ [R=301,L]
 RewriteRule ^2026/03/04/praca-mlodsza-ksiegowa-debica/?$ https://biuro-mazur.pl/o-nas/ [R=301,L]
 
+RewriteRule ^procedura-zgloszen-wewnetrznych-sygnalisci/?$ https://biuro-mazur.pl/documents/whistleblower-procedure.pdf [R=301,L]
+RewriteRule ^wzor-formularza-zgloszenia/?$ https://biuro-mazur.pl/documents/whistleblower-report-form.pdf [R=301,L]
+RewriteRule ^wzor-potwierdzenia-przyjecia-zgloszenia/?$ https://biuro-mazur.pl/documents/whistleblower-report-confirmation.pdf [R=301,L]
+RewriteRule ^wzor-rejestru-zgloszen/?$ https://biuro-mazur.pl/documents/whistleblower-report-register.pdf [R=301,L]
+RewriteRule ^ksef-krajowy-system-e-faktur-co-siezmienia-i-jak-sie-przygotowac/?$ https://biuro-mazur.pl/blog/ksef-w-malej-firmie-2026/ [R=301,L]
+RewriteRule ^oferta/.+ https://biuro-mazur.pl/uslugi/ [R=301,L]
+RewriteRule ^o-nas/.+ https://biuro-mazur.pl/o-nas/ [R=301,L]
+RewriteRule ^kontakt/.+ https://biuro-mazur.pl/kontakt/ [R=301,L]
+RewriteRule ^strona-glowna(/.*)?$ https://biuro-mazur.pl/ [R=301,L]
+RewriteRule ^blog/page/[0-9]+/?$ https://biuro-mazur.pl/blog/ [R=301,L]
+RewriteRule ^page/[0-9]+/?$ https://biuro-mazur.pl/ [R=301,L]
+RewriteRule ^index\.php$ https://biuro-mazur.pl/ [R=301,L]
+RewriteRule ^(1-2|11|121|13|151|16|2|3|3-2|4|8|9|accountant-hand-use-calculate-financial-report-counting-on-calc|accounting-planning-budget-concept-business-woman-offices-work|analytics-and-business-statics-documents-or-development-plan|business-bg-slide1|business-bg-slide2|business-bg-slide3|business-concept-with-copy-space-office-desk-table-with-pen-foc|business-man-financial-inspector-and-secretary-making-report-ca|businessman-working-analysis-business-information|closeup-of-coins-stack-isolated-on-black-background|cropped-favicon_im-jpg|cropped-imazur_www_favicon_512x512-png|cropped-imazur_www_x100-png|favicon_im|female-hand-putting-signature-on-financial-report|imazur_www_logo_200|imazur_www_x100|iwona-mazur-twoj-doradca-podatkowy|iwona-mazur-twoj-doradca-podatkowy-2|logo-biuro-rachunkowe-im_www|logo-kwadrat-512-x-512-px|logo-na-strone-biuro-rachunkowe_|logo-na-strone-biuro-rachunkowe_doradca|successful-acceptance-signing-hands-businessman-consultant)/?$ https://biuro-mazur.pl/ [R=301,L]
+
 RewriteRule ^20[0-9]{2}/[0-9]{2}/[0-9]{2}/ https://biuro-mazur.pl/blog/ [R=301,L]
 RewriteRule ^20[0-9]{2}(/[0-9]{2})?/?$ https://biuro-mazur.pl/blog/ [R=301,L]
 RewriteRule ^(category|author|tag|elementor-hf)(/.*)?$ https://biuro-mazur.pl/blog/ [R=301,L]
@@ -25,7 +39,7 @@ RewriteRule ^wp-content/uploads/2024/12/Wzor-rejestru-zgloszen\.pdf$ https://biu
 RewriteRule ^wp-content/uploads/ https://biuro-mazur.pl/ [R=301,L]
 RewriteRule ^(wp-admin|wp-login\.php|wp-json|xmlrpc\.php|login)(/.*)?$ https://biuro-mazur.pl/ [R=301,L]
 
-RewriteCond %{QUERY_STRING} (^|&)(p|page_id|cat|author|s)=
+RewriteCond %{QUERY_STRING} (^|&)(p|page_id|attachment_id|cat|author|s)=
 RewriteRule ^$ https://biuro-mazur.pl/? [R=301,L]
 
 RewriteCond %{REQUEST_FILENAME} -d
