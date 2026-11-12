@@ -29,9 +29,8 @@ import {
   initRiseSwipe,
 } from './animations/horizontal.js';
 import { destroyFaq, initFaq } from './animations/faq.js';
-import { destroyForms, initContactForm, initPageForm } from './animations/forms.js';
+import { destroyForms, initContactForm } from './animations/forms.js';
 import { destroyHoverCursor, initHoverCursor } from './animations/cursor.js';
-import { destroyCustomSelect, initCustomSelect } from './animations/select.js';
 import { destroyNavbar, initNavbar } from './animations/navbar.js';
 import { destroyMenu, initMenu } from './animations/menu.js';
 import {
@@ -60,9 +59,7 @@ const INITS = [
   ['headline-pin', initHeadlinePin],
   ['footer-transition', initFooterTransition],
   ['form-panel', initContactForm],
-  ['page-form', initPageForm],
   ['hover-cursor', initHoverCursor],
-  ['custom-select', initCustomSelect],
   ['navbar', initNavbar],
   ['menu', initMenu],
   ['parallax', initParallax],
@@ -74,7 +71,6 @@ const DESTROYERS = [
   destroyNavbar,
   destroyRiseSwipe,
   destroyHoverCursor,
-  destroyCustomSelect,
   destroyMenu,
   destroyScrollBar,
   destroyLenis,

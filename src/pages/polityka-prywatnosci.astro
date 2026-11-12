@@ -2,8 +2,8 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { address, email, legalName, openingHours, phone, registry } from '../data/contact.js';
 
-const updatedAt = '2026-10-14';
-const updatedLabel = 'Ostatnia aktualizacja: 14 października 2026';
+const updatedAt = '2026-11-12';
+const updatedLabel = 'Ostatnia aktualizacja: 12 listopada 2026';
 
 const sections = [
   {
@@ -27,23 +27,22 @@ const sections = [
       {
         type: 'text',
         value:
-          'Zbieramy wyłącznie to, co sam wpiszesz w formularzu kontaktowym. Formularz jest jedynym miejscem na tej stronie, które przyjmuje dane.',
-      },
-      {
-        type: 'list',
-        items: [
-          'Imię i nazwisko. Pole obowiązkowe.',
-          'Numer telefonu. Pole obowiązkowe.',
-          'Adres e-mail. Pole obowiązkowe.',
-          'Forma prowadzonej działalności. Pole opcjonalne.',
-          'Zakres potrzebnej pomocy. Pole opcjonalne.',
-          'Treść wiadomości. Pole opcjonalne.',
-        ],
+          'Na tej stronie nie ma formularza ani żadnego innego miejsca, w którym można wpisać swoje dane. Kontaktujesz się z nami telefonicznie albo e-mailem.',
       },
       {
         type: 'text',
         value:
-          'Do każdego zgłoszenia dopisujemy datę i godzinę wysłania oraz informację o tym, z której części strony zostało wysłane. Twojego numeru IP nie dopisujemy do zgłoszenia.',
+          'Gdy zadzwonisz albo napiszesz, przetwarzamy dane, które sam nam przekażesz. Zwykle są to:',
+      },
+      {
+        type: 'list',
+        items: [
+          'imię i nazwisko,',
+          'numer telefonu,',
+          'adres e-mail,',
+          'nazwa i forma prowadzonej działalności,',
+          'informacje o sprawie, z którą się do nas zgłaszasz.',
+        ],
       },
       {
         type: 'text',
@@ -59,7 +58,7 @@ const sections = [
       {
         type: 'list',
         items: [
-          'Żeby się z Tobą skontaktować i przygotować odpowiedź na zapytanie. Podstawą jest art. 6 ust. 1 lit. b RODO, czyli działania podejmowane na Twoje żądanie przed zawarciem umowy.',
+          'Żeby odpowiedzieć na Twoje pytanie i przygotować ofertę współpracy. Podstawą jest art. 6 ust. 1 lit. b RODO, czyli działania podejmowane na Twoje żądanie przed zawarciem umowy.',
           'Żeby wykazać przebieg kontaktu i bronić się przed ewentualnymi roszczeniami. Podstawą jest art. 6 ust. 1 lit. f RODO, czyli nasz prawnie uzasadniony interes.',
         ],
       },
@@ -72,17 +71,17 @@ const sections = [
   },
   {
     slug: 'jak-dlugo',
-    title: 'Jak długo przechowujemy zgłoszenia',
+    title: 'Jak długo przechowujemy dane',
     blocks: [
       {
         type: 'text',
         value:
-          'Zgłoszenie z formularza przechowujemy przez czas potrzebny do odpowiedzi i rozmów o współpracy, a następnie do upływu terminu przedawnienia ewentualnych roszczeń. Po tym czasie usuwamy je z naszej skrzynki pocztowej.',
+          'Korespondencję i notatki z rozmów przechowujemy przez czas potrzebny do odpowiedzi i rozmów o współpracy, a następnie do upływu terminu przedawnienia ewentualnych roszczeń. Po tym czasie je usuwamy.',
       },
       {
         type: 'text',
         value:
-          'Jeżeli ze zgłoszenia wyniknie współpraca, dane związane z jej rozliczeniem przechowujemy tak długo, jak wymagają tego przepisy podatkowe i przepisy o rachunkowości.',
+          'Jeżeli z rozmowy wyniknie współpraca, dane związane z jej rozliczeniem przechowujemy tak długo, jak wymagają tego przepisy podatkowe i przepisy o rachunkowości.',
       },
     ],
   },
@@ -98,8 +97,8 @@ const sections = [
       {
         type: 'list',
         items: [
-          'Dostawca hostingu, na którym stoi ta strona. Jego serwer odbiera zgłoszenie i wysyła je e-mailem do biura.',
-          'Microsoft. Zgłoszenia trafiają do naszej firmowej skrzynki pocztowej w Microsoft 365.',
+          'Dostawca hostingu, na którym stoi ta strona. Na jego serwerze zapisują się logi dostępu.',
+          'Microsoft. Wiadomości e-mail trafiają do naszej firmowej skrzynki pocztowej w Microsoft 365.',
         ],
       },
       {
@@ -146,7 +145,7 @@ const sections = [
       {
         type: 'text',
         value:
-          'Podanie danych jest w pełni dobrowolne. Bez imienia, numeru telefonu i adresu e-mail nie przyjmiemy jednak zgłoszenia, bo nie mielibyśmy jak na nie odpowiedzieć.',
+          'Podanie danych jest w pełni dobrowolne. Bez numeru telefonu albo adresu e-mail nie będziemy jednak mogli odpowiedzieć na Twoją wiadomość ani przygotować oferty.',
       },
     ],
   },
@@ -186,7 +185,7 @@ const sections = [
 ---
 <BaseLayout
   title="Polityka prywatności"
-  description="Jakie dane zbieramy przez formularz kontaktowy, po co, jak długo je przechowujemy i jakie prawa Ci przysługują."
+  description="Jakie dane przetwarzamy, gdy kontaktujesz się z nami telefonicznie lub e-mailem, po co, jak długo je przechowujemy i jakie prawa Ci przysługują."
 >
   <article>
     <section class="px-[2vw] pt-[clamp(9rem,15vw,16rem)] max-lg:px-[4vw] max-lg:pt-[clamp(7rem,40vw,11rem)]">
